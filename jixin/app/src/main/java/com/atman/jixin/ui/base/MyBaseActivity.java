@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,13 +25,8 @@ import com.atman.jixin.R;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
-import com.base.baselibs.net.YunXinAuthOutEvent;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.PromptDialog;
 import com.google.gson.Gson;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +66,6 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Bind(R.id.bar_title_iv)
     ImageView barTitleIv;
 
-    private boolean mShouldLogin = true;
     private static long lastClickTime = 0;
     protected Activity mAty;
     private Display display;
@@ -147,7 +140,6 @@ public class MyBaseActivity extends BaseAppCompatActivity {
      * 影藏头部
      */
     protected void hideTitleBar() {
-        LogUtils.e("rootBarRl:" + rootBarRl);
         if (rootBarRl != null) {
             rootBarRl.setVisibility(View.GONE);
         }
@@ -338,37 +330,6 @@ public class MyBaseActivity extends BaseAppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    //在注册了的Activity中,声明处理事件的方法
-    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
-    public void onUserEvent(YunXinAuthOutEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
-        if (!getTopActivity(mAty).equals("") && getTopActivity(mAty).contains(mAty.getLocalClassName())) {
-            PromptDialog.Builder builder = new PromptDialog.Builder(mAty);
-            builder.setTitle("账号异常");
-            builder.setMessage("您的账号已在别处登录，请退出登录，如非您本人操作，请尽快修改您的密码！");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    clearData();
-                    dialog.dismiss();
-                    startActivity(new Intent(mAty, MainActivity.class));
-                    finish();
-                }
-            });
-            builder.setCancelable(false);
-            builder.show();
-        }
-    }
-
-    private String getTopActivity(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
-
-        if (runningTaskInfos != null) {
-            return (runningTaskInfos.get(0).topActivity).toString();
-        } else
-            return "";
     }
 
     /**

@@ -126,8 +126,8 @@ public class DownloadFile extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
         ConfigModel mConfigModel = new Gson().fromJson(result.replace("ï»¿",""), ConfigModel.class);
         if (mConfigModel != null) {
-            mImageLoader.displayImage(mConfigModel.getKStartUPAdBgUrl(), iv_one);
-            mImageLoader.displayImage(mConfigModel.getKStartUpAdUrl(), iv_two);
+//            mImageLoader.displayImage(mConfigModel.getKStartUPAdBgUrl(), iv_one);
+//            mImageLoader.displayImage(mConfigModel.getKStartUpAdUrl(), iv_two);
         }
     }
 }

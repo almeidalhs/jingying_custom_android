@@ -35,6 +35,10 @@ public class MyBaseApplication extends BaseApplication {
         setConfigLoad();
     }
 
+    public static MyBaseApplication getApplication() {
+        return mInstance;
+    }
+
     private void setConfigLoad() {
         File cacheDir = StorageUtils.getOwnCacheDirectory(this, "imageloader/Cache");
         ImageLoaderConfiguration config = new ImageLoaderConfiguration

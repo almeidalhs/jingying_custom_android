@@ -94,10 +94,8 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     @Override
     protected void onResume() {
         super.onResume();
-        String us = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_US);
-        String pw = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_PW);
         new DownloadFile(SplashActivity.this, splashIvOne, splashIvTwo)
-                .execute("http://www.5ys7.com/url_resource.json");
+                .execute("http://www.justing.com/baiye/config.json");
         timeCount.start();
     }
 
