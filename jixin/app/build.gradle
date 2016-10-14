@@ -1,0 +1,106 @@
+apply plugin: 'com.android.application'
+apply plugin:'org.greenrobot.greendao'
+
+android {
+
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.atman.jixin"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'wys7'
+            keyPassword 'atmanatman'
+            storeFile file('../keystore/wys7.keystore')
+            storePassword 'atmanatman'
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    productFlavors {
+
+        atman {}
+        yingyongbao {}
+        wandoujia {}
+        lenovo {}
+        sougouphone {}
+        pp {}
+        huawei {}
+        meizu {}
+        mumayi {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+
+    }
+
+    buildTypes {
+        release {
+            // 不显示Log, 在java代码中的调用方式为：BuildConfig.LOG_DEBUG
+            buildConfigField "boolean", "LEO_DEBUG", "false"
+
+            minifyEnabled false
+            //移除无用资源
+            shrinkResources false
+            zipAlignEnabled true
+
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LEO_DEBUG", "true"
+            versionNameSuffix "-debug"
+
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        task nativeLibsToJar(type: Zip, description: "create a jar archive of the native libs") {
+            destinationDir file("$projectDir/libs")
+            baseName "Native_Libs2"
+            extension "jar"
+            from fileTree(dir: "src/jniLibs", include: "**/*.so")
+            into "lib"
+        }
+
+        tasks.withType(JavaCompile) {
+            compileTask -> compileTask.dependsOn(nativeLibsToJar)
+        }
+
+        greendao{
+            schemaVersion 1
+            daoPackage 'com.atman.wysq.model.greendao.gen'
+            targetGenDir 'src/main/java'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile project(':baselibs')
+    compile'org.greenrobot:greendao:3.1.0'
+    compile'org.greenrobot:greendao-generator:3.1.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    testCompile 'junit:junit:4.12'
+}
