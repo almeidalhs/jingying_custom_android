@@ -1,0 +1,59 @@
+package com.atman.jixin.ui.base;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import com.atman.jixin.utils.UiHelper;
+import com.base.baselibs.base.BaseFragment;
+import com.google.gson.Gson;
+
+/**
+ * 描述
+ * 作者 tangbingliang
+ * 时间 16/7/1 18:08
+ * 邮箱 bltang@atman.com
+ * 电话 18578909061
+ */
+public class MyBaseFragment extends BaseFragment {
+    protected Gson mGson;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGson = new Gson();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void showToast(String msg) {
+        getBaseAppCompatActivity().showToast(msg);
+    }
+
+    public int getmWidth() {
+        return ((MyBaseActivity) getActivity()).getmWidth();
+    }
+
+    public void showLogin() {
+        ((MyBaseActivity) getActivity()).showLogin();
+    }
+
+    public void showWraning(String s) {
+        ((MyBaseActivity) getActivity()).showWraning(s);
+    }
+
+    @Override
+    public void clearData() {
+        super.clearData();
+    }
+
+    public void toPhone(Context mContext, String phonenumber){
+        if (!UiHelper.isTabletDevice(getActivity())) {
+            ((MyBaseActivity) getActivity()).toPhone(mContext,phonenumber);
+        } else {
+            showToast("您的设备不支持拨号");
+        }
+    }
+}

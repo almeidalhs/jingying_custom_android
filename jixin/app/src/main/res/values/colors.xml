@@ -4,7 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="activity_default_bg">#efeff4</color>
+    <color name="activity_default_bg">#f3f1f2</color>
 
+    <color name="color_f3f1f2">#f3f1f2</color>
     <color name="color_efeff4">#efeff4</color>
+    <color name="color_ffffff">#ffffff</color>
+    <color name="color_f6f6f6">#f6f6f6</color>
+    <color name="color_2B2B2B">#2b2b2b</color>
+    <color name="color_010101">#010101</color>
 </resources>
