@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.atman.jixin.R;
 import com.atman.jixin.ui.MainActivity;
+import com.atman.jixin.ui.personal.LoginActivity;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.widget.PromptDialog;
@@ -70,6 +71,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     protected Activity mAty;
     private Display display;
     protected Gson mGson;
+    private boolean mShouldLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,21 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         mAty = this;
         display = getWindowManager().getDefaultDisplay();
         mGson = new Gson();
+    }
+
+    /**
+     * 如果activity需要开启 登陆状态验证
+     * 有需要在public
+     */
+    private void enableLoginCheck() {
+        mShouldLogin = true;
+    }
+
+    /**
+     * 关闭登陆检查
+     */
+    public void disableLoginCheck() {
+        mShouldLogin = false;
     }
 
     @Override
@@ -259,6 +276,23 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        if (mShouldLogin) {
+            if (!isLogin()) {
+                //需要登陆状态，跳转到登陆界面
+                startActivity(LoginActivity.createIntent(this, getIntent()));
+                finish();
+            }
+        }
+    }
+
+    /**
+     * 判断用户是否登陆
+     *
+     * @return
+     */
+    public boolean isLogin() {
+//        return MyBaseApplication.mLoginResultModel != null;
+        return false;
     }
 
     @Override
@@ -325,7 +359,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && (this instanceof MainActivity)) {// 返回键
+                && (this instanceof MainActivity || this instanceof LoginActivity)) {// 返回键
             exitBy2Click();
             return true;
         }
