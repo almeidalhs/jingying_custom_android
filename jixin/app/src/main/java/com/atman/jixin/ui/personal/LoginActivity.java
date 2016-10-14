@@ -3,12 +3,18 @@ package com.atman.jixin.ui.personal;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.ui.base.MyBaseActivity;
+import com.base.baselibs.widget.MyCleanEditText;
+import com.base.baselibs.widget.ShapeImageView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
@@ -17,6 +23,19 @@ import okhttp3.Response;
 
 public class LoginActivity extends MyBaseActivity {
 
+    @Bind(R.id.login_register_tx)
+    TextView loginRegisterTx;
+    @Bind(R.id.part_store_preview_head_img)
+    ShapeImageView partStorePreviewHeadImg;
+    @Bind(R.id.login_username_et)
+    MyCleanEditText loginUsernameEt;
+    @Bind(R.id.login_password_et)
+    MyCleanEditText loginPasswordEt;
+    @Bind(R.id.login_bt)
+    Button loginBt;
+    @Bind(R.id.login_forget_pw_tx)
+    TextView loginForgetPwTx;
+
     private Context mContext = LoginActivity.this;
 
     @Override
@@ -24,6 +43,7 @@ public class LoginActivity extends MyBaseActivity {
         super.onCreate(savedInstanceState);
         disableLoginCheck();
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
     }
 
     /**
@@ -65,5 +85,17 @@ public class LoginActivity extends MyBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @OnClick({R.id.login_register_tx, R.id.login_bt, R.id.login_forget_pw_tx})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.login_register_tx:
+                break;
+            case R.id.login_bt:
+                break;
+            case R.id.login_forget_pw_tx:
+                break;
+        }
     }
 }

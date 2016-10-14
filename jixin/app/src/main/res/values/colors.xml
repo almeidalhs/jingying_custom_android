@@ -6,6 +6,8 @@
 
     <color name="activity_default_bg">#f3f1f2</color>
 
+    <color name="color_00000000">#00000000</color>
+    <color name="color_16c5ee">#16c5ee</color>
     <color name="color_f3f1f2">#f3f1f2</color>
     <color name="color_efeff4">#efeff4</color>
     <color name="color_ffffff">#ffffff</color>
