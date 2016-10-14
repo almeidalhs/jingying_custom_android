@@ -18,7 +18,8 @@
         </activity>
 
         <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.personal.LoginActivity"/>
+        <activity android:name=".ui.personal.LoginActivity" android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".ui.personal.ForgetPassWordActivity" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
