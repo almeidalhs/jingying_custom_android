@@ -35,6 +35,7 @@ public class MyStringCallback extends StringCallback {
     private httpCallBack CallBack;
     private Context mContext;
     private boolean isShowLoading;
+    private boolean isCancelable = true;
     private String dialogStr;
 
     public MyStringCallback(){}
@@ -46,11 +47,20 @@ public class MyStringCallback extends StringCallback {
         this.isShowLoading = isShowLoading;
     }
 
+    public MyStringCallback(Context mContext, String dialogStr, httpCallBack CallBack
+            , boolean isShowLoading, boolean isCancelable){
+        this.CallBack = CallBack;
+        this.mContext = mContext;
+        this.dialogStr = dialogStr;
+        this.isCancelable = isCancelable;
+        this.isShowLoading = isShowLoading;
+    }
+
     @Override
     public void onBefore(Request request, int id) {
         super.onBefore(request, id);
         if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).showLoading(dialogStr);
+            ((BaseAppCompatActivity)mContext).showLoading(dialogStr, isCancelable);
         }
         CallBack.onBefore(request, id);
     }
