@@ -35,12 +35,14 @@ public class MyStringCallback extends StringCallback {
     private httpCallBack CallBack;
     private Context mContext;
     private boolean isShowLoading;
+    private String dialogStr;
 
     public MyStringCallback(){}
 
-    public MyStringCallback(Context mContext, httpCallBack CallBack, boolean isShowLoading){
+    public MyStringCallback(Context mContext, String dialogStr, httpCallBack CallBack, boolean isShowLoading){
         this.CallBack = CallBack;
         this.mContext = mContext;
+        this.dialogStr = dialogStr;
         this.isShowLoading = isShowLoading;
     }
 
@@ -48,7 +50,7 @@ public class MyStringCallback extends StringCallback {
     public void onBefore(Request request, int id) {
         super.onBefore(request, id);
         if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).showLoading();
+            ((BaseAppCompatActivity)mContext).showLoading(dialogStr);
         }
         CallBack.onBefore(request, id);
     }
@@ -61,9 +63,6 @@ public class MyStringCallback extends StringCallback {
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
-        if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).cancelLoading();
-        }
         LogUtils.e("e:"+e.toString()+",id:"+id);
         if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")) {
             return;
@@ -79,9 +78,6 @@ public class MyStringCallback extends StringCallback {
 
     @Override
     public void onResponse(String data, Response response, int id) {
-        if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).cancelLoading();
-        }
         Headers s = response.headers();
         List<String> list = s.values("Set-Cookie");
         for (int i=0;i<list.size();i++) {

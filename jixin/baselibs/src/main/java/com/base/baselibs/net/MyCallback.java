@@ -22,19 +22,21 @@ public class MyCallback extends Callback {
     private Context mContext;
     private Class clazz;
     private boolean isShowLoading;
+    private String dialogStr;
 
     public MyCallback(){}
 
-    public MyCallback(Context mContext, httpCallBack CallBack, boolean isShowLoading){
+    public MyCallback(Context mContext, String dialogStr, httpCallBack CallBack, boolean isShowLoading){
         this.CallBack = CallBack;
         this.mContext = mContext;
+        this.dialogStr = dialogStr;
         this.isShowLoading = isShowLoading;
     }
 
     @Override
     public void onBefore(Request request, int id) {
         super.onBefore(request, id);
-        ((BaseAppCompatActivity)mContext).showLoading();
+        ((BaseAppCompatActivity)mContext).showLoading(dialogStr);
         CallBack.onBefore(request, id);
     }
 

@@ -65,8 +65,8 @@ public class BaseFragment extends Fragment implements IInit,PullToRefreshBase.On
         }
     }
 
-    public void showLoading() {
-        getBaseAppCompatActivity().showLoading();
+    public void showLoading(String str) {
+        getBaseAppCompatActivity().showLoading(str);
     }
 
     public void cancelLoading() {

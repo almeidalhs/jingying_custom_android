@@ -137,7 +137,7 @@ public class LoginActivity extends MyBaseActivity {
                         .content(mGson.toJson(mLoginRequestModel))
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                         .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
-                        .execute(new MyStringCallback(mContext, this, true));
+                        .execute(new MyStringCallback(mContext, "玩命登录中", this, true));
                 break;
             case R.id.login_forget_pw_tx:
                 startActivity(new Intent(mContext, ForgetPassWordActivity.class));

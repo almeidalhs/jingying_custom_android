@@ -169,7 +169,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
                     .content(mGson.toJson(mLoginRequestModel))
                     .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                     .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
-                    .execute(new MyStringCallback(mContext, this, true));
+                    .execute(new MyStringCallback(mContext, "玩命登录中", this, true));
         }
     }
 

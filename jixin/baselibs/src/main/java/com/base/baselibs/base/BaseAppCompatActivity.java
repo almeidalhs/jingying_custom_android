@@ -131,9 +131,9 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     /**
      * 开启加载Loading
      */
-    public void showLoading() {
+    public void showLoading(String str) {
         if (mWaitingDialog == null) {
-            mWaitingDialog = new WaitingDialog(this);
+            mWaitingDialog = new WaitingDialog(this, str);
         }
         mWaitingDialog.setCanceledOnTouchOutside(true);
         mWaitingDialog.startAnimation();
@@ -301,6 +301,7 @@ public class BaseAppCompatActivity extends SwipeBackActivity
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
+        cancelLoading();
         LogUtils.e("返回码："+code+"，id:"+id);
         if (id==65) {
             return;

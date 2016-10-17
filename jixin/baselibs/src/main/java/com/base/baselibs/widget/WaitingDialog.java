@@ -22,19 +22,27 @@ public class WaitingDialog extends MyDialog {
     private ImageView imageView;
     private AnimationDrawable anim;
     private View view;
+    private TextView textView;
 
     /*
      * private ImageView anim_img; private TextView content_tv;
      */
-    public WaitingDialog(Context context) {
+    public WaitingDialog(Context context, String str) {
         super(context, R.style.DT_DIALOG_Translucent);
         this.context = context;
+
+        if (str.isEmpty()) {
+            str = "加载中...";
+        }
+
         view = LayoutInflater.from(context).inflate(
                 R.layout.dt_now_page_loading, null);
         imageView = (ImageView) view.findViewById(R.id.loding_img);
+        textView = (TextView) view.findViewById(R.id.content_tv);
         anim = (AnimationDrawable) context.getResources().getDrawable(
                 R.drawable.loading_drawable);
         imageView.setImageDrawable(anim);
+        textView.setText(str);
         super.createView();
         super.setCancelable(true);
         super.setCanceledOnTouchOutside(true);
