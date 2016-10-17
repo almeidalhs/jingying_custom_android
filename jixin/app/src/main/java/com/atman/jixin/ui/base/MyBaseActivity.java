@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.atman.jixin.R;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.personal.LoginActivity;
+import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.widget.PromptDialog;
@@ -279,8 +280,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         if (mShouldLogin) {
             if (!isLogin()) {
                 //需要登陆状态，跳转到登陆界面
-                startActivity(LoginActivity.createIntent(this, getIntent()));
-                finish();
+                startActivityForResult(LoginActivity.createIntent(this, getIntent()), Common.TO_LOGIN);
             }
         }
     }
@@ -291,8 +291,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
      * @return
      */
     public boolean isLogin() {
-//        return MyBaseApplication.mLoginResultModel != null;
-        return false;
+        return MyBaseApplication.USERINFOR != null;
     }
 
     @Override

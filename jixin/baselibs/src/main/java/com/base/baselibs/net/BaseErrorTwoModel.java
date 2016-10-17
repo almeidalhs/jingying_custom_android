@@ -10,17 +10,15 @@ package com.base.baselibs.net;
 public class BaseErrorTwoModel {
     /**
      * result : 0
-     * body : {"error":"User or Password error","error_code":"20020","error_description":"用户名或者密码错误。"}
+     * body : {"message":"账号或密码错误"}
      */
 
     private String result;
     /**
-     * error : User or Password error
-     * error_code : 20020
-     * error_description : 用户名或者密码错误。
+     * message : 账号或密码错误
      */
 
-    private BodyEntity body;
+    private BodyBean body;
 
     public String getResult() {
         return result;
@@ -30,41 +28,23 @@ public class BaseErrorTwoModel {
         this.result = result;
     }
 
-    public BodyEntity getBody() {
+    public BodyBean getBody() {
         return body;
     }
 
-    public void setBody(BodyEntity body) {
+    public void setBody(BodyBean body) {
         this.body = body;
     }
 
-    public static class BodyEntity {
-        private String error;
-        private String error_code;
-        private String error_description;
+    public static class BodyBean {
+        private String message;
 
-        public String getError() {
-            return error;
+        public String getMessage() {
+            return message;
         }
 
-        public void setError(String error) {
-            this.error = error;
-        }
-
-        public String getError_code() {
-            return error_code;
-        }
-
-        public void setError_code(String error_code) {
-            this.error_code = error_code;
-        }
-
-        public String getError_description() {
-            return error_description;
-        }
-
-        public void setError_description(String error_description) {
-            this.error_description = error_description;
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 }

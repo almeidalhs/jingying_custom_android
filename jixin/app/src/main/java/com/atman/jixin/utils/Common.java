@@ -1,6 +1,7 @@
 package com.atman.jixin.utils;
 
 import okhttp3.MediaType;
+import okhttp3.internal.framed.PushObserver;
 
 /**
  * Created by tangbingliang on 16/10/14.
@@ -27,15 +28,21 @@ public class Common {
 
 
     /**************************http访问路径*****************************/
+    //登录
+    public static String Url_Login = hostUrl + "login";
     /**************************http访问路径*****************************/
 
 
 
     /**************************http访问回应识别码*****************************/
+    //登录
+    public static int NET_LOGIN_ID = 1;
     /**************************http访问回应识别码*****************************/
 
 
 
     /**************************跳转码*****************************/
+    public static int TO_LOGIN = 10000;
+    public static int TO_REGISTER = 10001;
     /**************************跳转码*****************************/
 }

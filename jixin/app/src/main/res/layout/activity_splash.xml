@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="跳过 5 s"
+        android:visibility="gone"
         android:textColor="@color/color_ffffff"
         android:padding="@dimen/dimen_dp_5"/>
 

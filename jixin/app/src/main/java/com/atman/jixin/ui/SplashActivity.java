@@ -10,16 +10,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
+import com.atman.jixin.model.request.LoginRequestModel;
+import com.atman.jixin.model.response.LoginResultModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
+import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.personal.LoginActivity;
+import com.atman.jixin.utils.Common;
 import com.atman.jixin.widget.downfile.DownloadFile;
 import com.base.baselibs.iimp.TimeCountInterface;
+import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
+import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.TimeCount;
+import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -37,6 +46,10 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     private TimeCount timeCount;
     private Context mContext = SplashActivity.this;
 
+    private int unLoginTime = 5000;
+    private int loginTime = 500;
+    private int defalTime = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +58,15 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         setSwipeBackEnable(false);
-        timeCount = new TimeCount(5 * 1000, 1000, this);
+
+        if (MyBaseApplication.PASSWORD.isEmpty()) {
+            jumpTx.setVisibility(View.VISIBLE);
+            timeCount = new TimeCount(unLoginTime, defalTime, this);
+        } else {
+            jumpTx.setVisibility(View.GONE);
+            timeCount = new TimeCount(loginTime, defalTime, this);
+        }
+        timeCount.start();
 
         getSomedate();
     }
@@ -97,7 +118,6 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
         super.onResume();
         new DownloadFile(SplashActivity.this, splashIvOne, splashIvTwo)
                 .execute("http://www.justing.com/baiye/config.json");
-        timeCount.start();
     }
 
     @OnClick(R.id.jump_tx)
@@ -115,11 +135,42 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
+        if (id == Common.NET_LOGIN_ID) {
+            LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
+            MyBaseApplication.USERINFOR = mLoginResultModel;
+            toMainActivity();
+        }
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        super.onError(call, e, code, id);
+        toMainActivity();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LOGIN_ID);
     }
 
     @Override
     public void onTimeOut() {
-        toMainActivity();
+        if (MyBaseApplication.PASSWORD.isEmpty()) {
+            toMainActivity();
+        } else {
+            LoginRequestModel mLoginRequestModel = new LoginRequestModel(MyBaseApplication.USERNAME
+                    , MyBaseApplication.PASSWORD, MyBaseApplication.USERTOKEN
+                    , MyBaseApplication.VERSION, MyBaseApplication.PLATFORM
+                    , MyBaseApplication.DEVICETYPE, MyBaseApplication.CHANNEL);
+            LogUtils.e("mGson.toJson(mLoginRequestModel):"+mGson.toJson(mLoginRequestModel));
+            OkHttpUtils.postString()
+                    .url(Common.Url_Login).tag(Common.NET_LOGIN_ID).id(Common.NET_LOGIN_ID)
+                    .content(mGson.toJson(mLoginRequestModel))
+                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                    .execute(new MyStringCallback(mContext, this, true));
+        }
     }
 
     @Override

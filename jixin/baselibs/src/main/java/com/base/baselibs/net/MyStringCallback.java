@@ -95,33 +95,22 @@ public class MyStringCallback extends StringCallback {
         String PARM_USER_KEY = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_KEY);
         String PARM_USER_TOKEN = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_TOKEN);
 //        Log.e(">>>","PARM_USER_KEY:"+PARM_USER_KEY+",PARM_USER_TOKEN:"+PARM_USER_TOKEN);
-        Log.e(">>>","data:"+data);
+        Log.e(">>>","<<"+id+">>data:"+data);
         BaseNormalModel mBaseModel = new Gson().fromJson(data, BaseNormalModel.class);
         if (mBaseModel != null && mBaseModel.getResult() != null && mBaseModel.getResult().equals("1")) {
             CallBack.onStringResponse(data, response, id);
-        } else if(mBaseModel != null && mBaseModel.getResult() != null && mBaseModel.getResult().equals("0")) {
-            BaseErrorThreeModel mBaseErrorThreeModel = new Gson().fromJson(data, BaseErrorThreeModel.class);
-            if (mBaseErrorThreeModel.getBody().getError_code().equals("20030")) {
-//                CustomToast.showToast(mContext, mBaseErrorThreeModel.getBody().getError_description(), 50000);
-//                CallBack.clearData();
-                EventBus.getDefault().post(new YunXinAuthOutEvent());
-            } else {
-                CallBack.onError(null, new IOException(mBaseErrorThreeModel.getBody().getError_description()), 200, id);
-            }
         } else {
             BaseErrorTwoModel mBaseErrorTwoModel = new Gson().fromJson(data, BaseErrorTwoModel.class);
-            if (mBaseErrorTwoModel != null && mBaseErrorTwoModel.getBody()!=null
-                    && mBaseErrorTwoModel.getBody().getError_code()!=null
-                    && mBaseErrorTwoModel.getBody().getError_code().equals("20030")) {
-                CustomToast.showToast(mContext, mBaseErrorTwoModel.getBody().getError_description(), 50000);
-                CallBack.clearData();
+            if (mBaseErrorTwoModel != null && mBaseErrorTwoModel.getBody()!=null) {
+                CallBack.onError(null, new IOException(mBaseErrorTwoModel.getBody().getMessage()), 200, id);
             } else {
-                BaseErrorModel mBaseErrorModel = new Gson().fromJson(data, BaseErrorModel.class);
-                if (mBaseErrorModel != null && mBaseErrorModel.getError_code()!=null) {
-                    CallBack.onError(null, new IOException(mBaseErrorModel.getError_description()), 200, id);
-                } else {
-                    CallBack.onStringResponse(data, response, id);
-                }
+                CallBack.onError(null, new IOException("新的错误数据结构"), 200, id);
+//                BaseErrorModel mBaseErrorModel = new Gson().fromJson(data, BaseErrorModel.class);
+//                if (mBaseErrorModel != null && mBaseErrorModel.getError_code()!=null) {
+//                    CallBack.onError(null, new IOException(mBaseErrorModel.getError_description()), 200, id);
+//                } else {
+//                    CallBack.onStringResponse(data, response, id);
+//                }
             }
         }
     }

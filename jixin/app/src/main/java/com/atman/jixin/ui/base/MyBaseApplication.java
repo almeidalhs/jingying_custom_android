@@ -1,9 +1,14 @@
 package com.atman.jixin.ui.base;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
+import com.atman.jixin.model.response.LoginResultModel;
 import com.base.baselibs.base.BaseApplication;
+import com.base.baselibs.util.PreferenceUtil;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -27,12 +32,87 @@ public class MyBaseApplication extends BaseApplication {
 
     private static MyBaseApplication mInstance;
 
+    public static String VERSION = "";
+    public static String PLATFORM = "";
+    public static String DEVICETYPE = "";
+    public static String CHANNEL = "";
+
+    public static String DEVICETOKEN = "";
+    public static String USERNAME = "";
+    public static String PASSWORD = "";
+    public static String USERKEY = "";
+    public static String USERTOKEN = "";
+    public static String USERID = "";
+
+    public static LoginResultModel USERINFOR;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
 
+        initInformation();
+        initLoginInformation();
         setConfigLoad();
+    }
+
+    public boolean isLogined() {
+        initLoginInformation();
+        return !USERNAME.isEmpty() && !PASSWORD.isEmpty() &&
+                !USERKEY.isEmpty() && !USERTOKEN.isEmpty() && !USERID.isEmpty();
+    }
+
+    private void initLoginInformation() {
+        USERNAME = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_US);
+        PASSWORD = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_PW);
+        USERKEY = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY);
+        USERTOKEN = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN);
+        USERID = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID);
+        DEVICETOKEN = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN);
+    }
+
+    private void initInformation() {
+        VERSION = getAppInfo().split("-")[0];
+        PLATFORM = "android "+android.os.Build.VERSION.RELEASE;
+        DEVICETYPE = android.os.Build.MODEL;
+        CHANNEL = "android_"+getAppMetaData(getApplicationContext(), "UMENG_CHANNEL");
+    }
+
+    /**
+     * 获取application中指定的meta-data
+     * @return 如果没有获取成功(没有对应值，或者异常)，则返回值为空
+     */
+    public static String getAppMetaData(Context ctx, String key) {
+        if (ctx == null || TextUtils.isEmpty(key)) {
+            return null;
+        }
+        String resultData = null;
+        try {
+            PackageManager packageManager = ctx.getPackageManager();
+            if (packageManager != null) {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
+                if (applicationInfo != null) {
+                    if (applicationInfo.metaData != null) {
+                        resultData = applicationInfo.metaData.getString(key);
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return resultData;
+    }
+
+    private String getAppInfo() {
+        try {
+            String pkName = this.getPackageName();
+            String versionName = this.getPackageManager().getPackageInfo(pkName, 0).versionName;
+            int versionCode = this.getPackageManager().getPackageInfo(pkName, 0).versionCode;
+            return versionName;
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public static MyBaseApplication getApplication() {
@@ -65,5 +145,14 @@ public class MyBaseApplication extends BaseApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    public String getCookie() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("USER_KEY=");
+        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
+        stringBuilder.append(";USER_TOKEN=");
+        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));
+        return stringBuilder.toString();
     }
 }

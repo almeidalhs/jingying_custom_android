@@ -8,7 +8,7 @@
     android:orientation="vertical">
     
     <ImageView
-        android:id="@+id/forget_back_iv"
+        android:id="@+id/register_back_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@mipmap/nav_btn_icon_back_white"/>
@@ -16,11 +16,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/forget_back_iv"
+        android:layout_below="@+id/register_back_iv"
         android:gravity="center">
 
         <com.base.baselibs.widget.MyCleanEditText
-            android:id="@+id/forget_username_et"
+            android:id="@+id/register_username_et"
             android:layout_width="@dimen/dimen_dp_200"
             android:layout_height="@dimen/dimen_dp_40"
             android:layout_centerHorizontal="true"
@@ -30,7 +30,7 @@
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="11"
-            android:nextFocusForward="@+id/forget_password_et"
+            android:nextFocusForward="@+id/register_password_et"
             android:paddingLeft="@dimen/dimen_dp_5"
             android:paddingRight="@dimen/dimen_dp_5"
             android:singleLine="true"
@@ -42,20 +42,20 @@
         <ImageView
             android:layout_width="@dimen/dimen_dp_180"
             android:layout_height="@dimen/dimen_dp_1"
-            android:layout_below="@+id/forget_username_et"
+            android:layout_below="@+id/register_username_et"
             android:layout_centerHorizontal="true"
             android:background="@color/color_ffffff" />
 
         <com.base.baselibs.widget.MyCleanEditText
-            android:id="@+id/forget_password_et"
+            android:id="@+id/register_password_et"
             android:layout_width="@dimen/dimen_dp_200"
             android:layout_height="@dimen/dimen_dp_40"
-            android:layout_below="@+id/forget_username_et"
+            android:layout_below="@+id/register_username_et"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_dp_10"
             android:background="@null"
             android:gravity="center"
-            android:hint="新密码"
+            android:hint="密    码"
             android:maxLength="17"
             android:paddingLeft="@dimen/dimen_dp_5"
             android:paddingRight="@dimen/dimen_dp_5"
@@ -69,15 +69,15 @@
         <ImageView
             android:layout_width="@dimen/dimen_dp_180"
             android:layout_height="@dimen/dimen_dp_1"
-            android:layout_below="@+id/forget_password_et"
+            android:layout_below="@+id/register_password_et"
             android:layout_centerHorizontal="true"
             android:background="@color/color_ffffff" />
 
         <com.base.baselibs.widget.MyCleanEditText
-            android:id="@+id/forget_code_et"
+            android:id="@+id/register_code_et"
             android:layout_width="@dimen/dimen_dp_200"
             android:layout_height="@dimen/dimen_dp_40"
-            android:layout_below="@+id/forget_password_et"
+            android:layout_below="@+id/register_password_et"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_dp_10"
             android:background="@null"
@@ -96,15 +96,15 @@
         <ImageView
             android:layout_width="@dimen/dimen_dp_180"
             android:layout_height="@dimen/dimen_dp_1"
-            android:layout_below="@+id/forget_code_et"
+            android:layout_below="@+id/register_code_et"
             android:layout_centerHorizontal="true"
             android:background="@color/color_ffffff" />
 
         <TextView
-            android:id="@+id/forget_code_tv"
+            android:id="@+id/register_code_tv"
             android:layout_width="@dimen/dimen_dp_120"
             android:layout_height="@dimen/dimen_dp_40"
-            android:layout_below="@+id/forget_code_et"
+            android:layout_below="@+id/register_code_et"
             android:layout_centerHorizontal="true"
             android:textColor="@color/color_ffffff"
             android:text="获取短信验证码"
@@ -114,17 +114,41 @@
             android:layout_marginTop="@dimen/dimen_dp_10"/>
 
         <Button
-            android:id="@+id/forget_bt"
+            android:id="@+id/register_bt"
             android:layout_width="@dimen/dimen_dp_180"
             android:layout_height="@dimen/dimen_dp_40"
-            android:layout_below="@+id/forget_code_tv"
+            android:layout_below="@+id/register_code_tv"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_dp_20"
             android:background="@drawable/login_bt_selector"
-            android:hint="重置密码"
+            android:hint="注    册"
             android:textColor="@color/color_ffffff"
             android:textColorHint="@color/color_ffffff"
             android:textSize="@dimen/dimen_sp_13" />
+
+        <TextView
+            android:id="@+id/register_warn_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register_bt"
+            android:layout_centerHorizontal="true"
+            android:text="轻触'注册'按钮,即表示你同意"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_12"
+            android:textColor="@color/color_ffffff"
+            android:layout_marginTop="@dimen/dimen_dp_10"/>
+
+        <TextView
+            android:id="@+id/register_agreement_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register_warn_tx"
+            android:layout_centerHorizontal="true"
+            android:text="《即应用户协议》"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_12"
+            android:textColor="@color/color_ba4642"
+            android:padding="@dimen/dimen_dp_5"/>
     </RelativeLayout>
 
 </RelativeLayout>

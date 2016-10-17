@@ -14,6 +14,7 @@ public class MainActivity extends MyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSwipeBackEnable(false);
     }
 
     public static Intent buildIntent(Context context, boolean isToWeb) {

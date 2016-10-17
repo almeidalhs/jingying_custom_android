@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/img_sign_background">
+
+    <RelativeLayout
+        android:id="@+id/agreement_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/agreement_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/nav_btn_icon_back_white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_dp_60"
+            android:layout_marginRight="@dimen/dimen_dp_60"
+            android:singleLine="true"
+            android:textColor="@color/color_ffffff"
+            android:text="即应用户协议"
+            android:textSize="@dimen/dimen_sp_18"/>
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_below="@+id/agreement_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="@dimen/dimen_dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/color_ffffff"
+                android:text="@string/agreement"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
