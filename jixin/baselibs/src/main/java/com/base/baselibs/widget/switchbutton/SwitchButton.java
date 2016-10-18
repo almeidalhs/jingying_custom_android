@@ -84,7 +84,9 @@ public class SwitchButton extends CompoundButton {
 	private float mTextHeight;
 	private float mTextMarginH;
 
-	private CompoundButton.OnCheckedChangeListener mChildOnCheckedChangeListener;
+	private boolean isCanMoveChang = true;
+
+	private OnCheckedChangeListener mChildOnCheckedChangeListener;
 
 	public SwitchButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -483,6 +485,14 @@ public class SwitchButton extends CompoundButton {
 		}
 	}
 
+	public boolean isCanMoveChang() {
+		return isCanMoveChang;
+	}
+
+	public void setCanMoveChang(boolean canMoveChang) {
+		isCanMoveChang = canMoveChang;
+	}
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 
@@ -508,9 +518,11 @@ public class SwitchButton extends CompoundButton {
 				break;
 
 			case MotionEvent.ACTION_MOVE:
-				float x = event.getX();
-				setProcess(getProcess() + (x - mLastX) / mSafeRectF.width());
-				mLastX = x;
+				if (isCanMoveChang) {
+					float x = event.getX();
+					setProcess(getProcess() + (x - mLastX) / mSafeRectF.width());
+					mLastX = x;
+				}
 				break;
 
 			case MotionEvent.ACTION_CANCEL:
@@ -902,8 +914,8 @@ public class SwitchButton extends CompoundButton {
 			TextUtils.writeToParcel(offText, out, flags);
 		}
 
-		public static final Parcelable.Creator<SavedState> CREATOR
-				= new Parcelable.Creator<SavedState>() {
+		public static final Creator<SavedState> CREATOR
+				= new Creator<SavedState>() {
 			public SavedState createFromParcel(Parcel in) {
 				return new SavedState(in);
 			}

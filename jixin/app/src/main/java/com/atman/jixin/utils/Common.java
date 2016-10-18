@@ -32,6 +32,10 @@ public class Common {
     public static String Url_Login = hostUrl + "login";
     //个人
     public static String Url_Personal = hostUrl + "rest/custom/index/";
+    //退出
+    public static String Url_Logout = hostUrl + "rest/user/logout";
+    //个人信息维护
+    public static String Url_Manage = hostUrl + "rest/custom/manage";
     /**************************http访问路径*****************************/
 
 
@@ -41,6 +45,10 @@ public class Common {
     public static int NET_LOGIN_ID = 1;
     //个人
     public static int NET_PERSONAL_ID = 2;
+    //退出
+    public static int NET_LOGOUT_ID = 3;
+    //个人信息维护
+    public static int NET_MANAGE_ID = 4;
     /**************************http访问回应识别码*****************************/
 
 

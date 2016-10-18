@@ -309,6 +309,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     public void clearData() {
         super.clearData();
+        MyBaseApplication.getApplication().cleanLoginData();
     }
 
     /**

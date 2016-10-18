@@ -66,7 +66,7 @@ public class LoginResultModel {
         private long id;
         private String memberName;
         private String memberTrueName;
-        private int atmanUserId;
+        private long atmanUserId;
         private String memberMobile;
         private String memberAvatar;
         private int memberSex;
@@ -118,11 +118,11 @@ public class LoginResultModel {
             this.memberTrueName = memberTrueName;
         }
 
-        public int getAtmanUserId() {
+        public long getAtmanUserId() {
             return atmanUserId;
         }
 
-        public void setAtmanUserId(int atmanUserId) {
+        public void setAtmanUserId(long atmanUserId) {
             this.atmanUserId = atmanUserId;
         }
 

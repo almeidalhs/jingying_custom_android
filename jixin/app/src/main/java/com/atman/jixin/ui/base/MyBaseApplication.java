@@ -25,6 +25,8 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 描述
@@ -174,7 +176,23 @@ public class MyBaseApplication extends BaseApplication {
         stringBuilder.append("USER_KEY=");
         stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
         stringBuilder.append(";USER_TOKEN=");
+        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));stringBuilder.append(";USER_TOKEN=");
         stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));
         return stringBuilder.toString();
+    }
+
+    public Map<String, String> getHeaderSeting() {
+        Map<String, String> m = new HashMap<>();
+        m.put("Accept", "application/json");
+        m.put("Content-Type", "application/json");
+        return m;
+    }
+
+    public void cleanLoginData() {
+        PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_PW, "");
+        PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USER_KEY, "");
+        PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN, "");
+        PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USERID, "");
+        USERINFOR = null;
     }
 }

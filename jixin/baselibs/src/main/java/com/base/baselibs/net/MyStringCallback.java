@@ -110,7 +110,11 @@ public class MyStringCallback extends StringCallback {
             if (mBaseErrorTwoModel != null && mBaseErrorTwoModel.getBody()!=null) {
                 CallBack.onError(null, new IOException(mBaseErrorTwoModel.getBody().getMessage()), 200, id);
             } else {
-                CallBack.onError(null, new IOException("新的错误数据结构"), 200, id);
+                if (id == 3) {
+                    CallBack.onStringResponse(data, response, id);
+                } else {
+                    CallBack.onError(null, new IOException("新的错误数据结构"), 200, id);
+                }
 //                BaseErrorModel mBaseErrorModel = new Gson().fromJson(data, BaseErrorModel.class);
 //                if (mBaseErrorModel != null && mBaseErrorModel.getError_code()!=null) {
 //                    CallBack.onError(null, new IOException(mBaseErrorModel.getError_description()), 200, id);

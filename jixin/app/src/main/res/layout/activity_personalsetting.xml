@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dimen_dp_15"
+        android:background="@color/color_line"/>
+
+    <LinearLayout
+        android:id="@+id/personal_peoplenearby_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不让附近的人看到"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <com.base.baselibs.widget.switchbutton.SwitchButton
+            android:id="@+id/setting_open_sb"
+            style="@style/SwitchButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:kswTintColor="#3FD86E"
+            app:kswFadeBack="false"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dimen_dp_15"
+        android:background="@color/color_line"/>
+
+    <LinearLayout
+        android:id="@+id/personal_clean_cachedata_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清空缓存数据"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <TextView
+            android:id="@+id/personal_clean_cachedata_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen_dp_5"
+            android:text="0 Byte"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_13" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/personal_clean_all_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清除所有聊天记录"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/personal_version_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="版本号"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <TextView
+            android:id="@+id/personal_version_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_13"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"/>
+
+    <Button
+        android:id="@+id/personal_logout_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:layout_below="@+id/login_password_et"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/dimen_dp_40"
+        android:layout_marginRight="@dimen/dimen_dp_40"
+        android:layout_marginTop="@dimen/dimen_dp_60"
+        android:background="@drawable/red_bt_selector"
+        android:hint="退出登录"
+        android:textColor="@color/color_ffffff"
+        android:textColorHint="@color/color_ffffff"
+        android:textSize="@dimen/dimen_sp_15" />
+
+</LinearLayout>

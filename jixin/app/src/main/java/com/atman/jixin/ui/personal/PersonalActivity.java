@@ -1,6 +1,7 @@
 package com.atman.jixin.ui.personal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,14 +13,10 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -79,15 +76,8 @@ public class PersonalActivity extends MyBaseActivity {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
-        LogUtils.e("url:"+(Common.Url_Personal + userId));
-        LogUtils.e("MyBaseApplication.getApplication().getCookie():"
-                +MyBaseApplication.getApplication().getCookie());
-        String key = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY);
-        String USER_TOKEN = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY);
-        Map<String, String> m = new HashMap<>();
-        m.put("USER_KEY", key);
-        m.put("USER_TOKEN", USER_TOKEN);
         OkHttpUtils.get().url(Common.Url_Personal + userId)
+                .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_PERSONAL_ID).id(Common.NET_PERSONAL_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, true));
@@ -102,7 +92,8 @@ public class PersonalActivity extends MyBaseActivity {
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_PERSONAL_ID) {
-
+            mGetPersonalInformationModel = mGson.fromJson(data, GetPersonalInformationModel.class);
+            personalAttentionNumTx.setText(mGetPersonalInformationModel.getBody().getLikeNum()+"");
         }
     }
 
@@ -121,6 +112,7 @@ public class PersonalActivity extends MyBaseActivity {
             case R.id.personal_attention_ll:
                 break;
             case R.id.personal_setting_ll:
+                startActivity(new Intent(mContext, PersonalSettingActivity.class));
                 break;
             case R.id.personal_about_and_help_ll:
                 break;
