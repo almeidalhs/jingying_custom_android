@@ -86,7 +86,7 @@
             android:maxLength="6"
             android:paddingLeft="@dimen/dimen_dp_5"
             android:paddingRight="@dimen/dimen_dp_5"
-            android:password="true"
+            android:inputType="number"
             android:singleLine="true"
             android:textColor="@color/color_ffffff"
             android:textColorHint="@color/color_ffffff"

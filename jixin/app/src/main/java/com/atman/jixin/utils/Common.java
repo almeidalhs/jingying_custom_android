@@ -38,9 +38,11 @@ public class Common {
     public static String Url_Manage = hostUrl + "rest/custom/manage";
     //发送验证码
     public static final String Url_FORGOT = hostUrl + "rest/checkcode/mobile/";
-    public static final String SEED_MEESAGE_AFTER_FORGOT = "?type=0";
+    public static final String SEED_MEESAGE_AFTER_FORGOT = "?type=";
     //重置密码
     public static String Url_ResetPWD = hostUrl + "rest/user/forgotpwd/";
+    //注册
+    public static String Url_Register = hostUrl + "rest/user";
     /**************************http访问路径*****************************/
 
 
@@ -60,6 +62,8 @@ public class Common {
     public static int NET_CHECKCODE_ID = 6;
     //重置密码
     public static int NET_RESETPWD_ID = 7;
+    //注册
+    public static int NET_REGISTER_ID = 8;
     /**************************http访问回应识别码*****************************/
 
 

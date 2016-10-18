@@ -14,7 +14,6 @@ import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.BaseErrorTwoModel;
 import com.base.baselibs.net.BaseNormalModel;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.util.TimeCount;
@@ -93,7 +92,6 @@ public class ForgetPassWordActivity extends MyBaseActivity {
         } else if (id == Common.NET_CHECKCODE_ID) {
             BaseNormalModel base = mGson.fromJson(data, BaseNormalModel.class);
             if (base.getResult().equals("1")) {
-                LogUtils.e("url:"+(Common.Url_ResetPWD + aount + "/" + MD5Util.getMD5(newPassword)));
                 OkHttpUtils.put().url(Common.Url_ResetPWD + aount + "/" + MD5Util.getMD5(newPassword))
                         .headers(MyBaseApplication.getApplication().getHeaderSeting()).requestBody("{}")
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
@@ -143,7 +141,7 @@ public class ForgetPassWordActivity extends MyBaseActivity {
                 if (checkInput(1)) {
                     return;
                 }
-                OkHttpUtils.get().url(Common.Url_FORGOT + aount + Common.SEED_MEESAGE_AFTER_FORGOT)
+                OkHttpUtils.get().url(Common.Url_FORGOT + aount + Common.SEED_MEESAGE_AFTER_FORGOT+0)
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_SMS_ID).id(Common.NET_SMS_ID).build()
@@ -153,7 +151,6 @@ public class ForgetPassWordActivity extends MyBaseActivity {
                 if (checkInput(2)) {
                     return;
                 }
-                LogUtils.e("url:"+(Common.Url_FORGOT + aount + "/" + code));
                 OkHttpUtils.put().url(Common.Url_FORGOT + aount + "/" + code).requestBody("{}")
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
