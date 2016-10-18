@@ -36,6 +36,11 @@ public class Common {
     public static String Url_Logout = hostUrl + "rest/user/logout";
     //个人信息维护
     public static String Url_Manage = hostUrl + "rest/custom/manage";
+    //发送验证码
+    public static final String Url_FORGOT = hostUrl + "rest/checkcode/mobile/";
+    public static final String SEED_MEESAGE_AFTER_FORGOT = "?type=0";
+    //重置密码
+    public static String Url_ResetPWD = hostUrl + "rest/user/forgotpwd/";
     /**************************http访问路径*****************************/
 
 
@@ -49,6 +54,12 @@ public class Common {
     public static int NET_LOGOUT_ID = 3;
     //个人信息维护
     public static int NET_MANAGE_ID = 4;
+    //发送验证码
+    public static int NET_SMS_ID = 5;
+    //验证验证码
+    public static int NET_CHECKCODE_ID = 6;
+    //重置密码
+    public static int NET_RESETPWD_ID = 7;
     /**************************http访问回应识别码*****************************/
 
 

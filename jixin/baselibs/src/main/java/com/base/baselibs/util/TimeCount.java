@@ -64,7 +64,7 @@ public class TimeCount extends CountDownTimer {
             mTimeCountInterface.onTimeOut();
         }
         if (btn!=null) {
-            btn.setText("获取验证码");
+            btn.setText("获取短信验证码");
             btn.setClickable(true);
             btn.setEnabled(true);
         }
