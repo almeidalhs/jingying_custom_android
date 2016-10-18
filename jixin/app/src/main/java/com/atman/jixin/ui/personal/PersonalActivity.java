@@ -115,6 +115,7 @@ public class PersonalActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, PersonalSettingActivity.class));
                 break;
             case R.id.personal_about_and_help_ll:
+                startActivity(new Intent(mContext, AboutAndHelpActivity.class));
                 break;
         }
     }

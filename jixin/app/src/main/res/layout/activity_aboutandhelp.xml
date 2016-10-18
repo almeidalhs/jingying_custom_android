@@ -5,12 +5,11 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/personal_head_ll"
+        android:id="@+id/abouthelp_head_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dimen_dp_40"
-        android:paddingBottom="@dimen/dimen_dp_40"
-        android:background="@color/color_cccccc"
+        android:paddingTop="@dimen/dimen_dp_48"
+        android:paddingBottom="@dimen/dimen_dp_48"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -18,18 +17,17 @@
             android:id="@+id/personal_head_img_iv"
             android:layout_width="@dimen/dimen_dp_60"
             android:layout_height="@dimen/dimen_dp_60"
-            android:src="@mipmap/img_sign_logo"
-            img:shape="circle" />
+            android:src="@mipmap/ic_launcher"
+            img:shape="rect"
+            img:shape_round_radius="@dimen/dimen_dp_5"/>
 
         <TextView
-            android:id="@+id/personal_head_name_tx"
+            android:id="@+id/abouthelp_head_version_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_dp_5"
-            android:text="即客"
             android:textSize="@dimen/dimen_sp_15"
-            android:textStyle="bold"
-            android:textColor="@color/color_ffffff"/>
+            android:textColor="@color/color_494949"/>
     </LinearLayout>
 
     <ImageView
@@ -39,7 +37,7 @@
         android:background="@color/color_line"/>
 
     <LinearLayout
-        android:id="@+id/personal_information_ll"
+        android:id="@+id/abouthelp_agreement_ll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_dp_40"
         android:background="@drawable/white_no_radius_bt_selector"
@@ -49,17 +47,11 @@
         android:paddingLeft="@dimen/dimen_dp_15"
         android:paddingRight="@dimen/dimen_dp_15">
 
-        <ImageView
-            android:layout_width="@dimen/dimen_dp_25"
-            android:layout_height="@dimen/dimen_dp_25"
-            android:src="@mipmap/person_setting_icon_info" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
             android:layout_weight="1"
-            android:text="个人信息"
+            android:text="用户协议"
             android:textColor="@color/color_494949"
             android:textSize="@dimen/dimen_sp_15" />
 
@@ -82,7 +74,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/personal_attention_ll"
+        android:id="@+id/abouthelp_feedback_ll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_dp_40"
         android:background="@drawable/white_no_radius_bt_selector"
@@ -92,28 +84,58 @@
         android:paddingLeft="@dimen/dimen_dp_15"
         android:paddingRight="@dimen/dimen_dp_15">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="意见反馈"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
         <ImageView
-            android:layout_width="@dimen/dimen_dp_25"
-            android:layout_height="@dimen/dimen_dp_25"
-            android:src="@mipmap/person_setting_icon_costlist" />
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/abouthelp_service_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
             android:layout_weight="1"
-            android:text="我的关注"
+            android:text="联系客服"
             android:textColor="@color/color_494949"
             android:textSize="@dimen/dimen_sp_15" />
 
         <TextView
-            android:id="@+id/personal_attention_num_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen_dp_10"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="0"
+            android:text="400-820-5310"
             android:textColor="@color/color_494949"
             android:textSize="@dimen/dimen_sp_15" />
 
@@ -128,89 +150,15 @@
         android:layout_height="1px"
         android:background="@color/color_line"/>
 
-    <ImageView
+    <TextView
+        android:paddingBottom="@dimen/dimen_dp_15"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginTop="@dimen/dimen_dp_15"
-        android:background="@color/color_line"/>
-
-    <LinearLayout
-        android:id="@+id/personal_setting_ll"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_dp_40"
-        android:background="@drawable/white_no_radius_bt_selector"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dimen_dp_15"
-        android:paddingRight="@dimen/dimen_dp_15">
-
-        <ImageView
-            android:layout_width="@dimen/dimen_dp_25"
-            android:layout_height="@dimen/dimen_dp_25"
-            android:src="@mipmap/person_setting_icon_setting" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:layout_weight="1"
-            android:text="设置"
-            android:textColor="@color/color_494949"
-            android:textSize="@dimen/dimen_sp_15" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_ffffff">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:background="@color/color_line"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/personal_about_and_help_ll"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_dp_40"
-        android:background="@drawable/white_no_radius_bt_selector"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dimen_dp_15"
-        android:paddingRight="@dimen/dimen_dp_15">
-
-        <ImageView
-            android:layout_width="@dimen/dimen_dp_25"
-            android:layout_height="@dimen/dimen_dp_25"
-            android:src="@mipmap/person_setting_icon_about" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:layout_weight="1"
-            android:text="关于&amp;帮助"
-            android:textColor="@color/color_494949"
-            android:textSize="@dimen/dimen_sp_15" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_line"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:gravity="center_horizontal|bottom"
+        android:text="上海阿特门计算机技术有限公司"
+        android:textSize="@dimen/dimen_sp_12"
+        android:textColor="@color/color_494949"
+        android:id="@+id/textView" />
 
 </LinearLayout>
