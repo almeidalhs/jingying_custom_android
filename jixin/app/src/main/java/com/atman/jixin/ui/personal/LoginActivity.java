@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.atman.jixin.R;
 import com.atman.jixin.model.request.LoginRequestModel;
 import com.atman.jixin.model.response.LoginResultModel;
+import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
@@ -21,6 +22,7 @@ import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
@@ -51,6 +53,7 @@ public class LoginActivity extends MyBaseActivity {
     private LoginResultModel mLoginResultModel;
     private String username;
     private String password;
+    private String headImge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,11 @@ public class LoginActivity extends MyBaseActivity {
         hideTitleBar();
 
         loginUsernameEt.setText(PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_US));
+        headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
+        if (!headImge.isEmpty()) {
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, partStorePreviewHeadImg
+                    , MyBaseApplication.getApplication().optionsHead);
+        }
     }
 
     @Override
@@ -101,12 +109,16 @@ public class LoginActivity extends MyBaseActivity {
             mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
             PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW, MD5Util.getMD5(password));
-            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID, mLoginResultModel.getBody().getId()+"");
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID, mLoginResultModel.getBody().getAtmanUserId()+"");
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG, mLoginResultModel.getBody().getMemberAvatar());
             showToast("登录成功");
-            Intent mIntent = new Intent();
-            setResult(RESULT_OK,mIntent);
-            finish();
+            toMainActivity();
         }
+    }
+
+    private void toMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override

@@ -280,7 +280,9 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         if (mShouldLogin) {
             if (!isLogin()) {
                 //需要登陆状态，跳转到登陆界面
-                startActivityForResult(LoginActivity.createIntent(this, getIntent()), Common.TO_LOGIN);
+                startActivity(LoginActivity.createIntent(this, getIntent()));
+//                startActivityForResult(LoginActivity.createIntent(this, getIntent()), Common.TO_LOGIN);
+                finish();
             }
         }
     }

@@ -16,6 +16,7 @@ public class PreferenceUtil {
 	public static final String PARM_US = "UserName";
 	public static final String PARM_PW = "PassWord";
 	public static final String PARM_USERID = "UserId";
+	public static final String PARM_USER_IMG = "UserImg";
 	public static final String PARM_USER_KEY = "USER_KEY";
 	public static final String PARM_USER_TOKEN = "USER_TOKEN";
 	public static final String PARM_YUNXIN_TOKEN = "PARM_YUNXIN_TOKEN";

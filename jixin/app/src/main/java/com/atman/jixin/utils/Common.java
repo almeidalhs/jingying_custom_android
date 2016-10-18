@@ -30,6 +30,8 @@ public class Common {
     /**************************http访问路径*****************************/
     //登录
     public static String Url_Login = hostUrl + "login";
+    //个人
+    public static String Url_Personal = hostUrl + "rest/custom/index/";
     /**************************http访问路径*****************************/
 
 
@@ -37,6 +39,8 @@ public class Common {
     /**************************http访问回应识别码*****************************/
     //登录
     public static int NET_LOGIN_ID = 1;
+    //个人
+    public static int NET_PERSONAL_ID = 2;
     /**************************http访问回应识别码*****************************/
 
 
