@@ -11,6 +11,8 @@ import com.atman.jixin.R;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.MyTools;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -59,8 +61,6 @@ public class PersonalInformationActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("个人信息");
-
-        updataView();
     }
 
     private void updataView() {
@@ -76,8 +76,15 @@ public class PersonalInformationActivity extends MyBaseActivity {
                 personalinforGanderTx.setText("男");
             }
             if (MyBaseApplication.USERINFOR.getBody().getMemberBirthday()!=null) {
-                personalinforBirthdayTx.setText(MyBaseApplication.USERINFOR.getBody()
-                        .getMemberBirthday().substring(0,10));
+                if (MyBaseApplication.USERINFOR.getBody().getMemberBirthday().contains("-")) {
+                    personalinforBirthdayTx.setText(MyBaseApplication.USERINFOR.getBody()
+                            .getMemberBirthday().substring(0,10));
+                } else {
+                    LogUtils.e(">>:"+Long.parseLong(MyBaseApplication.USERINFOR.getBody()
+                            .getMemberBirthday())/1000);
+                    personalinforBirthdayTx.setText(MyTools.convertTime(Long.parseLong(MyBaseApplication.USERINFOR.getBody()
+                            .getMemberBirthday()), "yyyy-MM-dd"));
+                }
             } else {
                 personalinforBirthdayTx.setText("");
             }
@@ -112,6 +119,7 @@ public class PersonalInformationActivity extends MyBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updataView();
     }
 
     @Override
@@ -138,6 +146,7 @@ public class PersonalInformationActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, ResetPassWordActivity.class));
                 break;
             case R.id.personalinfor_nick_ll:
+                startActivity(new Intent(mContext, ModifyNickActivity.class));
                 break;
             case R.id.personalinfor_headimg_ll:
                 break;

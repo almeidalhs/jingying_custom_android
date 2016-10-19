@@ -63,14 +63,6 @@ public class PersonalActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("个人");
-
-        headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
-        userId = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USERID);
-        if (!headImge.isEmpty()) {
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, personalHeadImgIv
-                    , MyBaseApplication.getApplication().optionsHead);
-            personalHeadNameTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
-        }
     }
 
     @Override
@@ -86,6 +78,13 @@ public class PersonalActivity extends MyBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
+        userId = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USERID);
+        if (!headImge.isEmpty()) {
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, personalHeadImgIv
+                    , MyBaseApplication.getApplication().optionsHead);
+            personalHeadNameTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
+        }
     }
 
     @Override

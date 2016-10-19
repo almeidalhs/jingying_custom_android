@@ -113,7 +113,12 @@ public class MyStringCallback extends StringCallback {
                 if (id == 3) {
                     CallBack.onStringResponse(data, response, id);
                 } else {
-                    CallBack.onError(null, new IOException("新的错误数据结构"), 200, id);
+                    BaseErrorThreeModel mBaseErrorThreeModel = new Gson().fromJson(data, BaseErrorThreeModel.class);
+                    if (mBaseErrorThreeModel!=null) {
+                        CallBack.onError(null, new IOException(mBaseErrorThreeModel.getRequestResult().getMessage()), 200, id);
+                    } else {
+                        CallBack.onError(null, new IOException("新的错误数据结构"), 200, id);
+                    }
                 }
 //                BaseErrorModel mBaseErrorModel = new Gson().fromJson(data, BaseErrorModel.class);
 //                if (mBaseErrorModel != null && mBaseErrorModel.getError_code()!=null) {

@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
-import com.atman.jixin.model.request.SetPersonalInformationModel;
 import com.atman.jixin.model.response.LoginResultModel;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
@@ -23,6 +22,8 @@ import com.base.baselibs.widget.switchbutton.SwitchButton;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,13 +81,10 @@ public class PersonalSettingActivity extends MyBaseActivity {
         settingOpenSb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetPersonalInformationModel temp = new SetPersonalInformationModel();
-                temp.setShowNear(setStatus);
-                temp.setMemberSex(MyBaseApplication.USERINFOR.getBody().getMemberSex());
-                temp.setMemberBirthday(Long.parseLong(MyBaseApplication.USERINFOR.getBody().getMemberBirthday()));
+                Map<String, Integer> p = new HashMap<>();
+                p.put("showNear", setStatus);
                 OkHttpUtils.postString().url(Common.Url_Manage).tag(Common.NET_MANAGE_ID)
-                        .id(Common.NET_MANAGE_ID).content(mGson.toJson(temp))
-                        .mediaType(Common.JSON)
+                        .id(Common.NET_MANAGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .build().execute(new MyStringCallback(mContext, "", PersonalSettingActivity.this, true));
@@ -123,7 +121,7 @@ public class PersonalSettingActivity extends MyBaseActivity {
             clearData();
             startActivity(new Intent(mContext, MainActivity.class));
             finish();
-        } if (id == Common.NET_MANAGE_ID) {
+        } else if (id == Common.NET_MANAGE_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
             setSwitchButton();

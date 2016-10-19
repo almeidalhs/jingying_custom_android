@@ -28,6 +28,7 @@
         <activity android:name=".ui.personal.FeedbackActivity" />
         <activity android:name=".ui.personal.PersonalInformationActivity" />
         <activity android:name=".ui.personal.ResetPassWordActivity" />
+        <activity android:name=".ui.personal.ModifyNickActivity" />
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
