@@ -173,7 +173,7 @@
         android:layout_marginLeft="@dimen/dimen_dp_40"
         android:layout_marginRight="@dimen/dimen_dp_40"
         android:layout_marginTop="@dimen/dimen_dp_60"
-        android:background="@drawable/red_bt_selector"
+        android:background="@drawable/red_redius_bt_selector"
         android:hint="退出登录"
         android:textColor="@color/color_ffffff"
         android:textColorHint="@color/color_ffffff"

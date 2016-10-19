@@ -108,6 +108,7 @@ public class PersonalActivity extends MyBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.personal_information_ll:
+                startActivity(new Intent(mContext, PersonalInformationActivity.class));
                 break;
             case R.id.personal_attention_ll:
                 break;

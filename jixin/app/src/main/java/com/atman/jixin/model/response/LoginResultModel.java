@@ -93,6 +93,25 @@ public class LoginResultModel {
         private int showNear;
         private String guestUuid;
         private String mobileSign;
+        private String interest;
+
+        public String getJob() {
+            return job;
+        }
+
+        public void setJob(String job) {
+            this.job = job;
+        }
+
+        private String job;
+
+        public String getInterest() {
+            return interest;
+        }
+
+        public void setInterest(String interest) {
+            this.interest = interest;
+        }
 
         public long getId() {
             return id;

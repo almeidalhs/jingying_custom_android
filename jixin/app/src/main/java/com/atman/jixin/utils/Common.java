@@ -45,6 +45,8 @@ public class Common {
     public static String Url_Register = hostUrl + "rest/user";
     //意见反馈
     public static String Url_Feedback = hostUrl + "rest/ad/feedback";
+    //修改密码
+    public static String Url_Reset_PassWord = hostUrl + "rest/user/password/";
     /**************************http访问路径*****************************/
 
 
@@ -68,6 +70,8 @@ public class Common {
     public static int NET_REGISTER_ID = 8;
     //意见反馈
     public static int NET_FEEDBACK_ID = 9;
+    //修改密码
+    public static int NET_RESET_PASSWORD_ID = 10;
     /**************************http访问回应识别码*****************************/
 
 
@@ -75,5 +79,7 @@ public class Common {
     /**************************跳转码*****************************/
     public static int TO_LOGIN = 10000;
     public static int TO_REGISTER = 10001;
+    public static int TO_RESETPW = 10002;
+    public static int TO_PERSONALINFOR = 10004;
     /**************************跳转码*****************************/
 }

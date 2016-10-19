@@ -24,17 +24,17 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/18.
  */
 
-public class FeedbackAcivity extends MyBaseActivity {
+public class FeedbackActivity extends MyBaseActivity {
 
     @Bind(R.id.feedback_sug_conent_et)
     EditText feedbackSugConentEt;
 
-    private Context mContext = FeedbackAcivity.this;
+    private Context mContext = FeedbackActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acivity_feedback);
+        setContentView(R.layout.activity_feedback);
         ButterKnife.bind(this);
     }
 
@@ -58,7 +58,7 @@ public class FeedbackAcivity extends MyBaseActivity {
                                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                                 .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                                 .tag(Common.NET_FEEDBACK_ID).id(Common.NET_FEEDBACK_ID).build()
-                                .execute(new MyStringCallback(mContext, "", FeedbackAcivity.this, true));
+                                .execute(new MyStringCallback(mContext, "", FeedbackActivity.this, true));
                     }
                 });
     }

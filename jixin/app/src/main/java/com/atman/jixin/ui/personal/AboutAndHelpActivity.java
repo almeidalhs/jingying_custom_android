@@ -80,7 +80,7 @@ public class AboutAndHelpActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, UserAgreementActivity.class));
                 break;
             case R.id.abouthelp_feedback_ll:
-                startActivity(new Intent(mContext, FeedbackAcivity.class));
+                startActivity(new Intent(mContext, FeedbackActivity.class));
                 break;
             case R.id.abouthelp_service_ll:
                 toPhone(mContext, "4008205310");
