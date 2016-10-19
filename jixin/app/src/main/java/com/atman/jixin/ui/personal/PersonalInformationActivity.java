@@ -93,10 +93,10 @@ public class PersonalInformationActivity extends MyBaseActivity {
             } else {
                 personalinforDisplayTx.setText("");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getMobileSign()!=null) {
-                personalinforSignatrueTx.setText(MyBaseApplication.USERINFOR.getBody().getMobileSign());
+            if (MyBaseApplication.USERINFOR.getBody().getMemberSign()!=null) {
+                personalinforSignatrueTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberSign());
             } else {
-                personalinforSignatrueTx.setText("");
+                personalinforSignatrueTx.setText("这家伙很忙,还未来得及设置签名!");
             }
             if (MyBaseApplication.USERINFOR.getBody().getMaritalStatus()!=null) {
                 personalinforEmotionstatusTx.setText(MyBaseApplication.USERINFOR.getBody().getMaritalStatus());
@@ -155,14 +155,18 @@ public class PersonalInformationActivity extends MyBaseActivity {
             case R.id.personalinfor_birthday_ll:
                 break;
             case R.id.personalinfor_display_ll:
+                startActivity(new Intent(mContext, ModifyDisplayActivity.class));
                 break;
             case R.id.personalinfor_signatrue_ll:
+                startActivity(new Intent(mContext, ModifySignatrueActivity.class));
                 break;
             case R.id.personalinfor_emotionstatus_ll:
                 break;
             case R.id.personalinfor_occupation_ll:
+                startActivity(new Intent(mContext, ModifyJobActivity.class));
                 break;
             case R.id.personalinfor_hobby_ll:
+                startActivity(new Intent(mContext, ModifyHobbyActivity.class));
                 break;
         }
     }

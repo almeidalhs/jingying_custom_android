@@ -14,13 +14,13 @@
         android:paddingRight="@dimen/dimen_dp_40">
 
         <com.base.baselibs.widget.MyCleanEditText
-            android:id="@+id/modifynick_name_et"
+            android:id="@+id/modifysighatrue_content_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/radius_edit_bg"
             android:gravity="center_vertical"
-            android:hint="输入昵称"
-            android:maxLength="17"
+            android:hint="输入个性签名"
+            android:maxLength="50"
             android:paddingLeft="@dimen/dimen_dp_10"
             android:paddingRight="@dimen/dimen_dp_10"
             android:singleLine="true"

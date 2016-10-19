@@ -92,7 +92,7 @@ public class LoginResultModel {
         private String maritalStatus;
         private int showNear;
         private String guestUuid;
-        private String mobileSign;
+        private String memberSign;
         private String interest;
 
         public String getJob() {
@@ -345,12 +345,12 @@ public class LoginResultModel {
             this.guestUuid = guestUuid;
         }
 
-        public String getMobileSign() {
-            return mobileSign;
+        public String getMemberSign() {
+            return memberSign;
         }
 
-        public void setMobileSign(String mobileSign) {
-            this.mobileSign = mobileSign;
+        public void setMemberSign(String memberSign) {
+            this.memberSign = memberSign;
         }
     }
 }

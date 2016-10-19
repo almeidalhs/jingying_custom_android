@@ -24,18 +24,18 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/19.
  */
 
-public class ModifyNickActivity extends MyBaseActivity {
+public class ModifyHobbyActivity extends MyBaseActivity {
 
-    @Bind(R.id.modifynick_name_et)
-    MyCleanEditText modifynickNameEt;
+    @Bind(R.id.modifyhobby_hobby_et)
+    MyCleanEditText modifyhobbyHobbyEt;
 
-    private Context mContext = ModifyNickActivity.this;
-    private  String str;
+    private Context mContext = ModifyHobbyActivity.this;
+    private String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modifynick);
+        setContentView(R.layout.activity_modifyhobby);
         ButterKnife.bind(this);
     }
 
@@ -43,27 +43,32 @@ public class ModifyNickActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        setBarTitleTx("修改昵称");
+        setBarTitleTx("编辑兴趣爱好");
         setBarRightTx("完成").setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                str = modifynickNameEt.getText().toString().trim();
+                str = modifyhobbyHobbyEt.getText().toString().trim();
                 if (str.isEmpty()) {
-                    showToast("请输入昵称");
+                    showToast("请输入兴趣爱好");
                     return;
                 }
                 Map<String, String> p = new HashMap<>();
-                p.put("memberName", str);
+                p.put("interest", str);
                 OkHttpUtils.postString().url(Common.Url_Manage).tag(Common.NET_MANAGE_ID)
                         .id(Common.NET_MANAGE_ID).content(mGson.toJson(p))
                         .mediaType(Common.JSON)
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .build().execute(new MyStringCallback(mContext, "", ModifyNickActivity.this, true));
+                        .build().execute(new MyStringCallback(mContext, "", ModifyHobbyActivity.this, true));
             }
         });
 
-        modifynickNameEt.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
+        if (MyBaseApplication.USERINFOR.getBody().getInterest() == null
+                || MyBaseApplication.USERINFOR.getBody().getInterest().isEmpty()) {
+            modifyhobbyHobbyEt.setText("");
+        } else {
+            modifyhobbyHobbyEt.setText(MyBaseApplication.USERINFOR.getBody().getInterest());
+        }
     }
 
     @Override
@@ -77,7 +82,7 @@ public class ModifyNickActivity extends MyBaseActivity {
         if (id == Common.NET_MANAGE_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
-            showToast("昵称修改成功");
+            showToast("兴趣爱好修改成功");
             finish();
         }
     }

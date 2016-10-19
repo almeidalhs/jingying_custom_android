@@ -51,8 +51,8 @@
                     android:layout_marginRight="@dimen/dimen_dp_10"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="昵称"
-                    android:textColor="@color/color_494949"
+                    android:textColor="@color/color_6d6d72"
                     android:textSize="@dimen/dimen_sp_15" />
 
                 <TextView
@@ -138,7 +138,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -230,8 +230,8 @@
                     android:layout_marginRight="@dimen/dimen_dp_10"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -277,8 +277,8 @@
                     android:layout_marginRight="@dimen/dimen_dp_10"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -325,8 +325,8 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:text=""
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -373,9 +373,9 @@
                     android:layout_weight="1"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:gravity="right"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:gravity="right|center_vertical"
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -421,12 +421,12 @@
                     android:layout_marginRight="@dimen/dimen_dp_10"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textColor="@color/color_494949"
+                    android:textColor="@color/color_6d6d72"
                     android:textSize="@dimen/dimen_sp_15" />
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_sp_13"
                     android:src="@mipmap/right_arrow" />
             </LinearLayout>
 
@@ -469,7 +469,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:text=""
-                    android:textColor="@color/color_494949"
+                    android:textColor="@color/color_6d6d72"
                     android:textSize="@dimen/dimen_sp_15" />
 
                 <ImageView
@@ -517,8 +517,8 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:text=""
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"

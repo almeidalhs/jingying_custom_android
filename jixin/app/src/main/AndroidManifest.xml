@@ -29,6 +29,10 @@
         <activity android:name=".ui.personal.PersonalInformationActivity" />
         <activity android:name=".ui.personal.ResetPassWordActivity" />
         <activity android:name=".ui.personal.ModifyNickActivity" />
+        <activity android:name=".ui.personal.ModifyHobbyActivity" />
+        <activity android:name=".ui.personal.ModifyJobActivity" />
+        <activity android:name=".ui.personal.ModifySignatrueActivity" />
+        <activity android:name=".ui.personal.ModifyDisplayActivity" />
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>

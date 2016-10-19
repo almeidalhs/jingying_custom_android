@@ -24,18 +24,17 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/19.
  */
 
-public class ModifyNickActivity extends MyBaseActivity {
+public class ModifyJobActivity extends MyBaseActivity {
 
-    @Bind(R.id.modifynick_name_et)
-    MyCleanEditText modifynickNameEt;
-
-    private Context mContext = ModifyNickActivity.this;
-    private  String str;
+    @Bind(R.id.modifyjob_content_et)
+    MyCleanEditText modifyjobContentEt;
+    private Context mContext = ModifyJobActivity.this;
+    private String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modifynick);
+        setContentView(R.layout.activity_modifyjob);
         ButterKnife.bind(this);
     }
 
@@ -43,27 +42,31 @@ public class ModifyNickActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        setBarTitleTx("修改昵称");
+        setBarTitleTx("编辑职业");
         setBarRightTx("完成").setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                str = modifynickNameEt.getText().toString().trim();
+                str = modifyjobContentEt.getText().toString().trim();
                 if (str.isEmpty()) {
-                    showToast("请输入昵称");
+                    showToast("请输入职业");
                     return;
                 }
                 Map<String, String> p = new HashMap<>();
-                p.put("memberName", str);
+                p.put("job", str);
                 OkHttpUtils.postString().url(Common.Url_Manage).tag(Common.NET_MANAGE_ID)
-                        .id(Common.NET_MANAGE_ID).content(mGson.toJson(p))
-                        .mediaType(Common.JSON)
+                        .id(Common.NET_MANAGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .build().execute(new MyStringCallback(mContext, "", ModifyNickActivity.this, true));
+                        .build().execute(new MyStringCallback(mContext, "", ModifyJobActivity.this, true));
             }
         });
 
-        modifynickNameEt.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
+        if (MyBaseApplication.USERINFOR.getBody().getJob() == null
+                || MyBaseApplication.USERINFOR.getBody().getJob().isEmpty()) {
+            modifyjobContentEt.setText("");
+        } else {
+            modifyjobContentEt.setText(MyBaseApplication.USERINFOR.getBody().getJob());
+        }
     }
 
     @Override
@@ -77,7 +80,7 @@ public class ModifyNickActivity extends MyBaseActivity {
         if (id == Common.NET_MANAGE_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
-            showToast("昵称修改成功");
+            showToast("职业修改成功");
             finish();
         }
     }
