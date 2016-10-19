@@ -60,7 +60,6 @@
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dimen_dp_10"
         android:clickable="true">
 
         <TextView
@@ -68,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/dimen_dp_10"
             android:gravity="center"
             android:textSize="@dimen/dimen_sp_13"
             android:visibility="gone"
@@ -77,7 +77,6 @@
             android:id="@+id/bar_right_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimen_dp_10"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:scaleType="centerInside"

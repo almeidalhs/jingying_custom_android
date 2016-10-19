@@ -43,6 +43,8 @@ public class Common {
     public static String Url_ResetPWD = hostUrl + "rest/user/forgotpwd/";
     //注册
     public static String Url_Register = hostUrl + "rest/user";
+    //意见反馈
+    public static String Url_Feedback = hostUrl + "rest/ad/feedback";
     /**************************http访问路径*****************************/
 
 
@@ -64,6 +66,8 @@ public class Common {
     public static int NET_RESETPWD_ID = 7;
     //注册
     public static int NET_REGISTER_ID = 8;
+    //意见反馈
+    public static int NET_FEEDBACK_ID = 9;
     /**************************http访问回应识别码*****************************/
 
 

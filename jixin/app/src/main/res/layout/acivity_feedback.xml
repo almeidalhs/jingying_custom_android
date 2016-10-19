@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/feedback_sug_conent_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_dp_15"
+        android:background="@drawable/nomal_edit_bg"
+        android:gravity="left|top"
+        android:hint="请在此处键入意见..."
+        android:textSize="@dimen/dimen_sp_13"
+        android:maxLength="255"
+        android:minLines="4"
+        android:padding="5dp" />
 
 </LinearLayout>
