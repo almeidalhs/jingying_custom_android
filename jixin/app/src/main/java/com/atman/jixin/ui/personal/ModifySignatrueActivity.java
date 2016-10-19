@@ -10,6 +10,7 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -59,7 +60,7 @@ public class ModifySignatrueActivity extends MyBaseActivity {
                         .mediaType(Common.JSON)
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .build().execute(new MyStringCallback(mContext, "", ModifySignatrueActivity.this, true));
+                        .build().execute(new MyStringCallback(mContext, "修改中...", ModifySignatrueActivity.this, true));
             }
         });
 
@@ -82,6 +83,9 @@ public class ModifySignatrueActivity extends MyBaseActivity {
         if (id == Common.NET_MANAGE_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW, mLoginResultModel.getBody().getMemberPasswd());
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID, mLoginResultModel.getBody().getAtmanUserId()+"");
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG, mLoginResultModel.getBody().getMemberAvatar());
             showToast("个性签名修改成功");
             finish();
         }

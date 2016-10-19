@@ -18,7 +18,7 @@ public class Common {
 
 
     /**************************http基础访问路径*****************************/
-    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
+    public static String hostUrl = "http://192.168.1.141:8089/";
     public static String ImageUrl = "http://192.168.1.141:8000/by/";
 
 //    public static String hostUrl = "http://www.jiplaza.net/";
@@ -29,24 +29,28 @@ public class Common {
 
     /**************************http访问路径*****************************/
     //登录
-    public static String Url_Login = hostUrl + "login";
+    public static String Url_Login = hostUrl + "baiye/login";
     //个人
-    public static String Url_Personal = hostUrl + "rest/custom/index/";
+    public static String Url_Personal = hostUrl + "baiye/rest/custom/index/";
     //退出
-    public static String Url_Logout = hostUrl + "rest/user/logout";
+    public static String Url_Logout = hostUrl + "baiye/rest/user/logout";
     //个人信息维护
-    public static String Url_Manage = hostUrl + "rest/custom/manage";
+    public static String Url_Manage = hostUrl + "baiye/rest/custom/manage";
     //发送验证码
-    public static final String Url_FORGOT = hostUrl + "rest/checkcode/mobile/";
+    public static final String Url_FORGOT = hostUrl + "baiye/rest/checkcode/mobile/";
     public static final String SEED_MEESAGE_AFTER_FORGOT = "?type=";
     //重置密码
-    public static String Url_ResetPWD = hostUrl + "rest/user/forgotpwd/";
+    public static String Url_ResetPWD = hostUrl + "baiye/rest/user/forgotpwd/";
     //注册
-    public static String Url_Register = hostUrl + "rest/user";
+    public static String Url_Register = hostUrl + "baiye/rest/user";
     //意见反馈
-    public static String Url_Feedback = hostUrl + "rest/ad/feedback";
+    public static String Url_Feedback = hostUrl + "baiye/rest/ad/feedback";
     //修改密码
-    public static String Url_Reset_PassWord = hostUrl + "rest/user/password/";
+    public static String Url_Reset_PassWord = hostUrl + "baiye/rest/user/password/";
+    //上传头像
+    public static final String Url_HeadImg = hostUrl + "upload?uploadType=avatar";
+    //更新头像
+    public static final String Url_Modify_HeadImg = hostUrl + "baiye/rest/user/avatar";
     /**************************http访问路径*****************************/
 
 
@@ -72,6 +76,10 @@ public class Common {
     public static int NET_FEEDBACK_ID = 9;
     //修改密码
     public static int NET_RESET_PASSWORD_ID = 10;
+    //上传头像
+    public static int NET_HEADIMG_ID = 11;
+    //更新头像
+    public static int NET_MODFY_HEADIMG_ID = 12;
     /**************************http访问回应识别码*****************************/
 
 

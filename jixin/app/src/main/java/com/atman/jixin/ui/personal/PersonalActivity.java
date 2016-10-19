@@ -63,6 +63,9 @@ public class PersonalActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("个人");
+
+        headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
+        userId = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USERID);
     }
 
     @Override
