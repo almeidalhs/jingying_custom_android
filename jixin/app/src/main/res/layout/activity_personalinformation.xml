@@ -422,11 +422,11 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:textColor="@color/color_6d6d72"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen_sp_13"
+                    android:layout_height="@dimen/dimen_dp_15"
                     android:src="@mipmap/right_arrow" />
             </LinearLayout>
 
@@ -470,7 +470,7 @@
                     android:gravity="right"
                     android:text=""
                     android:textColor="@color/color_6d6d72"
-                    android:textSize="@dimen/dimen_sp_15" />
+                    android:textSize="@dimen/dimen_sp_13" />
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -23,11 +23,11 @@ import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
-import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.ShapeImageView;
+import com.base.baselibs.widget.WheelView.BirthdayPopwindow;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -44,7 +44,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/19.
  */
 
-public class PersonalInformationActivity extends MyBaseActivity {
+public class PersonalInformationActivity extends MyBaseActivity implements BirthdayPopwindow.PopWindowsCallback {
 
     @Bind(R.id.personalinfor_aount_tx)
     TextView personalinforAountTx;
@@ -69,6 +69,7 @@ public class PersonalInformationActivity extends MyBaseActivity {
 
     private Context mContext = PersonalInformationActivity.this;
     private String allStr;
+    private BirthdayPopwindow mBirthdayPopwindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +209,9 @@ public class PersonalInformationActivity extends MyBaseActivity {
                 showGanderDialog();
                 break;
             case R.id.personalinfor_birthday_ll:
+                mBirthdayPopwindow = new BirthdayPopwindow(mContext
+                        , personalinforBirthdayTx.getText().toString(), this);
+                mBirthdayPopwindow.showTypePopupWindow(view);
                 break;
             case R.id.personalinfor_display_ll:
                 startActivity(new Intent(mContext, ModifyDisplayActivity.class));
@@ -236,9 +240,9 @@ public class PersonalInformationActivity extends MyBaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String str = "";
                 if (which == 0) {
-                    str = "男";
+                    str = "1";
                 } else {
-                    str = "女";
+                    str = "0";
                 }
                 Map<String, String> p = new HashMap<>();
                 p.put("memberSex", str);
@@ -368,5 +372,13 @@ public class PersonalInformationActivity extends MyBaseActivity {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true); // no face detection
         startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void selectItem(String str) {
+        allStr = "生日";
+        Map<String, String> p = new HashMap<>();
+        p.put("memberBirthday", String.valueOf(MyTools.transformationToUnix(str, "yyyy-MM-dd")));
+        modifyPersonalInfor(p, true);
     }
 }

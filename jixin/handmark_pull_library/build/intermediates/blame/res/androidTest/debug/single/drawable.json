@@ -6,13 +6,5 @@
     {
         "merged": "/Users/tangbingliang/Desktop/gitProjects/jingying_custom_android/jixin/handmark_pull_library/build/intermediates/res/merged/androidTest/debug/drawable/indicator_bg_top.xml",
         "source": "/Users/tangbingliang/Desktop/gitProjects/jingying_custom_android/jixin/handmark_pull_library/build/intermediates/bundles/debug/res/drawable/indicator_bg_top.xml"
-    },
-    {
-        "merged": "/Users/tangbingliang/Desktop/gitProjects/jiying/jixin/handmark_pull_library/build/intermediates/res/merged/androidTest/debug/drawable/indicator_bg_top.xml",
-        "source": "/Users/tangbingliang/Desktop/gitProjects/jiying/jixin/handmark_pull_library/build/intermediates/bundles/debug/res/drawable/indicator_bg_top.xml"
-    },
-    {
-        "merged": "/Users/tangbingliang/Desktop/gitProjects/jiying/jixin/handmark_pull_library/build/intermediates/res/merged/androidTest/debug/drawable/indicator_bg_bottom.xml",
-        "source": "/Users/tangbingliang/Desktop/gitProjects/jiying/jixin/handmark_pull_library/build/intermediates/bundles/debug/res/drawable/indicator_bg_bottom.xml"
     }
 ]
