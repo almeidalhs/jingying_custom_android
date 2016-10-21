@@ -33,6 +33,8 @@
         <activity android:name=".ui.personal.ModifyJobActivity" />
         <activity android:name=".ui.personal.ModifySignatrueActivity" />
         <activity android:name=".ui.personal.ModifyDisplayActivity" />
+        <activity android:name=".ui.scancode.QRScanCodeActivity" />
+        <activity android:name=".ui.im.ShopIMActivity" />
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>

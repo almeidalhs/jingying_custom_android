@@ -353,13 +353,19 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                 }
             });
         } else {
-            mDecodeManager.showResultDialog(this, resultString, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    restartPreview();
-                }
-            });
+//            mDecodeManager.showResultDialog(this, resultString, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    restartPreview();
+//                }
+//            });
+
+            restartPreview();
+            Intent mIntent = new Intent();
+            mIntent.putExtra("ScanResult", resultString);
+            setResult(RESULT_OK,mIntent);
+            finish();
         }
     }
 
@@ -430,12 +436,16 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
 
         private void handleResult(String resultString) {
             QrCodeActivity imagePickerActivity = mWeakQrCodeActivity.get();
-            mDecodeManager.showResultDialog(imagePickerActivity, resultString, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            Intent mIntent = new Intent();
+            mIntent.putExtra("ScanResult", resultString);
+            imagePickerActivity.setResult(RESULT_OK,mIntent);
+            imagePickerActivity.finish();
+//            mDecodeManager.showResultDialog(imagePickerActivity, resultString, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//            });
         }
 
     }
