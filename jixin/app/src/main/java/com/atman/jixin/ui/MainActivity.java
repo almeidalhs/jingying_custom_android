@@ -16,6 +16,7 @@ import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
@@ -60,6 +61,13 @@ public class MainActivity extends MyBaseActivity {
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FaceConversionUtil.getInstace().getFileText(getApplication());
+            }
+        }).start();
+
         hideTitleBar();
     }
 
