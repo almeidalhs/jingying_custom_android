@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.alan.codescanlibs.QrCodeActivity;
 import com.atman.jixin.R;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
@@ -83,6 +84,7 @@ public class MainActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, PersonalActivity.class));
                 break;
             case R.id.main_bottom_ll:
+                startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
                 break;
         }
     }

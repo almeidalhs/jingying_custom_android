@@ -31,5 +31,6 @@ dependencies {
     compile project(':okhttputils')
     compile project(':choicepicture_library')
     compile project(':picturebrowsing_library')
+    compile project(':codescanlibs')
     compile files('libs/fastjson-1.1.34.android.jar')
 }

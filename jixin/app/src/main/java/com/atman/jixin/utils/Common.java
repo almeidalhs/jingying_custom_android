@@ -89,5 +89,6 @@ public class Common {
     public static int TO_REGISTER = 10001;
     public static int TO_RESETPW = 10002;
     public static int TO_PERSONALINFOR = 10004;
+    public static int TO_CODESCAN = 10005;
     /**************************跳转码*****************************/
 }
