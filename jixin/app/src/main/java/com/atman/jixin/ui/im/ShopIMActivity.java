@@ -11,11 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
+import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -62,6 +62,7 @@ public class ShopIMActivity extends MyBaseActivity {
     private QRScanCodeModel mQRScanCodeModel = new QRScanCodeModel();
     private Context mContext = ShopIMActivity.this;
     private boolean isFromList = false;
+    private long storeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +93,11 @@ public class ShopIMActivity extends MyBaseActivity {
 
         if (isFromList) {
             setBarTitleTx(getIntent().getStringExtra("name"));
+            storeId = getIntent().getLongExtra("id", -1);
         } else {
             mQRScanCodeModel = (QRScanCodeModel) getIntent().getSerializableExtra("bean");
             if (mQRScanCodeModel != null) {
+                storeId = mQRScanCodeModel.getBody().getStoreBean().getId();
                 setBarTitleTx(mQRScanCodeModel.getBody().getStoreBean().getStoreName());
             }
         }
@@ -102,7 +105,7 @@ public class ShopIMActivity extends MyBaseActivity {
         setBarRightIv(R.mipmap.shop_member_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast(">>>>");
+                startActivity(MemberCenterActivity.buildIntent(mContext, storeId));
             }
         });
     }

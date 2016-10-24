@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/part_empty_tx"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="@dimen/dimen_sp_15"
+        android:textColor="@color/color_494949"
+        android:text="你的附近还没有人哦~~"/>
+
+</LinearLayout>

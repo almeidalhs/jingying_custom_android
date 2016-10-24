@@ -55,6 +55,8 @@ public class Common {
     public static final String Url_QRCode = hostUrl + "baiye/rest/custom/qrcode";
     //获取关注列表
     public static final String Url_GetLike_List = hostUrl + "baiye/rest/favor/likelist";
+    //获取会员中心
+    public static final String Url_MemberCenter = hostUrl + "baiye/rest/custom/memcenter/";
     /**************************http访问路径*****************************/
 
 
@@ -88,6 +90,8 @@ public class Common {
     public static int NET_QR_CODE_ID = 13;
     //获取关注列表
     public static int NET_GETLIKE_LIST_ID = 14;
+    //获取会员中心
+    public static int NET_MEMBER_CENTRER = 15;
     /**************************http访问回应识别码*****************************/
 
 

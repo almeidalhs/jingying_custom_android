@@ -18,7 +18,6 @@ import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.widget.telephonebook.CharacterParser;
 import com.atman.jixin.widget.telephonebook.FriendsPinyinComparator;
-import com.atman.jixin.widget.telephonebook.PinyinComparator;
 import com.atman.jixin.widget.telephonebook.SideBar;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
