@@ -38,6 +38,8 @@
         <activity android:name=".ui.im.ShopIMActivity" />
         <activity android:name=".ui.shop.MemberCenterActivity" />
         <activity android:name=".ui.shop.IntegralexchangeActivity" />
+        <activity android:name=".ui.shop.GoodsDetailActivity" />
+        <activity android:name=".ui.shop.ExchangeRecordActivity" />
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>

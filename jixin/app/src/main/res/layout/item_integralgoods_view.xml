@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dimen_dp_10"
+    android:paddingRight="@dimen/dimen_dp_10"
+    android:paddingTop="@dimen/dimen_dp_5"
+    android:paddingBottom="@dimen/dimen_dp_5"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_integralgoods_iv"
+        android:layout_width="@dimen/dimen_dp_80"
+        android:layout_height="@dimen/dimen_dp_80"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_integralgoods_name_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textColor="#131313"
+            android:textSize="@dimen/dimen_sp_14"/>
+
+        <TextView
+            android:id="@+id/item_integralgoods_num_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="积分: 1"
+            android:textColor="#131313"
+            android:textSize="@dimen/dimen_sp_12"/>
+
+        <TextView
+            android:id="@+id/item_integralgoods_price_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="售价:￥ 1"
+            android:textColor="#5b5b5b"
+            android:textSize="@dimen/dimen_sp_12"/>
+
+        <TextView
+            android:id="@+id/item_integralgoods_stock_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="剩余库存:1"
+            android:textColor="#5b5b5b"
+            android:textSize="@dimen/dimen_sp_12"/>
+
+        <TextView
+            android:id="@+id/item_integralgoods_limit_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="每人限兑:1"
+            android:textColor="#5b5b5b"
+            android:textSize="@dimen/dimen_sp_12"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_integralgoods_exchange_ll"
+        android:clickable="true"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:background="@drawable/exchange_bg_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_integralgoods_exchange_tx"
+            android:layout_width="@dimen/dimen_dp_50"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:drawableLeft="@mipmap/integral_ic"
+            android:textColor="#69c0a2"
+            android:text="  1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

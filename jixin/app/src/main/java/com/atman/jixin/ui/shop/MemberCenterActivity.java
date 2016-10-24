@@ -39,9 +39,9 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
 
     private Context mContext = MemberCenterActivity.this;
     private long storeId;
+    private int myIntegral;
     private MemberCenterModel mMemberCenterModel;
     private View headView;
-//    private View emptyView;
     private MemberCenterAdapter mAdapter;
 
     private ShapeImageView membercenterHeadIv;
@@ -49,7 +49,6 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     private TextView membercenterHeadNameTx;
     private TextView membercenterHeadIntegralTx;
     private TextView membercenterHeadIntegralMarkTx;
-//    private TextView partEmptyTx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +68,6 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         super.initWidget(v);
         setBarTitleTx("会员中心");
 
-//        emptyView = LayoutInflater.from(mContext).inflate(R.layout.part_empty_view, null);
-//        partEmptyTx = (TextView) emptyView.findViewById(R.id.part_empty_tx);
         headView = LayoutInflater.from(mContext).inflate(R.layout.part_membercenter_head_view, null);
         membercenterHeadIv = (ShapeImageView) headView.findViewById(R.id.membercenter_head_iv);
         membercenterHeadBg = (ImageView) headView.findViewById(R.id.membercenter_head_bg);
@@ -86,7 +83,6 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
 
         mAdapter = new MemberCenterAdapter(mContext, this);
         membercenterListview.addHeaderView(headView);
-//        membercenterListview.setEmptyView(emptyView);
         membercenterListview.setAdapter(mAdapter);
     }
 
@@ -97,7 +93,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         OkHttpUtils.get().url(Common.Url_MemberCenter + storeId)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                .tag(Common.NET_MEMBER_CENTRER).id(Common.NET_MEMBER_CENTRER).build()
+                .tag(Common.NET_MEMBER_CENTRER_ID).id(Common.NET_MEMBER_CENTRER_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, true));
     }
 
@@ -109,7 +105,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
-        if (id == Common.NET_MEMBER_CENTRER) {
+        if (id == Common.NET_MEMBER_CENTRER_ID) {
             mMemberCenterModel = mGson.fromJson(data, MemberCenterModel.class);
 
             updateUi();
@@ -129,12 +125,13 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         membercenterHeadNameTx.setText(mMemberCenterModel.getBody().getStoreName());
         membercenterHeadIntegralTx.setText("  我的积分  " + mMemberCenterModel.getBody().getIntegral());
         mAdapter.updateListView(mMemberCenterModel.getBody().getUserList());
+        myIntegral = mMemberCenterModel.getBody().getIntegral();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OkHttpUtils.getInstance().cancelTag(Common.NET_MEMBER_CENTRER);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_MEMBER_CENTRER_ID);
     }
 
     @Override
@@ -150,7 +147,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         switch (v.getId()) {
             case R.id.membercenter_head_integralmark_tx:
             case R.id.membercenter_head_integral_tx:
-                startActivity(new Intent(mContext, IntegralexchangeActivity.class));
+                startActivity(IntegralexchangeActivity.buildIntent(mContext, storeId, myIntegral));
                 break;
         }
     }

@@ -57,6 +57,10 @@ public class Common {
     public static final String Url_GetLike_List = hostUrl + "baiye/rest/favor/likelist";
     //获取会员中心
     public static final String Url_MemberCenter = hostUrl + "baiye/rest/custom/memcenter/";
+    //获取积分兑换商品
+    public static final String Url_Integral_Exchange = hostUrl + "baiye/rest/integral/";
+    //积分兑换商品
+    public static final String Url_Exchange = hostUrl + "baiye/rest/integral/exchange";
     /**************************http访问路径*****************************/
 
 
@@ -91,7 +95,11 @@ public class Common {
     //获取关注列表
     public static int NET_GETLIKE_LIST_ID = 14;
     //获取会员中心
-    public static int NET_MEMBER_CENTRER = 15;
+    public static int NET_MEMBER_CENTRER_ID = 15;
+    //获取积分兑换商品
+    public static int NET_Integral_EXCHANGE_ID = 16;
+    //积分兑换商品
+    public static int NET_EXCHANGE_ID = 17;
     /**************************http访问回应识别码*****************************/
 
 
