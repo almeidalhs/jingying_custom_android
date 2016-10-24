@@ -53,6 +53,8 @@ public class Common {
     public static final String Url_Modify_HeadImg = hostUrl + "baiye/rest/user/avatar";
     //扫描二维码
     public static final String Url_QRCode = hostUrl + "baiye/rest/custom/qrcode";
+    //获取关注列表
+    public static final String Url_GetLike_List = hostUrl + "baiye/rest/favor/likelist";
     /**************************http访问路径*****************************/
 
 
@@ -84,6 +86,8 @@ public class Common {
     public static int NET_MODFY_HEADIMG_ID = 12;
     //扫描二维码
     public static int NET_QR_CODE_ID = 13;
+    //获取关注列表
+    public static int NET_GETLIKE_LIST_ID = 14;
     /**************************http访问回应识别码*****************************/
 
 

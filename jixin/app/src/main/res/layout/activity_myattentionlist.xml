@@ -1,7 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/mofriend_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/mofriend_no_friends"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dimen_dp_30"
+            android:layout_gravity="right|top"
+            android:gravity="center_vertical"
+            android:text="没有匹配的联系人"
+            android:textColor="#454545"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/mofriend_title_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dimen_dp_30"
+            android:layout_gravity="right|top"
+            android:background="#efeff4"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mofriend_title_layout_catalog"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#efeff4"
+                android:paddingBottom="@dimen/dimen_dp_5"
+                android:paddingLeft="@dimen/dimen_dp_10"
+                android:paddingTop="@dimen/dimen_dp_5"
+                android:textColor="#979797"
+                android:textSize="@dimen/dimen_sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mofriend_dialog"
+            android:layout_width="@dimen/dimen_dp_80"
+            android:layout_height="@dimen/dimen_dp_80"
+            android:layout_gravity="center"
+            android:background="@drawable/show_head_toast_bg"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="@dimen/dimen_sp_30"
+            android:visibility="invisible" />
+
+        <com.atman.jixin.widget.telephonebook.SideBar
+            android:id="@+id/mofriend_sidrbar"
+            android:layout_width="@dimen/dimen_dp_30"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center"
+            android:layout_marginBottom="@dimen/dimen_dp_50"
+            android:layout_marginTop="@dimen/dimen_dp_50" />
+    </FrameLayout>
 </LinearLayout>

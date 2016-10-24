@@ -61,6 +61,7 @@ public class ShopIMActivity extends MyBaseActivity {
 
     private QRScanCodeModel mQRScanCodeModel = new QRScanCodeModel();
     private Context mContext = ShopIMActivity.this;
+    private boolean isFromList = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +78,27 @@ public class ShopIMActivity extends MyBaseActivity {
         return intent;
     }
 
+    public static Intent buildIntent(Context context, long id, String name) {
+        Intent intent = new Intent(context, ShopIMActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", name);
+        intent.putExtra("isFromList", true);
+        return intent;
+    }
+
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        mQRScanCodeModel = (QRScanCodeModel) getIntent().getSerializableExtra("bean");
-        if (mQRScanCodeModel != null) {
-            setBarTitleTx(mQRScanCodeModel.getBody().getStoreBean().getStoreName());
+
+        if (isFromList) {
+            setBarTitleTx(getIntent().getStringExtra("name"));
+        } else {
+            mQRScanCodeModel = (QRScanCodeModel) getIntent().getSerializableExtra("bean");
+            if (mQRScanCodeModel != null) {
+                setBarTitleTx(mQRScanCodeModel.getBody().getStoreBean().getStoreName());
+            }
         }
+
         setBarRightIv(R.mipmap.shop_member_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
