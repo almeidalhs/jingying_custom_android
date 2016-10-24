@@ -138,7 +138,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
         if (id == Common.NET_LOGIN_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW
-                    , mLoginResultModel.getBody().getMemberPasswd());
+                    , MD5Util.getMD5(mLoginResultModel.getBody().getMemberPasswd()));
             PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID
                     , mLoginResultModel.getBody().getAtmanUserId()+"");
             PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG
