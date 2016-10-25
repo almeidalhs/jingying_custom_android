@@ -35,7 +35,7 @@
         <activity android:name=".ui.personal.ModifyDisplayActivity" />
         <activity android:name=".ui.personal.MyAttentionListActivity" />
         <activity android:name=".ui.scancode.QRScanCodeActivity" />
-        <activity android:name=".ui.im.ShopIMActivity" />
+        <activity android:name=".ui.im.ShopIMActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.shop.MemberCenterActivity" />
         <activity android:name=".ui.shop.IntegralexchangeActivity" />
         <activity android:name=".ui.shop.GoodsDetailActivity" />

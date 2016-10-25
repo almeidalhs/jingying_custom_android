@@ -5,20 +5,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.atman.jixin.R;
+import com.atman.jixin.adapter.ChatServiceAdapter;
+import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
+import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.personal.ModifyJobActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
+import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
+import com.base.baselibs.iimp.AdapterInterface;
+import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,7 +44,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/21.
  */
 
-public class ShopIMActivity extends MyBaseActivity {
+public class ShopIMActivity extends MyBaseActivity implements AdapterInterface {
 
     @Bind(R.id.p2pchat_lv)
     PullToRefreshListView p2pchatLv;
@@ -42,8 +56,8 @@ public class ShopIMActivity extends MyBaseActivity {
     Button p2pchatRecordBt;
     @Bind(R.id.blogdetail_addemol_iv)
     ImageView blogdetailAddemolIv;
-    @Bind(R.id.p2pchat_adds_iv)
-    ImageView p2pchatAddsIv;
+    @Bind(R.id.p2pchat_service_or_keyboard_iv)
+    ImageView p2pchatServiceOrKeyboardIv;
     @Bind(R.id.p2pchat_send_bt)
     Button p2pchatSendBt;
     @Bind(R.id.ll1)
@@ -58,11 +72,18 @@ public class ShopIMActivity extends MyBaseActivity {
     RelativeLayout llFacechoose;
     @Bind(R.id.FaceRelativeLayout)
     FaceRelativeLayout FaceRelativeLayout;
+    @Bind(R.id.p2pchat_service_gv)
+    GridView p2pchatServiceGv;
+    @Bind(R.id.p2pchat_service_ll)
+    LinearLayout p2pchatServiceLl;
 
     private QRScanCodeModel mQRScanCodeModel = new QRScanCodeModel();
     private Context mContext = ShopIMActivity.this;
     private boolean isFromList = false;
     private long storeId;
+
+    private GetChatServiceModel mGetChatServiceModel;
+    private ChatServiceAdapter mGVAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +129,30 @@ public class ShopIMActivity extends MyBaseActivity {
                 startActivity(MemberCenterActivity.buildIntent(mContext, storeId));
             }
         });
+
+        initGridView();
+        initListView();
+    }
+
+    private void initListView() {
+    }
+
+    private void initGridView() {
+        mGVAdapter = new ChatServiceAdapter(mContext, this);
+        p2pchatServiceGv.setAdapter(mGVAdapter);
+        p2pchatServiceGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Map<String, String> p = new HashMap<>();
+
+                OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
+                        .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
+                        .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .build().execute(new MyStringCallback(mContext, "", ShopIMActivity.this, false));
+            }
+        });
     }
 
     @Override
@@ -118,11 +163,23 @@ public class ShopIMActivity extends MyBaseActivity {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
+        OkHttpUtils.get().url(Common.Url_Get_UserChat + storeId)
+                .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_GET_USERCHAT_ID).id(Common.NET_GET_USERCHAT_ID).build()
+                .execute(new MyStringCallback(mContext, "", this, true));
     }
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
+        if (id == Common.NET_GET_USERCHAT_ID) {
+            mGetChatServiceModel = mGson.fromJson(data, GetChatServiceModel.class);
+
+            mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
+        } else if (id == Common.NET_SEED_USERCHAT_ID) {
+
+        }
     }
 
     @Override
@@ -133,14 +190,28 @@ public class ShopIMActivity extends MyBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCHAT_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_SEED_USERCHAT_ID);
     }
 
-    @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_adds_iv, R.id.p2pchat_send_bt
-            , R.id.p2pchat_add_picture_tv, R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv})
+    @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_service_or_keyboard_iv, R.id.p2pchat_send_bt
+            , R.id.p2pchat_add_picture_tv, R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv, R.id.item_p2pchat_root_ll})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_p2pchat_root_ll:
+                if (isIMOpen()) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                }
+                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+                blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
+                p2pchatServiceLl.setVisibility(View.GONE);
+                llFacechoose.setVisibility(View.GONE);
+                p2pchatAddLl.setVisibility(View.GONE);
+                handler.postDelayed(runnable, 200);
+                break;
             case R.id.p2pchat_add_iv:
-                if (p2pchatAddLl.getVisibility()==View.VISIBLE) {
+                if (p2pchatAddLl.getVisibility() == View.VISIBLE) {
                     p2pchatAddLl.setVisibility(View.GONE);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
@@ -151,8 +222,9 @@ public class ShopIMActivity extends MyBaseActivity {
                     }
                     p2pchatAddLl.setVisibility(View.VISIBLE);
                 }
+                p2pchatServiceLl.setVisibility(View.GONE);
+                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
                 blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
-                blogdetailAddcommentEt.setVisibility(View.VISIBLE);
                 p2pchatRecordBt.setVisibility(View.GONE);
                 llFacechoose.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
@@ -171,12 +243,29 @@ public class ShopIMActivity extends MyBaseActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
                 }
-                blogdetailAddcommentEt.setVisibility(View.VISIBLE);
+                p2pchatServiceLl.setVisibility(View.GONE);
+                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
                 p2pchatRecordBt.setVisibility(View.GONE);
                 p2pchatAddLl.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;
-            case R.id.p2pchat_adds_iv:
+            case R.id.p2pchat_service_or_keyboard_iv:
+                if (p2pchatServiceLl.getVisibility() == View.VISIBLE) {
+                    p2pchatServiceLl.setVisibility(View.GONE);
+                    p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+                    blogdetailAddcommentEt.setFocusable(true);
+                    blogdetailAddcommentEt.setFocusableInTouchMode(true);
+                    //打开软键盘
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                } else {
+                    if (isIMOpen()) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                    }
+                    p2pchatServiceLl.setVisibility(View.VISIBLE);
+                    p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_keyboard);
+                }
                 llFacechoose.setVisibility(View.GONE);
                 p2pchatAddLl.setVisibility(View.GONE);
                 blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
@@ -200,4 +289,9 @@ public class ShopIMActivity extends MyBaseActivity {
 //            p2pChatLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
         }
     };
+
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
 }

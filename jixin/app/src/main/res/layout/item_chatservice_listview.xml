@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_chatservice_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gray_redius_bg"
+        android:paddingTop="@dimen/dimen_dp_10"
+        android:paddingBottom="@dimen/dimen_dp_10"
+        android:gravity="center"
+        android:text="23岁"
+        android:textColor="#ababab"
+        android:textSize="@dimen/dimen_sp_15" />
+</LinearLayout>

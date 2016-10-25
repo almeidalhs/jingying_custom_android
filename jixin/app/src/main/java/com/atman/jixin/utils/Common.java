@@ -65,6 +65,10 @@ public class Common {
     public static final String Url_Get_GoodsDetail = hostUrl + "baiye/rest/goods/";
     //获取商品兑换记录
     public static final String Url_Get_ExchangeRecord = hostUrl + "baiye/rest/integral/exchangelog/";
+    //获取商家聊天服务信息
+    public static final String Url_Get_UserChat = hostUrl + "baiye/rest/store/userchat/";
+    //发送信息
+    public static final String Url_Seed_UserChat = hostUrl + "baiye/rest/chat/send";
     /**************************http访问路径*****************************/
 
 
@@ -108,6 +112,10 @@ public class Common {
     public static int NET_GET_GOODSDETAI_ID = 18;
     //获取商品兑换记录
     public static int NET_GET_GOODS_EXCHANGERECORD_ID = 19;
+    //获取商家聊天服务信息
+    public static int NET_GET_USERCHAT_ID = 20;
+    //发送信息
+    public static int NET_SEED_USERCHAT_ID = 21;
     /**************************http访问回应识别码*****************************/
 
 
