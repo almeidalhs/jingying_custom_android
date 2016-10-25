@@ -87,12 +87,49 @@ public class GetPersonalInformationModel {
         private int memberCredit;
         private int memberSnsVisitNum;
         private String getuiCid;
+        private String aroundSite;
+        private String interest;
+        private String job;
         private int showNear;
         private String guestUuid;
+        private String memberSign;
+
+        public String getMemberSign() {
+            return memberSign;
+        }
+
+        public void setMemberSign(String memberSign) {
+            this.memberSign = memberSign;
+        }
+
         private int likeNum;
         private int favNum;
         private int couponNum;
         private int consumeNum;
+
+        public String getInterest() {
+            return interest;
+        }
+
+        public void setInterest(String interest) {
+            this.interest = interest;
+        }
+
+        public String getJob() {
+            return job;
+        }
+
+        public void setJob(String job) {
+            this.job = job;
+        }
+
+        public String getAroundSite() {
+            return aroundSite;
+        }
+
+        public void setAroundSite(String aroundSite) {
+            this.aroundSite = aroundSite;
+        }
 
         public long getId() {
             return id;

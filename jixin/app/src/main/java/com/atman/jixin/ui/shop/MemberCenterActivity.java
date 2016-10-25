@@ -15,6 +15,7 @@ import com.atman.jixin.adapter.MemberCenterAdapter;
 import com.atman.jixin.model.response.MemberCenterModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.TAPersonalInformationActivity;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
@@ -89,17 +90,17 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void doInitBaseHttp() {
+        super.doInitBaseHttp();
         storeId = getIntent().getLongExtra("storeId", -1);
         OkHttpUtils.get().url(Common.Url_MemberCenter + storeId)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_MEMBER_CENTRER_ID).id(Common.NET_MEMBER_CENTRER_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, true));
-    }
-
-    @Override
-    public void doInitBaseHttp() {
-        super.doInitBaseHttp();
     }
 
     @Override
@@ -138,6 +139,8 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     public void onItemClick(View view, int position) {
         switch (view.getId()) {
             case R.id.item_member_root_ll:
+                startActivity(TAPersonalInformationActivity.buildIntent(mContext
+                        , mAdapter.getItem(position).getAtmanUserId()));
                 break;
         }
     }

@@ -77,7 +77,11 @@ public class MemberCenterAdapter extends BaseAdapter {
         viewHolder.itemMemberNameTv.setText(mData.getMemberName());
         viewHolder.itemMemberAgeTv.setText(mData.getMemberAge());
         viewHolder.itemMemberGanderTv.setText(mData.getMemberSex());
-        viewHolder.itemMemberSignTv.setText(mData.getMemberSign());
+        if (mData.getMemberSign().isEmpty()) {
+            viewHolder.itemMemberSignTv.setText("这家伙很忙,还未来得及设置签名!");
+        } else {
+            viewHolder.itemMemberSignTv.setText(mData.getMemberSign());
+        }
         ImageLoader.getInstance().displayImage(Common.ImageUrl+mData.getMemberAvatar()
                 , viewHolder.itemMemberHeadIv, MyBaseApplication.getApplication().optionsHead);
 

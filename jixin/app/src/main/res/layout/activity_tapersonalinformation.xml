@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/tapersional_head_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.base.baselibs.widget.ShapeImageView
+                        xmlns:img="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/tapersional_head_iv"
+                        android:layout_width="@dimen/dimen_dp_60"
+                        android:layout_height="@dimen/dimen_dp_60"
+                        android:src="@mipmap/img_sign_logo"
+                        img:shape="circle" />
+
+                    <TextView
+                        android:id="@+id/tapersional_head_name_tx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_dp_5"
+                        android:textSize="@dimen/dimen_sp_15"
+                        android:textColor="@color/color_ffffff" />
+                    
+                    <TextView
+                        android:id="@+id/tapersional_head_gander_tx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dimen_sp_12"
+                        android:layout_marginTop="@dimen/dimen_dp_5"
+                        android:textColor="@color/color_ffffff" />
+                </LinearLayout>
+
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_dp_10"
+                android:paddingRight="@dimen/dimen_dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/tapersional_sign_ic" />
+
+                <TextView
+                    android:id="@+id/tapersional_head_sign_tx"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_dp_10"
+                    android:singleLine="true"
+                    android:text="这家伙很忙,还未来得及设置签名!"
+                    android:textColor="#69c0a2" />
+            </LinearLayout>
+            
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line"/>
+
+            <ImageView
+                android:layout_marginTop="@dimen/dimen_dp_15"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_40"
+                android:background="@color/color_ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_dp_150"
+                    android:layout_height="wrap_content"
+                    android:text="常出没地"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <TextView
+                    android:id="@+id/tapersional_display_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_ffffff">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/dimen_dp_15"
+                    android:background="@color/color_line"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_40"
+                android:background="@color/color_ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_dp_150"
+                    android:layout_height="wrap_content"
+                    android:text="职业"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <TextView
+                    android:id="@+id/tapersional_job_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_ffffff">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/dimen_dp_15"
+                    android:background="@color/color_line"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_40"
+                android:background="@color/color_ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_dp_150"
+                    android:layout_height="wrap_content"
+                    android:text="兴趣爱好"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <TextView
+                    android:id="@+id/tapersional_hobby_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text=""
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line"/>
+
+            <Button
+                android:id="@+id/tapersional_tochat_bt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_40"
+                android:layout_below="@+id/login_password_et"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/dimen_dp_40"
+                android:layout_marginRight="@dimen/dimen_dp_40"
+                android:layout_marginTop="@dimen/dimen_dp_20"
+                android:background="@drawable/green_redius_bt_selector"
+                android:hint="进入聊天"
+                android:textColor="@color/color_ffffff"
+                android:textColorHint="@color/color_ffffff"
+                android:textSize="@dimen/dimen_sp_15" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
