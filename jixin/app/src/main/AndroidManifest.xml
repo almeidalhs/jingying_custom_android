@@ -43,6 +43,15 @@
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
+
+        <!--getui-->
+        <receiver
+            android:name="com.atman.jixin.receiver.GeTuiPushReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

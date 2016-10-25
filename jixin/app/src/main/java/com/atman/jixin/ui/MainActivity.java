@@ -21,6 +21,7 @@ import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.ShapeImageView;
+import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -50,6 +51,10 @@ public class MainActivity extends MyBaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSwipeBackEnable(false);
+
+        if (isLogin()) {
+            PushManager.getInstance().initialize(this.getApplicationContext());
+        }
     }
 
     public static Intent buildIntent(Context context, boolean isToWeb) {

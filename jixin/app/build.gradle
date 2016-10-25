@@ -14,6 +14,17 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
+        }
+        //参数说明
+        manifestPlaceholders = [
+                GETUI_APP_ID : "vQZCZlRGRRA3duMkclFK",
+                GETUI_APP_KEY : "svJcVsHjrL8AlxSpZ0Kgh",
+                GETUI_APP_SECRET : "g9aeu5ibFL7sblEZ8EH1e5",
+                PACKAGE_NAME : applicationId
+        ]
+        //APP_ID、APP_KEY、APP_SECRET请根据个推开发者后台申请到的应用参数进行相应替换
     }
 
     signingConfigs {
@@ -99,8 +110,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':baselibs')
-    compile'org.greenrobot:greendao:3.1.0'
-    compile'org.greenrobot:greendao-generator:3.1.0'
+    compile 'com.getui:sdk:2.9.0.0'
+    compile 'org.greenrobot:greendao:3.1.0'
+    compile 'org.greenrobot:greendao-generator:3.1.0'
     compile 'com.android.support:appcompat-v7:22.2.1'
     testCompile 'junit:junit:4.12'
 }
