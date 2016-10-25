@@ -10,6 +10,7 @@
     <color name="color_white_pressed">#F5F5F5</color>
 
     <color name="color_00000000">#00000000</color>
+    <color name="color_000000">#000000</color>
     <color name="color_16c5ee">#16c5ee</color>
     <color name="color_f3f1f2">#f3f1f2</color>
     <color name="color_efeff4">#efeff4</color>
@@ -26,4 +27,5 @@
     <color name="color_6d6d72">#6d6d72</color>
     <color name="color_00bcae">#00bcae</color>
     <color name="color_10ccbe">#10ccbe</color>
+    <color name="color_df2138">#df2138</color>
 </resources>

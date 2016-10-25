@@ -104,7 +104,9 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
         pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(GoodsDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getGoodsId()));
+                startActivity(GoodsDetailActivity.buildIntent(mContext
+                        , mAdapter.getItem(position-1).getGoodsId()
+                        , mAdapter.getItem(position-1).getGoodsName()));
             }
         });
     }

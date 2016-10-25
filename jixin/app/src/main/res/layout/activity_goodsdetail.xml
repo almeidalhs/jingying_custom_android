@@ -1,6 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/mall_top_ad_ll"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_170">
+
+                <fragment
+                    android:id="@+id/fragment_cycle_viewpager_content"
+                    android:name="com.base.baselibs.widget.adview.CycleViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_ffffff"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dimen_dp_5"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15"
+                android:paddingTop="@dimen/dimen_dp_5">
+
+                <TextView
+                    android:id="@+id/goodsdetail_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dimen_sp_18" />
+
+                <TextView
+                    android:id="@+id/goodsdetail_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_df2138"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <TextView
+                    android:id="@+id/goodsdetail_introduction_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_dp_15"
+                android:background="@color/color_ffffff"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dimen_dp_5"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15"
+                android:paddingTop="@dimen/dimen_dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品描述"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <TextView
+                    android:id="@+id/goodsdetail_description_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_6d6d72"
+                    android:textSize="@dimen/dimen_sp_13" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

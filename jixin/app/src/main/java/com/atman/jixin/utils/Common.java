@@ -61,6 +61,8 @@ public class Common {
     public static final String Url_Integral_Exchange = hostUrl + "baiye/rest/integral/";
     //积分兑换商品
     public static final String Url_Exchange = hostUrl + "baiye/rest/integral/exchange";
+    //获取商品详情
+    public static final String Url_Get_GoodsDetail = hostUrl + "baiye/rest/goods/";
     /**************************http访问路径*****************************/
 
 
@@ -100,6 +102,8 @@ public class Common {
     public static int NET_Integral_EXCHANGE_ID = 16;
     //积分兑换商品
     public static int NET_EXCHANGE_ID = 17;
+    //获取商品详情
+    public static int NET_GET_GOODSDETAI_ID = 18;
     /**************************http访问回应识别码*****************************/
 
 
