@@ -139,7 +139,7 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tapersional_tochat_bt:
-                startActivity(ShopIMActivity.buildIntent(mContext, persionId
+                startActivity(PersonalIMActivity.buildIntent(mContext, persionId
                         , mGetPersonalInformationModel.getBody().getMemberName()));
                 break;
         }
