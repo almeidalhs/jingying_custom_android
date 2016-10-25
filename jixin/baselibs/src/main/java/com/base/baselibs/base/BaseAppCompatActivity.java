@@ -3,19 +3,15 @@ package com.base.baselibs.base;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
 import com.base.baselibs.R;
 import com.base.baselibs.iimp.IInit;
-import com.base.baselibs.net.BaseErrorModel;
-import com.base.baselibs.net.BaseNormalModel;
 import com.base.baselibs.net.httpCallBack;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.WaitingDialog;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 import okhttp3.Call;

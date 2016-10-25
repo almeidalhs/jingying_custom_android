@@ -27,6 +27,7 @@ import com.atman.jixin.ui.personal.LoginActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
+import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.google.gson.Gson;
 
@@ -310,6 +311,10 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     public void clearData() {
         super.clearData();
         MyBaseApplication.getApplication().cleanLoginData();
+        Intent intent = new Intent();
+        intent.setClass(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /**
