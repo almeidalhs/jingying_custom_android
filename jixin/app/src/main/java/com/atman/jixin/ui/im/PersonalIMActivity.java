@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,10 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.atman.jixin.R;
+import com.atman.jixin.model.iimp.ADChatTargetType;
+import com.atman.jixin.model.iimp.ADChatType;
+import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
+import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.personal.ModifyJobActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
+import com.base.baselibs.iimp.EditCheckBack;
+import com.base.baselibs.iimp.MyTextWatcherTwo;
+import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -39,8 +48,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     ImageView p2pchatAddIv;
     @Bind(R.id.blogdetail_addcomment_et)
     MyCleanEditText blogdetailAddcommentEt;
-    @Bind(R.id.p2pchat_record_bt)
-    Button p2pchatRecordBt;
     @Bind(R.id.blogdetail_addemol_iv)
     ImageView blogdetailAddemolIv;
     @Bind(R.id.p2pchat_send_bt)
@@ -60,6 +67,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
 
     private Context mContext = PersonalIMActivity.this;
     private long storeId;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +87,8 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        setBarTitleTx(getIntent().getStringExtra("name"));
+        name = getIntent().getStringExtra("name");
+        setBarTitleTx(name);
         storeId = getIntent().getLongExtra("id", -1);
 
         initListView();
@@ -144,7 +153,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                     p2pchatAddLl.setVisibility(View.VISIBLE);
                 }
                 blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
-                p2pchatRecordBt.setVisibility(View.GONE);
                 llFacechoose.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;
@@ -162,7 +170,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
                 }
-                p2pchatRecordBt.setVisibility(View.GONE);
                 p2pchatAddLl.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;

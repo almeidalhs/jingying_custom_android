@@ -66,18 +66,6 @@
                     android:padding="@dimen/dimen_dp_5"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/dimen_sp_15" />
-
-                <Button
-                    android:id="@+id/p2pchat_record_bt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/et_addcomment_bg_selector"
-                    android:gravity="center"
-                    android:minHeight="@dimen/dimen_dp_30"
-                    android:text="按住 说话"
-                    android:textColor="@color/color_black"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <ImageView
@@ -89,14 +77,15 @@
                 android:src="@mipmap/adchat_input_action_icon_face" />
 
             <RelativeLayout
-                android:layout_width="@dimen/dimen_dp_25"
-                android:layout_height="@dimen/dimen_dp_25"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginRight="@dimen/dimen_dp_5">
 
                 <ImageView
                     android:id="@+id/p2pchat_service_or_keyboard_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dimen_dp_25"
+                    android:layout_height="@dimen/dimen_dp_25"
+                    android:layout_centerVertical="true"
                     android:src="@mipmap/adchat_input_action_icon_keyboard" />
 
                 <Button

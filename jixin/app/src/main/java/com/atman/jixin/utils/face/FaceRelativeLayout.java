@@ -74,6 +74,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
      */
     private View view;
     private View view2;
+    private View view3;
 
     /**
      * 输入框
@@ -163,6 +164,9 @@ public class FaceRelativeLayout extends RelativeLayout implements
                 if (view2!=null) {
                     view2.setVisibility(View.GONE);
                 }
+                if (view3!=null) {
+                    view3.setVisibility(View.GONE);
+                }
                 break;
 
         }
@@ -195,6 +199,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
         et_sendmessage.setOnClickListener(this);
         view = findViewById(R.id.ll_facechoose);
         view2 = findViewById(R.id.p2pchat_add_ll);
+        view3 = findViewById(R.id.p2pchat_service_ll);
         blogdetail_addemol_iv = (ImageView) findViewById(R.id.blogdetail_addemol_iv);
         blogdetail_addemol_iv.setOnClickListener(this);
     }
