@@ -1,11 +1,11 @@
 package com.atman.jixin.ui.im;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -21,16 +21,18 @@ import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
-import com.atman.jixin.ui.personal.ModifyJobActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -278,7 +280,26 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface {
             case R.id.p2pchat_add_camera_tv:
                 break;
             case R.id.p2pchat_add_record_tv:
+                p2pchatAddLl.setVisibility(View.GONE);
+                startActivityForResult(RecordingActivity.buildIntent(mContext, storeId), Common.TO_RECORDE);
                 break;
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        overridePendingTransition(com.base.baselibs.R.anim.activity_bottom_in, com.base.baselibs.R.anim.activity_bottom_out);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == Common.TO_RECORDE) {
+            LogUtils.e("ShopIMActivity_URL:"+data.getStringExtra("url"));
         }
     }
 

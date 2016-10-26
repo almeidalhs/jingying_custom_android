@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/recording_top_ll"
+        android:layout_above="@+id/recording_bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <!-- 录音显示UI层-->
+    <LinearLayout
+        android:id="@+id/rcChat_popup"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:visibility="gone" >
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            layout="@layout/voice_recording_hint_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recording_bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@color/color_ffffff"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="@dimen/dimen_dp_15"
+        android:paddingBottom="@dimen/dimen_dp_25"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/recording_tip_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_sp_14"
+            android:text="按住说话"
+            android:textColor="@color/color_757575"/>
+
+        <ImageView
+            android:id="@+id/recording_iv"
+            android:layout_marginTop="@dimen/dimen_dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/record_bg_selector"/>
+    </LinearLayout>
+
+</RelativeLayout>

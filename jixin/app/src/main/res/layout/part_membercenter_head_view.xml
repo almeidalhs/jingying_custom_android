@@ -40,7 +40,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_dp_30"
+            android:layout_height="@dimen/dimen_dp_35"
             android:background="#88000000"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dimen_dp_10"

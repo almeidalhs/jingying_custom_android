@@ -31,4 +31,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="recordingStyle" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_black</item>
+        <item name="colorAccent">@color/color_black</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
+        <item name="android:windowBackground">@color/color_recording_bg</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

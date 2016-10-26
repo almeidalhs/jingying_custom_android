@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="activity_default_bg">#f3f1f2</color>
+    <color name="color_recording_bg">#66000000</color>
     <color name="default_textcolor">#757575</color>
     <color name="color_line">#c8c8c8</color>
     <color name="color_white_pressed">#F5F5F5</color>
