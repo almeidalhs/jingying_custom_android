@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="@color/color_ffffff"
+    android:padding="@dimen/dimen_dp_5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.base.baselibs.widget.ShapeImageView
+        xmlns:img="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_session_head_iv"
+        android:layout_margin="@dimen/dimen_dp_10"
+        android:layout_width="@dimen/dimen_dp_35"
+        android:layout_height="@dimen/dimen_dp_35"
+        android:src="@mipmap/img_sign_logo"
+        img:shape="circle" />
+
+    <TextView
+        android:id="@+id/item_session_unread_tx"
+        android:layout_width="@dimen/dimen_dp_17"
+        android:layout_height="@dimen/dimen_dp_17"
+        android:layout_marginLeft="-20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="@dimen/dimen_sp_10"
+        android:textColor="@color/color_ffffff"
+        android:background="@mipmap/dote_pressed"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_5"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item_session_nick_tx"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="nick"
+                android:textColor="#484848"
+                android:textSize="@dimen/dimen_sp_15"/>
+
+            <TextView
+                android:id="@+id/item_session_time_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016-11-11"
+                android:textColor="#a2a2a2"
+                android:textSize="@dimen/dimen_sp_13"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_session_content_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="neirong"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:singleLine="true"
+            android:textColor="#a2a2a2"
+            android:textSize="@dimen/dimen_sp_13"/>
+    </LinearLayout>
+
+</LinearLayout>

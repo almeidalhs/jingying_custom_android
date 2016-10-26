@@ -266,6 +266,6 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
     @Override
     public void onItemClick(View view, int position) {
         startActivity(ShopIMActivity.buildIntent(mContext, adapter.getItem(position).getId()
-                , adapter.getItem(position).getStoreName()));
+                , adapter.getItem(position).getStoreName(), adapter.getItem(position).getStoreBanner(), true));
     }
 }

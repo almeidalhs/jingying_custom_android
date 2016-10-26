@@ -18,6 +18,9 @@ import android.widget.RelativeLayout;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.ChatServiceAdapter;
+import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.greendao.gen.ChatListModelDao;
+import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.response.GetChatServiceModel;
@@ -35,10 +38,8 @@ import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,12 +87,16 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
     private QRScanCodeModel mQRScanCodeModel = new QRScanCodeModel();
     private Context mContext = ShopIMActivity.this;
     private boolean isFromList = false;
-    private long storeId;
+    private long storeId = -1;
     private String name;
+    private String avatar;
     private int adChatTypeText;
 
     private GetChatServiceModel mGetChatServiceModel;
     private ChatServiceAdapter mGVAdapter;
+
+    private ChatListModelDao mChatListModelDao;
+    private ChatMessageModelDao mChatMessageModelDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,19 +105,21 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, QRScanCodeModel mQRScanCodeModel) {
+    public static Intent buildIntent(Context context, QRScanCodeModel mQRScanCodeModel, boolean isFromList) {
         Intent intent = new Intent(context, ShopIMActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("bean", mQRScanCodeModel);
         intent.putExtras(b);
+        intent.putExtra("isFromList", isFromList);
         return intent;
     }
 
-    public static Intent buildIntent(Context context, long id, String name) {
+    public static Intent buildIntent(Context context, long id, String name, String avatar, boolean isFromList) {
         Intent intent = new Intent(context, ShopIMActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
-        intent.putExtra("isFromList", true);
+        intent.putExtra("avatar", avatar);
+        intent.putExtra("isFromList", isFromList);
         return intent;
     }
 
@@ -120,16 +127,20 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
     public void initWidget(View... v) {
         super.initWidget(v);
 
+        isFromList = getIntent().getBooleanExtra("isFromList", false);
         if (isFromList) {
             name = getIntent().getStringExtra("name");
+            avatar = getIntent().getStringExtra("avatar");
             storeId = getIntent().getLongExtra("id", -1);
         } else {
             mQRScanCodeModel = (QRScanCodeModel) getIntent().getSerializableExtra("bean");
             if (mQRScanCodeModel != null) {
                 storeId = mQRScanCodeModel.getBody().getStoreBean().getId();
                 name = mQRScanCodeModel.getBody().getStoreBean().getStoreName();
+                avatar = mQRScanCodeModel.getBody().getStoreBean().getMessageBean().getTargetAvatar();
             }
         }
+        LogUtils.e("name:"+name+",storeId:"+storeId+",avatar:"+avatar);
         setBarTitleTx(name);
 
         setBarRightIv(R.mipmap.shop_member_icon).setOnClickListener(new View.OnClickListener() {
@@ -140,6 +151,9 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
         });
 
         blogdetailAddcommentEt.addTextChangedListener(new MyTextWatcherTwo(this));
+
+        mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
+        mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
 
         initGridView();
         initListView();
@@ -304,6 +318,7 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
         temp.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
         temp.setTargetId(storeId);
         temp.setTargetName(name);
+        temp.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
         temp.setSendTime(System.currentTimeMillis());
         if (adChatType_text == ADChatType.ADChatType_Text) {
             str = blogdetailAddcommentEt.getText().toString().trim();
@@ -325,6 +340,22 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .build().execute(new MyStringCallback(mContext, "发送中...", ShopIMActivity.this, true));
+
+        ChatListModel mChatListModel= mChatListModelDao.queryBuilder()
+                .where(ChatListModelDao.Properties.TargetId.eq(storeId)).build().unique();
+        if (mChatListModel==null) {
+            if (avatar.isEmpty() || temp.getTargetName().isEmpty()) {
+                return;
+            }
+            ChatListModel tempChat = new ChatListModel(null, temp.getTargetId(), temp.getTargetType()
+                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar);
+            mChatListModelDao.save(tempChat);
+        } else {
+            mChatListModel.setSendTime(temp.getSendTime());
+            mChatListModel.setUnreadNum(0);
+            mChatListModel.setContent(temp.getContent());
+            mChatListModelDao.update(mChatListModel);
+        }
     }
 
     @Override

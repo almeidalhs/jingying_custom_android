@@ -7,6 +7,9 @@
     <dimen name="dimen_dp_5">5dp</dimen>
     <dimen name="dimen_dp_10">10dp</dimen>
     <dimen name="dimen_dp_15">15dp</dimen>
+    <dimen name="dimen_dp_17">17dp</dimen>
+    <dimen name="dimen_dp_18">18dp</dimen>
+    <dimen name="dimen_dp_19">19dp</dimen>
     <dimen name="dimen_dp_20">20dp</dimen>
     <dimen name="dimen_dp_25">25dp</dimen>
     <dimen name="dimen_dp_30">30dp</dimen>

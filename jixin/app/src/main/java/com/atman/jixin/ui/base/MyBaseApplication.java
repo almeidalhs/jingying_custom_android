@@ -9,9 +9,9 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.atman.jixin.R;
+import com.atman.jixin.model.greendao.gen.DaoMaster;
+import com.atman.jixin.model.greendao.gen.DaoSession;
 import com.atman.jixin.model.response.LoginResultModel;
-import com.atman.wysq.model.greendao.gen.DaoMaster;
-import com.atman.wysq.model.greendao.gen.DaoSession;
 import com.base.baselibs.base.BaseApplication;
 import com.base.baselibs.util.PreferenceUtil;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
