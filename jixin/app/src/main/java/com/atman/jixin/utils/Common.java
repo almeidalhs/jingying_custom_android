@@ -69,6 +69,8 @@ public class Common {
     public static final String Url_Get_UserChat = hostUrl + "baiye/rest/store/userchat/";
     //发送信息
     public static final String Url_Seed_UserChat = hostUrl + "baiye/rest/chat/send";
+    //上传图片
+    public static final String Url_Up_File = hostUrl + "upload?uploadType=";
     /**************************http访问路径*****************************/
 
 
@@ -116,6 +118,8 @@ public class Common {
     public static int NET_GET_USERCHAT_ID = 20;
     //发送信息
     public static int NET_SEED_USERCHAT_ID = 21;
+    //上传图片
+    public static int NET_UP_File_ID = 22;
     /**************************http访问回应识别码*****************************/
 
 

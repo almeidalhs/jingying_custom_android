@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -26,24 +27,31 @@ import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
+import com.atman.jixin.model.iimp.UpChatFileType;
 import com.atman.jixin.model.response.GetChatServiceModel;
+import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
+import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.UiHelper;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
+import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +116,11 @@ public class ShopIMActivity extends MyBaseActivity
     private List<ChatMessageModel> allMessageList = new ArrayList<>();
 
     private P2PChatAdapter mAdapter;
+
+    private final int CHOOSE_BIG_PICTURE = 444;
+    private final int TAKE_BIG_PICTURE = 555;
+    private Uri imageUri;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,17 +237,22 @@ public class ShopIMActivity extends MyBaseActivity
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
-        super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_USERCHAT_ID) {
+            super.onStringResponse(data, response, id);
             mGetChatServiceModel = mGson.fromJson(data, GetChatServiceModel.class);
 
             mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
+            super.onStringResponse(data, response, id);
             if (adChatTypeText == ADChatType.ADChatType_Text
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
             }
             updateChatMessage(0);
+        } else if (id == Common.NET_UP_File_ID) {
+            HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
+            String str = mHeadImgResultModel.getBody().get(0).getUrl();
+            seedMessage(ADChatType.ADChatType_Image, str);
         }
     }
 
@@ -261,6 +279,7 @@ public class ShopIMActivity extends MyBaseActivity
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCHAT_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_SEED_USERCHAT_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_File_ID);
     }
 
     @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_service_or_keyboard_iv, R.id.p2pchat_send_bt
@@ -339,11 +358,17 @@ public class ShopIMActivity extends MyBaseActivity
                 handler.postDelayed(runnable, 200);
                 break;
             case R.id.p2pchat_send_bt:
-                seedMessage(ADChatType.ADChatType_Text);
+                seedMessage(ADChatType.ADChatType_Text, "");
                 break;
             case R.id.p2pchat_add_picture_tv:
+                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                getAlbum.setType("image/*");
+                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+                p2pchatAddLl.setVisibility(View.GONE);
                 break;
             case R.id.p2pchat_add_camera_tv:
+                path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
+                p2pchatAddLl.setVisibility(View.GONE);
                 break;
             case R.id.p2pchat_add_record_tv:
                 p2pchatAddLl.setVisibility(View.GONE);
@@ -352,7 +377,7 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    private void seedMessage(int adChatType_text) {
+    private void seedMessage(int adChatType_text, String imageUrl) {
         String str = "";
         adChatTypeText = adChatType_text;
         MessageModel temp = new MessageModel();
@@ -365,11 +390,11 @@ public class ShopIMActivity extends MyBaseActivity
             str = blogdetailAddcommentEt.getText().toString().trim();
         } else if (adChatType_text == ADChatType.ADChatType_Image
                 || adChatType_text == ADChatType.ADChatType_ImageText) {
-            str = "[图片]";
+            str = imageUrl;
         } else if (adChatType_text == ADChatType.ADChatType_Audio) {
             str = "[语音]";
         } else if (adChatType_text == ADChatType.ADChatType_Video) {
-            str = "[视屏]";
+            str = "[视频]";
         }
         if (str.isEmpty()) {
             return;
@@ -457,6 +482,29 @@ public class ShopIMActivity extends MyBaseActivity
         }
         if (requestCode == Common.TO_RECORDE) {
             LogUtils.e("ShopIMActivity_URL:"+data.getStringExtra("url"));
+        } else {
+            if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
+                imageUri = data.getData();
+            } else if (requestCode == TAKE_BIG_PICTURE) {
+                imageUri = Uri.parse("file:///" + path);
+            }
+            if (imageUri != null) {
+                LogUtils.e("imageUri:"+imageUri);
+                try {
+                    File temp = BitmapTools.revitionImage(mContext, imageUri);
+                    if (temp==null) {
+                        showToast("发送失败");
+                        return;
+                    }
+                    OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatI)
+                            .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                            .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()), temp)
+                            .id(Common.NET_UP_File_ID).tag(Common.NET_UP_File_ID)
+                            .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -486,7 +534,22 @@ public class ShopIMActivity extends MyBaseActivity
 
     @Override
     public void onItem(View v, int position) {
-
+        switch (v.getId()) {
+            case R.id.item_p2pchat_root_Rl:
+                if (isIMOpen()) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+                }
+                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+                p2pchatSendBt.setVisibility(View.GONE);
+                p2pchatServiceOrKeyboardIv.setVisibility(View.VISIBLE);
+                blogdetailAddcommentEt.setVisibility(View.VISIBLE);
+                llFacechoose.setVisibility(View.GONE);
+                p2pchatAddLl.setVisibility(View.GONE);
+                p2pchatServiceLl.setVisibility(View.GONE);
+                handler.postDelayed(runnable, 200);
+                break;
+        }
     }
 
     @Override

@@ -21,12 +21,14 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.face.SmileUtils;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.ShapeImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,27 +225,27 @@ public class P2PChatAdapter extends BaseAdapter {
                             , holderText.itemP2pchatTextRightTx, temp.getContent()));
                 }
                 break;
-//            case ContentTypeInter.contentTypeImage:
-//                if (temp.getIsSelfSend()) {
-//                    holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
-//                    if (temp.getImageThumUrl().startsWith("http")) {
-//                        ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageRightIv
-//                                , MyBaseApplication.getApplication().getOptionsNot(), mListener);
-//                    } else {
-//                        File mFile = new File(temp.getImageFilePath());
-//                        if (mFile.exists()) {
-//                            ImageLoader.getInstance().displayImage("file://" + temp.getImageFilePath(), holderText.itemP2pchatImageRightIv
-//                                    , MyBaseApplication.getApplication().getOptionsNot());
-//                        } else {
-//                            ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageRightIv
-//                                    , MyBaseApplication.getApplication().getOptionsNot(), mListener);
-//                        }
-//                    }
-//                } else {
-//                    holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
-//                    ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageLeftIv, MyBaseApplication.getApplication().getOptionsNot());
-//                }
-//                break;
+            case ADChatType.ADChatType_Image:
+                String url = temp.getContent();
+                if (!url.contains("http")) {
+                    url = Common.ImageUrl + temp.getContent();
+                }
+                File f = ImageLoader.getInstance().getDiskCache().get(url);
+                if (f!=null) {
+                    LogUtils.e("f:"+f);
+                } else {
+                    LogUtils.e("f is null");
+                }
+                if (temp.getSelfSend()) {
+                    holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
+                    ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv
+                            , MyBaseApplication.getApplication().optionsHead, mListener);
+                } else {
+                    holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
+                    ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageLeftIv
+                            , MyBaseApplication.getApplication().optionsHead, mListener);
+                }
+                break;
 //            case ContentTypeInter.contentTypeImageSmall:
 //                LogUtils.e("temp.getImageSThumUrl():" + temp.getImageSThumUrl());
 //                LogUtils.e("temp.getImageSUrl():" + temp.getImageSUrl());
