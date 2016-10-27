@@ -26,13 +26,14 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property TargetId = new Property(1, long.class, "targetId", false, "TARGET_ID");
-        public final static Property TargetType = new Property(2, int.class, "targetType", false, "TARGET_TYPE");
-        public final static Property SendTime = new Property(3, long.class, "sendTime", false, "SEND_TIME");
-        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
-        public final static Property UnreadNum = new Property(5, int.class, "unreadNum", false, "UNREAD_NUM");
-        public final static Property IdentifyStr = new Property(6, String.class, "identifyStr", false, "IDENTIFY_STR");
-        public final static Property TargetName = new Property(7, String.class, "targetName", false, "TARGET_NAME");
-        public final static Property TargetAvatar = new Property(8, String.class, "targetAvatar", false, "TARGET_AVATAR");
+        public final static Property LoginId = new Property(2, long.class, "loginId", false, "LOGIN_ID");
+        public final static Property TargetType = new Property(3, int.class, "targetType", false, "TARGET_TYPE");
+        public final static Property SendTime = new Property(4, long.class, "sendTime", false, "SEND_TIME");
+        public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
+        public final static Property UnreadNum = new Property(6, int.class, "unreadNum", false, "UNREAD_NUM");
+        public final static Property IdentifyStr = new Property(7, String.class, "identifyStr", false, "IDENTIFY_STR");
+        public final static Property TargetName = new Property(8, String.class, "targetName", false, "TARGET_NAME");
+        public final static Property TargetAvatar = new Property(9, String.class, "targetAvatar", false, "TARGET_AVATAR");
     }
 
 
@@ -50,13 +51,14 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"CHAT_LIST_MODEL\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TARGET_ID\" INTEGER NOT NULL ," + // 1: targetId
-                "\"TARGET_TYPE\" INTEGER NOT NULL ," + // 2: targetType
-                "\"SEND_TIME\" INTEGER NOT NULL ," + // 3: sendTime
-                "\"CONTENT\" TEXT," + // 4: content
-                "\"UNREAD_NUM\" INTEGER NOT NULL ," + // 5: unreadNum
-                "\"IDENTIFY_STR\" TEXT," + // 6: identifyStr
-                "\"TARGET_NAME\" TEXT," + // 7: targetName
-                "\"TARGET_AVATAR\" TEXT);"); // 8: targetAvatar
+                "\"LOGIN_ID\" INTEGER NOT NULL ," + // 2: loginId
+                "\"TARGET_TYPE\" INTEGER NOT NULL ," + // 3: targetType
+                "\"SEND_TIME\" INTEGER NOT NULL ," + // 4: sendTime
+                "\"CONTENT\" TEXT," + // 5: content
+                "\"UNREAD_NUM\" INTEGER NOT NULL ," + // 6: unreadNum
+                "\"IDENTIFY_STR\" TEXT," + // 7: identifyStr
+                "\"TARGET_NAME\" TEXT," + // 8: targetName
+                "\"TARGET_AVATAR\" TEXT);"); // 9: targetAvatar
     }
 
     /** Drops the underlying database table. */
@@ -74,28 +76,29 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindLong(2, entity.getTargetId());
-        stmt.bindLong(3, entity.getTargetType());
-        stmt.bindLong(4, entity.getSendTime());
+        stmt.bindLong(3, entity.getLoginId());
+        stmt.bindLong(4, entity.getTargetType());
+        stmt.bindLong(5, entity.getSendTime());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
-        stmt.bindLong(6, entity.getUnreadNum());
+        stmt.bindLong(7, entity.getUnreadNum());
  
         String identifyStr = entity.getIdentifyStr();
         if (identifyStr != null) {
-            stmt.bindString(7, identifyStr);
+            stmt.bindString(8, identifyStr);
         }
  
         String targetName = entity.getTargetName();
         if (targetName != null) {
-            stmt.bindString(8, targetName);
+            stmt.bindString(9, targetName);
         }
  
         String targetAvatar = entity.getTargetAvatar();
         if (targetAvatar != null) {
-            stmt.bindString(9, targetAvatar);
+            stmt.bindString(10, targetAvatar);
         }
     }
 
@@ -108,28 +111,29 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindLong(2, entity.getTargetId());
-        stmt.bindLong(3, entity.getTargetType());
-        stmt.bindLong(4, entity.getSendTime());
+        stmt.bindLong(3, entity.getLoginId());
+        stmt.bindLong(4, entity.getTargetType());
+        stmt.bindLong(5, entity.getSendTime());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
-        stmt.bindLong(6, entity.getUnreadNum());
+        stmt.bindLong(7, entity.getUnreadNum());
  
         String identifyStr = entity.getIdentifyStr();
         if (identifyStr != null) {
-            stmt.bindString(7, identifyStr);
+            stmt.bindString(8, identifyStr);
         }
  
         String targetName = entity.getTargetName();
         if (targetName != null) {
-            stmt.bindString(8, targetName);
+            stmt.bindString(9, targetName);
         }
  
         String targetAvatar = entity.getTargetAvatar();
         if (targetAvatar != null) {
-            stmt.bindString(9, targetAvatar);
+            stmt.bindString(10, targetAvatar);
         }
     }
 
@@ -143,13 +147,14 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         ChatListModel entity = new ChatListModel( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getLong(offset + 1), // targetId
-            cursor.getInt(offset + 2), // targetType
-            cursor.getLong(offset + 3), // sendTime
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // content
-            cursor.getInt(offset + 5), // unreadNum
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // identifyStr
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // targetName
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // targetAvatar
+            cursor.getLong(offset + 2), // loginId
+            cursor.getInt(offset + 3), // targetType
+            cursor.getLong(offset + 4), // sendTime
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // content
+            cursor.getInt(offset + 6), // unreadNum
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // identifyStr
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // targetName
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // targetAvatar
         );
         return entity;
     }
@@ -158,13 +163,14 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
     public void readEntity(Cursor cursor, ChatListModel entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTargetId(cursor.getLong(offset + 1));
-        entity.setTargetType(cursor.getInt(offset + 2));
-        entity.setSendTime(cursor.getLong(offset + 3));
-        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setUnreadNum(cursor.getInt(offset + 5));
-        entity.setIdentifyStr(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setTargetName(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setTargetAvatar(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setLoginId(cursor.getLong(offset + 2));
+        entity.setTargetType(cursor.getInt(offset + 3));
+        entity.setSendTime(cursor.getLong(offset + 4));
+        entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setUnreadNum(cursor.getInt(offset + 6));
+        entity.setIdentifyStr(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setTargetName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setTargetAvatar(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override

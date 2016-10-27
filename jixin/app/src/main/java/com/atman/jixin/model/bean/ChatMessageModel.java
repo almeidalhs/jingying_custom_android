@@ -16,7 +16,8 @@ public class ChatMessageModel {
     @Id(autoincrement = true)
     private Long id;
     private long chatId;
-    private int type;
+    private long loginId;
+    private int type;//消息类别
     private int targetType; //0:target为用户 1:target为店铺
     private long targetId;
     private String targetName;
@@ -203,6 +204,14 @@ public class ChatMessageModel {
         this.type = type;
     }
 
+    public long getLoginId() {
+        return this.loginId;
+    }
+
+    public void setLoginId(long loginId) {
+        this.loginId = loginId;
+    }
+
     public long getChatId() {
         return this.chatId;
     }
@@ -219,16 +228,17 @@ public class ChatMessageModel {
         this.id = id;
     }
 
-    @Generated(hash = 362995898)
-    public ChatMessageModel(Long id, long chatId, int type, int targetType,
-            long targetId, String targetName, String targetAvatar, long sendTime,
-            String content, int audio_duration, String video_image_url,
-            String imageT_icon, String imageT_title, String imageT_back,
-            String identifyStr, int actionType, long operaterId,
-            String operaterName, int operaterType, boolean selfSend, int readed,
-            int sendStatus) {
+    @Generated(hash = 1792823188)
+    public ChatMessageModel(Long id, long chatId, long loginId, int type,
+            int targetType, long targetId, String targetName, String targetAvatar,
+            long sendTime, String content, int audio_duration,
+            String video_image_url, String imageT_icon, String imageT_title,
+            String imageT_back, String identifyStr, int actionType,
+            long operaterId, String operaterName, int operaterType,
+            boolean selfSend, int readed, int sendStatus) {
         this.id = id;
         this.chatId = chatId;
+        this.loginId = loginId;
         this.type = type;
         this.targetType = targetType;
         this.targetId = targetId;

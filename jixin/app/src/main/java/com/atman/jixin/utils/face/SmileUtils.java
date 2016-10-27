@@ -28,7 +28,8 @@ public class SmileUtils {
         SpannableString spannableString = new SpannableString(source);
         Resources res = context.getResources();
 
-        String regexEmotion = "\\/+([\u11e00-\u9fa5]{1})";
+//        String regexEmotion = "\\/+([\u11e00-\u9fa5]{1})";
+        String regexEmotion = "\\[[\u4e00-\u9fa5\\w]+\\]";
         Pattern patternEmotion = Pattern.compile(regexEmotion);
         Matcher matcherEmotion = patternEmotion.matcher(spannableString);
 

@@ -36,6 +36,14 @@ public class MessageModel {
 
     public static class EventAction {
         private int actionType;
+
+        public int getActionType() {
+            return actionType;
+        }
+
+        public void setActionType(int actionType) {
+            this.actionType = actionType;
+        }
     }
 
     public long getChatId() {

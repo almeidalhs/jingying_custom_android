@@ -3,6 +3,7 @@ package com.atman.jixin.ui.im;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -18,7 +19,9 @@ import android.widget.RelativeLayout;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.ChatServiceAdapter;
+import com.atman.jixin.adapter.P2PChatAdapter;
 import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
@@ -37,10 +40,13 @@ import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -53,7 +59,8 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/21.
  */
 
-public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, EditCheckBack {
+public class ShopIMActivity extends MyBaseActivity
+        implements AdapterInterface, EditCheckBack, P2PChatAdapter.P2PAdapterInter {
 
     @Bind(R.id.p2pchat_lv)
     PullToRefreshListView p2pchatLv;
@@ -97,6 +104,10 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
 
     private ChatListModelDao mChatListModelDao;
     private ChatMessageModelDao mChatMessageModelDao;
+    private ChatMessageModel allMessage;
+    private List<ChatMessageModel> allMessageList = new ArrayList<>();
+
+    private P2PChatAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,11 +166,27 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
         mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
         mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
 
+        allMessageList = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(storeId)
+                , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
+
         initGridView();
         initListView();
     }
 
     private void initListView() {
+        initRefreshView(PullToRefreshBase.Mode.DISABLED, p2pchatLv);
+        mAdapter = new P2PChatAdapter(mContext, getmWidth(), p2pchatLv, handler, runnable, this);
+        p2pchatLv.setAdapter(mAdapter);
+        mAdapter.setLeftChange(true);
+        mAdapter.setLeftImageUrl(avatar);
+
+        mAdapter.addImMessageDao(allMessageList);
+        p2pchatLv.getRefreshableView().post(new Runnable() {
+            @Override
+            public void run() {
+                p2pchatLv.getRefreshableView().setSelection(mAdapter.getCount());
+            }
+        });
     }
 
     private void initGridView() {
@@ -207,12 +234,26 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
             }
+            updateChatMessage(0);
         }
     }
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
+        updateChatMessage(1);
+    }
+
+    private void updateChatMessage(int i) {
+        if (allMessage!=null) {
+            ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
+                    ChatMessageModelDao.Properties.Id.eq(allMessage.getId())).build().unique();
+            if (upMessage!=null) {
+                upMessage.setSendStatus(i);
+                mChatMessageModelDao.update(upMessage);
+                mAdapter.setImMessageStatus(upMessage.getId(), i);
+            }
+        }
     }
 
     @Override
@@ -341,13 +382,15 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .build().execute(new MyStringCallback(mContext, "发送中...", ShopIMActivity.this, true));
 
-        ChatListModel mChatListModel= mChatListModelDao.queryBuilder()
-                .where(ChatListModelDao.Properties.TargetId.eq(storeId)).build().unique();
+        //添加聊天列表
+        ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
+                , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
         if (mChatListModel==null) {
             if (avatar.isEmpty() || temp.getTargetName().isEmpty()) {
                 return;
             }
-            ChatListModel tempChat = new ChatListModel(null, temp.getTargetId(), temp.getTargetType()
+            ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
+                    , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
                     , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar);
             mChatListModelDao.save(tempChat);
         } else {
@@ -356,6 +399,48 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
             mChatListModel.setContent(temp.getContent());
             mChatListModelDao.update(mChatListModel);
         }
+        //添加聊天记录
+        ChatMessageModel tempMessage = new ChatMessageModel();
+        tempMessage.setId(null);
+        tempMessage.setTargetId(temp.getTargetId());
+        tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
+        tempMessage.setType(temp.getType());
+        tempMessage.setTargetType(temp.getTargetType());
+        tempMessage.setTargetName(temp.getTargetName());
+        tempMessage.setTargetAvatar(avatar);
+        tempMessage.setSendTime(temp.getSendTime());
+        tempMessage.setContent(temp.getContent());
+
+        if (temp.getVideo_image_url()!=null) {
+            tempMessage.setVideo_image_url(temp.getVideo_image_url());
+        }
+
+        if (temp.getAudio_duration()>0) {
+            tempMessage.setAudio_duration(temp.getAudio_duration());
+        }
+
+        if (temp.getImageT_back()!=null) {
+            tempMessage.setImageT_back(temp.getImageT_back());
+            tempMessage.setImageT_icon(temp.getImageT_icon());
+            tempMessage.setImageT_title(temp.getImageT_title());
+        }
+
+        if (temp.getEventAction()!=null) {
+            tempMessage.setActionType(temp.getEventAction().getActionType());
+        }
+
+        if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {
+            tempMessage.setOperaterId(temp.getOperaterList().get(0).getOperaterId());
+            tempMessage.setOperaterName(temp.getOperaterList().get(0).getOperaterName());
+            tempMessage.setOperaterType(temp.getOperaterList().get(0).getOperaterType());
+        }
+
+        tempMessage.setReaded(0);
+        tempMessage.setSendStatus(2);
+        tempMessage.setSelfSend(true);
+        allMessage = tempMessage;
+        mAdapter.addImMessageDao(allMessage);
+        mChatMessageModelDao.save(tempMessage);
     }
 
     @Override
@@ -379,7 +464,7 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-//            p2pChatLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
+            p2pchatLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
         }
     };
 
@@ -397,5 +482,15 @@ public class ShopIMActivity extends MyBaseActivity implements AdapterInterface, 
             p2pchatSendBt.setVisibility(View.VISIBLE);
             p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onItem(View v, int position) {
+
+    }
+
+    @Override
+    public void onItemAudio(View v, int position, AnimationDrawable animationDrawable) {
+
     }
 }

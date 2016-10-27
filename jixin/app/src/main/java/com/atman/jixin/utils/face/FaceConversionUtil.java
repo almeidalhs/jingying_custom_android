@@ -10,6 +10,7 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 
 import com.atman.jixin.R;
+import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 
 import java.util.ArrayList;
@@ -86,8 +87,9 @@ public class FaceConversionUtil {
         if (TextUtils.isEmpty(spannableString)) {
             return null;
         }
+        int w = DensityUtil.dp2px(context, 18);
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imgId);
-        bitmap = Bitmap.createScaledBitmap(bitmap, 35, 35, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, w, w, true);
         ImageSpan imageSpan = new ImageSpan(context, bitmap);
         SpannableString spannable = new SpannableString(spannableString);
         spannable.setSpan(imageSpan, 0, spannableString.length(),

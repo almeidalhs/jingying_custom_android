@@ -14,7 +14,9 @@ import com.alan.codescanlibs.QrCodeActivity;
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.MessageSessionListAdapter;
 import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
+import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
@@ -56,6 +58,7 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     private String headImge = "";
     private String str = "";
     private ChatListModelDao mChatListModelDao;
+    private ChatMessageModelDao mChatMessageModelDao;
     private List<ChatListModel> mChatList;
     private MessageSessionListAdapter mAdapter;
 
@@ -120,13 +123,15 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-//                        mImMessageDelete = mImMessageDao.queryBuilder().where(ImMessageDao.Properties.ChatId.eq(mAdapter.getItem(position).getUserId()), ImMessageDao.Properties.LoginUserId.eq(
-//                                String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()))).build().list();
-//                        for (ImMessage imMessageDelete : mImMessageDelete) {
-//                            mImMessageDao.delete(imMessageDelete);
-//                        }
+                        List<ChatMessageModel>  mImMessageDelete = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                                , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
+                        for (ChatMessageModel imMessageDelete : mImMessageDelete) {
+                            mChatMessageModelDao.delete(imMessageDelete);
+                        }
 
-                        ChatListModel mDelete = mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())).build().unique();
+                        ChatListModel mDelete = mChatListModelDao.queryBuilder()
+                                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                                        , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
                         if (mDelete != null) {
                             mChatListModelDao.delete(mDelete);
                             mAdapter.deleteItemById(position);
@@ -160,18 +165,23 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
         }
 
         mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
+        mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
 
         setUnreadMessageNum();
     }
 
     private void setUnreadMessageNum() {
+        if (!isLogin()) {
+            return;
+        }
         if (mChatList!=null) {
             mChatList.clear();
         }
         if (mAdapter!=null) {
             mAdapter.clearData();
         }
-        mChatList = mChatListModelDao.queryBuilder().build().list();
+        mChatList = mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties
+                .LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
         if (mChatList!=null) {
             mAdapter.addBody(mChatList);
         }

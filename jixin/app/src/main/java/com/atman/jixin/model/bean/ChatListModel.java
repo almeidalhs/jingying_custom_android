@@ -15,6 +15,7 @@ public class ChatListModel {
     @Id(autoincrement = true)
     private Long id;
     private long targetId;
+    private long loginId;
     private int targetType;//0:用户 1:商家
     private long sendTime;
     private String content;
@@ -65,6 +66,12 @@ public class ChatListModel {
     public void setTargetType(int targetType) {
         this.targetType = targetType;
     }
+    public long getLoginId() {
+        return this.loginId;
+    }
+    public void setLoginId(long loginId) {
+        this.loginId = loginId;
+    }
     public long getTargetId() {
         return this.targetId;
     }
@@ -77,12 +84,13 @@ public class ChatListModel {
     public void setId(Long id) {
         this.id = id;
     }
-    @Generated(hash = 1965425828)
-    public ChatListModel(Long id, long targetId, int targetType, long sendTime,
-            String content, int unreadNum, String identifyStr, String targetName,
-            String targetAvatar) {
+    @Generated(hash = 1052480580)
+    public ChatListModel(Long id, long targetId, long loginId, int targetType,
+            long sendTime, String content, int unreadNum, String identifyStr,
+            String targetName, String targetAvatar) {
         this.id = id;
         this.targetId = targetId;
+        this.loginId = loginId;
         this.targetType = targetType;
         this.sendTime = sendTime;
         this.content = content;
