@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import com.base.baselibs.util.LogUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 public  class SoundMeter {
@@ -12,18 +13,27 @@ public  class SoundMeter {
 
 	private MediaRecorder mRecorder = null;
 	private double mEMA = 0.0;
+	private String path = Environment.getExternalStorageDirectory()+"/jiying/audio";
+
+	public String getPath() {
+		return path;
+	}
 
 	public void start(String name) {
 		if (!Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
 			return;
 		}
+		File f = new File(path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		if (mRecorder == null) {
 			mRecorder = new MediaRecorder();
 			mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-			mRecorder.setOutputFile(Environment.getExternalStorageDirectory()+"/"+name);
+			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+			mRecorder.setOutputFile(f.getPath()+"/"+name);
 			try {
 				mRecorder.prepare();
 				mRecorder.start();

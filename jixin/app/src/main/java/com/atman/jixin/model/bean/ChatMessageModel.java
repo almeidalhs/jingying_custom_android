@@ -25,6 +25,7 @@ public class ChatMessageModel {
     private long sendTime;
     private String content; //消息内容
     private int audio_duration;//语音长度
+    private String audioLocationUrl;//语音本地路径
     private String video_image_url;//视屏封面
     //图文
     private String imageT_icon;
@@ -140,6 +141,14 @@ public class ChatMessageModel {
         this.video_image_url = video_image_url;
     }
 
+    public String getAudioLocationUrl() {
+        return this.audioLocationUrl;
+    }
+
+    public void setAudioLocationUrl(String audioLocationUrl) {
+        this.audioLocationUrl = audioLocationUrl;
+    }
+
     public int getAudio_duration() {
         return this.audio_duration;
     }
@@ -228,13 +237,13 @@ public class ChatMessageModel {
         this.id = id;
     }
 
-    @Generated(hash = 1792823188)
+    @Generated(hash = 1556638629)
     public ChatMessageModel(Long id, long chatId, long loginId, int type,
             int targetType, long targetId, String targetName, String targetAvatar,
             long sendTime, String content, int audio_duration,
-            String video_image_url, String imageT_icon, String imageT_title,
-            String imageT_back, String identifyStr, int actionType,
-            long operaterId, String operaterName, int operaterType,
+            String audioLocationUrl, String video_image_url, String imageT_icon,
+            String imageT_title, String imageT_back, String identifyStr,
+            int actionType, long operaterId, String operaterName, int operaterType,
             boolean selfSend, int readed, int sendStatus) {
         this.id = id;
         this.chatId = chatId;
@@ -247,6 +256,7 @@ public class ChatMessageModel {
         this.sendTime = sendTime;
         this.content = content;
         this.audio_duration = audio_duration;
+        this.audioLocationUrl = audioLocationUrl;
         this.video_image_url = video_image_url;
         this.imageT_icon = imageT_icon;
         this.imageT_title = imageT_title;

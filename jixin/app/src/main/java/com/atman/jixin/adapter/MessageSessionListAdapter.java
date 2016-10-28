@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
@@ -123,10 +124,22 @@ public class MessageSessionListAdapter extends BaseAdapter {
             holder.itemSessionUnreadTx.setVisibility(View.INVISIBLE);
         }
 
-        if (dataList.get(position).getContent() != null) {
-            holder.itemSessionContentTx.setText(SmileUtils.getEmotionContent(context
-                    , holder.itemSessionContentTx, dataList.get(position).getContent()));
+        String content = "";
+        if (dataList.get(position).getType() == ADChatType.ADChatType_Text) {
+            content = dataList.get(position).getContent();
+        } else if (dataList.get(position).getType() == ADChatType.ADChatType_Image) {
+            content = "[图片]";
+        } else if (dataList.get(position).getType() == ADChatType.ADChatType_Audio) {
+            content = "[语音]";
+        } else if (dataList.get(position).getType() == ADChatType.ADChatType_Video) {
+            content = "[视频]";
+        } else if (dataList.get(position).getType() == ADChatType.ADChatType_ImageText) {
+            content = "[图片]";
+        } else {
+            content = dataList.get(position).getContent();
         }
+        holder.itemSessionContentTx.setText(SmileUtils.getEmotionContent(context
+                , holder.itemSessionContentTx, content));
 
         return convertView;
     }

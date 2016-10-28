@@ -54,6 +54,8 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     private SoundMeter mSensor;
     private boolean isTouch = false;
     private boolean isCancel = false;
+    private boolean isFinish = false;
+    private int mTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +98,17 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         super.onStringResponse(data, response, id);
     }
 
-    public void backResuilt(String url) {
-        Intent mIntent = new Intent();
-        mIntent.putExtra("url", url);
-        setResult(RESULT_OK, mIntent);
-        finish();
+    public void backResuilt(File file) {
+        isFinish = true;
+        if (file.exists()) {
+            Intent mIntent = new Intent();
+            mIntent.putExtra("url", file.getPath());
+            mIntent.putExtra("time", mTime);
+            setResult(RESULT_OK, mIntent);
+            finish();
+        } else {
+            showToast("文件不存在");
+        }
     }
 
     @Override
@@ -152,7 +160,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                 recordingTipTx.setText("录音中.."+time+"s");
                 if (time >= MAX_TIME) {
                     File file = recordEnd();
-                    backResuilt(file.getPath());
+                    backResuilt(file);
                 } else {
                     mTimeHandler.postDelayed(mTimeTask, TIME_INTERVAL);
                 }
@@ -164,7 +172,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     protected void onPause() {
         super.onPause();
         File file = recordEnd();
-        if (file.exists()) {
+        if (file.exists() && !isFinish) {
             file.delete();
         }
     }
@@ -230,6 +238,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (flag == 1 && !isTouch) {
+                    isFinish = false;
                     rcChatPopup.setVisibility(View.VISIBLE);
                     voiceRcdHintRcding.setVisibility(View.GONE);
                     mHandler.postDelayed(new Runnable() {
@@ -243,7 +252,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                     recordingTipTx.setTextColor(getResources().getColor(R.color.color_ec5b4b));
                     mTimeHandler.postDelayed(mTimeTask, 0);
                     startVoiceT = System.currentTimeMillis();
-                    voiceName = startVoiceT + ".amr";
+                    voiceName = startVoiceT + ".aac";
                     start(voiceName);
                     flag = 2;
                     isTouch = true;
@@ -261,12 +270,13 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                             && event.getRawX() <= recordingIv_X + recordingIv.getWidth()) {
                         endVoiceT = System.currentTimeMillis();
                         int time = (int) ((endVoiceT - startVoiceT) / 1000);
+                        mTime = time;
                         if (time < 1) {
                             voiceRcdHintRcding.setVisibility(View.GONE);
                             showToast("时间太短");
                             return false;
                         } else {
-                            backResuilt(file.getPath());
+                            backResuilt(file);
                         }
                     } else {
                         if (file.exists()) {
@@ -287,8 +297,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         rcChatPopup.setVisibility(View.GONE);
         flag = 1;
         stop();
-        File file = new File(android.os.Environment.getExternalStorageDirectory()+"/"
-                + voiceName);
+        File file = new File(mSensor.getPath()+"/"+ voiceName);
         return file;
     }
 }

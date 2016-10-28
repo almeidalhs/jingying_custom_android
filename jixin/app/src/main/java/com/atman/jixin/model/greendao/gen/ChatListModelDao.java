@@ -34,6 +34,7 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         public final static Property IdentifyStr = new Property(7, String.class, "identifyStr", false, "IDENTIFY_STR");
         public final static Property TargetName = new Property(8, String.class, "targetName", false, "TARGET_NAME");
         public final static Property TargetAvatar = new Property(9, String.class, "targetAvatar", false, "TARGET_AVATAR");
+        public final static Property Type = new Property(10, int.class, "type", false, "TYPE");
     }
 
 
@@ -58,7 +59,8 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
                 "\"UNREAD_NUM\" INTEGER NOT NULL ," + // 6: unreadNum
                 "\"IDENTIFY_STR\" TEXT," + // 7: identifyStr
                 "\"TARGET_NAME\" TEXT," + // 8: targetName
-                "\"TARGET_AVATAR\" TEXT);"); // 9: targetAvatar
+                "\"TARGET_AVATAR\" TEXT," + // 9: targetAvatar
+                "\"TYPE\" INTEGER NOT NULL );"); // 10: type
     }
 
     /** Drops the underlying database table. */
@@ -100,6 +102,7 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         if (targetAvatar != null) {
             stmt.bindString(10, targetAvatar);
         }
+        stmt.bindLong(11, entity.getType());
     }
 
     @Override
@@ -135,6 +138,7 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         if (targetAvatar != null) {
             stmt.bindString(10, targetAvatar);
         }
+        stmt.bindLong(11, entity.getType());
     }
 
     @Override
@@ -154,7 +158,8 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
             cursor.getInt(offset + 6), // unreadNum
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // identifyStr
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // targetName
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // targetAvatar
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // targetAvatar
+            cursor.getInt(offset + 10) // type
         );
         return entity;
     }
@@ -171,6 +176,7 @@ public class ChatListModelDao extends AbstractDao<ChatListModel, Long> {
         entity.setIdentifyStr(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setTargetName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setTargetAvatar(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setType(cursor.getInt(offset + 10));
      }
     
     @Override

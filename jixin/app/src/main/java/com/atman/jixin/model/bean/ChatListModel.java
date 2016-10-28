@@ -24,6 +24,13 @@ public class ChatListModel {
     private String identifyStr;
     private String targetName;
     private String targetAvatar;
+    private int type;
+    public int getType() {
+        return this.type;
+    }
+    public void setType(int type) {
+        this.type = type;
+    }
     public String getTargetAvatar() {
         return this.targetAvatar;
     }
@@ -84,10 +91,10 @@ public class ChatListModel {
     public void setId(Long id) {
         this.id = id;
     }
-    @Generated(hash = 1052480580)
+    @Generated(hash = 779083064)
     public ChatListModel(Long id, long targetId, long loginId, int targetType,
             long sendTime, String content, int unreadNum, String identifyStr,
-            String targetName, String targetAvatar) {
+            String targetName, String targetAvatar, int type) {
         this.id = id;
         this.targetId = targetId;
         this.loginId = loginId;
@@ -98,6 +105,7 @@ public class ChatListModel {
         this.identifyStr = identifyStr;
         this.targetName = targetName;
         this.targetAvatar = targetAvatar;
+        this.type = type;
     }
     @Generated(hash = 2047655589)
     public ChatListModel() {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.face.SmileUtils;
+import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.ShapeImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -231,19 +233,39 @@ public class P2PChatAdapter extends BaseAdapter {
                     url = Common.ImageUrl + temp.getContent();
                 }
                 File f = ImageLoader.getInstance().getDiskCache().get(url);
-                if (f!=null) {
+                if (f.exists()) {
                     LogUtils.e("f:"+f);
+                    if (temp.getSelfSend()) {
+                        holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
+                        ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImageRightIv);
+                    } else {
+                        holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
+                        ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImageLeftIv);
+                    }
                 } else {
-                    LogUtils.e("f is null");
+                    if (temp.getSelfSend()) {
+                        holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
+                        ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv
+                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                    } else {
+                        holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
+                        ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageLeftIv
+                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                    }
                 }
+                break;
+            case ADChatType.ADChatType_Audio:
+                int w = (int) ((175 / 60 * temp.getAudio_duration()) + 75);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(DensityUtil.dp2px(context, w)
+                        , FrameLayout.LayoutParams.WRAP_CONTENT);
                 if (temp.getSelfSend()) {
-                    holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
-                    ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv
-                            , MyBaseApplication.getApplication().optionsHead, mListener);
+                    holderText.itemP2pchatAudioRightLl.setVisibility(View.VISIBLE);
+                    holderText.itemP2pchatAudioRightLl.setLayoutParams(params);
+                    holderText.itemP2pchatAudioRightTx.setText(temp.getAudio_duration() + "''");
                 } else {
-                    holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
-                    ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageLeftIv
-                            , MyBaseApplication.getApplication().optionsHead, mListener);
+                    holderText.itemP2pchatAudioLeftLl.setLayoutParams(params);
+                    holderText.itemP2pchatAudioLeftLl.setVisibility(View.VISIBLE);
+                    holderText.itemP2pchatAudioLeftTx.setText(temp.getAudio_duration() + "''");
                 }
                 break;
 //            case ContentTypeInter.contentTypeImageSmall:
@@ -271,20 +293,6 @@ public class P2PChatAdapter extends BaseAdapter {
 //                } else {
 //                    holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
 //                    ImageLoader.getInstance().displayImage(temp.getImageSUrl(), holderText.itemP2pchatImageLeftIv, MyBaseApplication.getApplication().getOptionsNot());
-//                }
-//                break;
-//            case ContentTypeInter.contentTypeAudio:
-//                int w = (int) ((175 / 60 * temp.getAudioDuration()) + 75);
-//                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(DensityUtil.dp2px(context, w)
-//                        , FrameLayout.LayoutParams.WRAP_CONTENT);
-//                if (temp.getIsSelfSend()) {
-//                    holderText.itemP2pchatAudioRightLl.setVisibility(View.VISIBLE);
-//                    holderText.itemP2pchatAudioRightLl.setLayoutParams(params);
-//                    holderText.itemP2pchatAudioRightTx.setText(temp.getAudioDuration() + "''");
-//                } else {
-//                    holderText.itemP2pchatAudioLeftLl.setLayoutParams(params);
-//                    holderText.itemP2pchatAudioLeftLl.setVisibility(View.VISIBLE);
-//                    holderText.itemP2pchatAudioLeftTx.setText(temp.getAudioDuration() + "''");
 //                }
 //                break;
 //            case ContentTypeInter.contentTypeFinger:

@@ -119,7 +119,9 @@ public class Common {
     //发送信息
     public static int NET_SEED_USERCHAT_ID = 21;
     //上传图片
-    public static int NET_UP_File_ID = 22;
+    public static int NET_UP_PIC_ID = 22;
+    //上传音频
+    public static int NET_UP_AUDIO_ID = 23;
     /**************************http访问回应识别码*****************************/
 
 

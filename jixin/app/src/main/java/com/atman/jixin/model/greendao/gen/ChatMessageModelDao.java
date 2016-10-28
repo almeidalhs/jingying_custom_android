@@ -35,18 +35,19 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         public final static Property SendTime = new Property(8, long.class, "sendTime", false, "SEND_TIME");
         public final static Property Content = new Property(9, String.class, "content", false, "CONTENT");
         public final static Property Audio_duration = new Property(10, int.class, "audio_duration", false, "AUDIO_DURATION");
-        public final static Property Video_image_url = new Property(11, String.class, "video_image_url", false, "VIDEO_IMAGE_URL");
-        public final static Property ImageT_icon = new Property(12, String.class, "imageT_icon", false, "IMAGE_T_ICON");
-        public final static Property ImageT_title = new Property(13, String.class, "imageT_title", false, "IMAGE_T_TITLE");
-        public final static Property ImageT_back = new Property(14, String.class, "imageT_back", false, "IMAGE_T_BACK");
-        public final static Property IdentifyStr = new Property(15, String.class, "identifyStr", false, "IDENTIFY_STR");
-        public final static Property ActionType = new Property(16, int.class, "actionType", false, "ACTION_TYPE");
-        public final static Property OperaterId = new Property(17, long.class, "operaterId", false, "OPERATER_ID");
-        public final static Property OperaterName = new Property(18, String.class, "operaterName", false, "OPERATER_NAME");
-        public final static Property OperaterType = new Property(19, int.class, "operaterType", false, "OPERATER_TYPE");
-        public final static Property SelfSend = new Property(20, boolean.class, "selfSend", false, "SELF_SEND");
-        public final static Property Readed = new Property(21, int.class, "readed", false, "READED");
-        public final static Property SendStatus = new Property(22, int.class, "sendStatus", false, "SEND_STATUS");
+        public final static Property AudioLocationUrl = new Property(11, String.class, "audioLocationUrl", false, "AUDIO_LOCATION_URL");
+        public final static Property Video_image_url = new Property(12, String.class, "video_image_url", false, "VIDEO_IMAGE_URL");
+        public final static Property ImageT_icon = new Property(13, String.class, "imageT_icon", false, "IMAGE_T_ICON");
+        public final static Property ImageT_title = new Property(14, String.class, "imageT_title", false, "IMAGE_T_TITLE");
+        public final static Property ImageT_back = new Property(15, String.class, "imageT_back", false, "IMAGE_T_BACK");
+        public final static Property IdentifyStr = new Property(16, String.class, "identifyStr", false, "IDENTIFY_STR");
+        public final static Property ActionType = new Property(17, int.class, "actionType", false, "ACTION_TYPE");
+        public final static Property OperaterId = new Property(18, long.class, "operaterId", false, "OPERATER_ID");
+        public final static Property OperaterName = new Property(19, String.class, "operaterName", false, "OPERATER_NAME");
+        public final static Property OperaterType = new Property(20, int.class, "operaterType", false, "OPERATER_TYPE");
+        public final static Property SelfSend = new Property(21, boolean.class, "selfSend", false, "SELF_SEND");
+        public final static Property Readed = new Property(22, int.class, "readed", false, "READED");
+        public final static Property SendStatus = new Property(23, int.class, "sendStatus", false, "SEND_STATUS");
     }
 
 
@@ -73,18 +74,19 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
                 "\"SEND_TIME\" INTEGER NOT NULL ," + // 8: sendTime
                 "\"CONTENT\" TEXT," + // 9: content
                 "\"AUDIO_DURATION\" INTEGER NOT NULL ," + // 10: audio_duration
-                "\"VIDEO_IMAGE_URL\" TEXT," + // 11: video_image_url
-                "\"IMAGE_T_ICON\" TEXT," + // 12: imageT_icon
-                "\"IMAGE_T_TITLE\" TEXT," + // 13: imageT_title
-                "\"IMAGE_T_BACK\" TEXT," + // 14: imageT_back
-                "\"IDENTIFY_STR\" TEXT," + // 15: identifyStr
-                "\"ACTION_TYPE\" INTEGER NOT NULL ," + // 16: actionType
-                "\"OPERATER_ID\" INTEGER NOT NULL ," + // 17: operaterId
-                "\"OPERATER_NAME\" TEXT," + // 18: operaterName
-                "\"OPERATER_TYPE\" INTEGER NOT NULL ," + // 19: operaterType
-                "\"SELF_SEND\" INTEGER NOT NULL ," + // 20: selfSend
-                "\"READED\" INTEGER NOT NULL ," + // 21: readed
-                "\"SEND_STATUS\" INTEGER NOT NULL );"); // 22: sendStatus
+                "\"AUDIO_LOCATION_URL\" TEXT," + // 11: audioLocationUrl
+                "\"VIDEO_IMAGE_URL\" TEXT," + // 12: video_image_url
+                "\"IMAGE_T_ICON\" TEXT," + // 13: imageT_icon
+                "\"IMAGE_T_TITLE\" TEXT," + // 14: imageT_title
+                "\"IMAGE_T_BACK\" TEXT," + // 15: imageT_back
+                "\"IDENTIFY_STR\" TEXT," + // 16: identifyStr
+                "\"ACTION_TYPE\" INTEGER NOT NULL ," + // 17: actionType
+                "\"OPERATER_ID\" INTEGER NOT NULL ," + // 18: operaterId
+                "\"OPERATER_NAME\" TEXT," + // 19: operaterName
+                "\"OPERATER_TYPE\" INTEGER NOT NULL ," + // 20: operaterType
+                "\"SELF_SEND\" INTEGER NOT NULL ," + // 21: selfSend
+                "\"READED\" INTEGER NOT NULL ," + // 22: readed
+                "\"SEND_STATUS\" INTEGER NOT NULL );"); // 23: sendStatus
     }
 
     /** Drops the underlying database table. */
@@ -124,41 +126,46 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         }
         stmt.bindLong(11, entity.getAudio_duration());
  
+        String audioLocationUrl = entity.getAudioLocationUrl();
+        if (audioLocationUrl != null) {
+            stmt.bindString(12, audioLocationUrl);
+        }
+ 
         String video_image_url = entity.getVideo_image_url();
         if (video_image_url != null) {
-            stmt.bindString(12, video_image_url);
+            stmt.bindString(13, video_image_url);
         }
  
         String imageT_icon = entity.getImageT_icon();
         if (imageT_icon != null) {
-            stmt.bindString(13, imageT_icon);
+            stmt.bindString(14, imageT_icon);
         }
  
         String imageT_title = entity.getImageT_title();
         if (imageT_title != null) {
-            stmt.bindString(14, imageT_title);
+            stmt.bindString(15, imageT_title);
         }
  
         String imageT_back = entity.getImageT_back();
         if (imageT_back != null) {
-            stmt.bindString(15, imageT_back);
+            stmt.bindString(16, imageT_back);
         }
  
         String identifyStr = entity.getIdentifyStr();
         if (identifyStr != null) {
-            stmt.bindString(16, identifyStr);
+            stmt.bindString(17, identifyStr);
         }
-        stmt.bindLong(17, entity.getActionType());
-        stmt.bindLong(18, entity.getOperaterId());
+        stmt.bindLong(18, entity.getActionType());
+        stmt.bindLong(19, entity.getOperaterId());
  
         String operaterName = entity.getOperaterName();
         if (operaterName != null) {
-            stmt.bindString(19, operaterName);
+            stmt.bindString(20, operaterName);
         }
-        stmt.bindLong(20, entity.getOperaterType());
-        stmt.bindLong(21, entity.getSelfSend() ? 1L: 0L);
-        stmt.bindLong(22, entity.getReaded());
-        stmt.bindLong(23, entity.getSendStatus());
+        stmt.bindLong(21, entity.getOperaterType());
+        stmt.bindLong(22, entity.getSelfSend() ? 1L: 0L);
+        stmt.bindLong(23, entity.getReaded());
+        stmt.bindLong(24, entity.getSendStatus());
     }
 
     @Override
@@ -192,41 +199,46 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         }
         stmt.bindLong(11, entity.getAudio_duration());
  
+        String audioLocationUrl = entity.getAudioLocationUrl();
+        if (audioLocationUrl != null) {
+            stmt.bindString(12, audioLocationUrl);
+        }
+ 
         String video_image_url = entity.getVideo_image_url();
         if (video_image_url != null) {
-            stmt.bindString(12, video_image_url);
+            stmt.bindString(13, video_image_url);
         }
  
         String imageT_icon = entity.getImageT_icon();
         if (imageT_icon != null) {
-            stmt.bindString(13, imageT_icon);
+            stmt.bindString(14, imageT_icon);
         }
  
         String imageT_title = entity.getImageT_title();
         if (imageT_title != null) {
-            stmt.bindString(14, imageT_title);
+            stmt.bindString(15, imageT_title);
         }
  
         String imageT_back = entity.getImageT_back();
         if (imageT_back != null) {
-            stmt.bindString(15, imageT_back);
+            stmt.bindString(16, imageT_back);
         }
  
         String identifyStr = entity.getIdentifyStr();
         if (identifyStr != null) {
-            stmt.bindString(16, identifyStr);
+            stmt.bindString(17, identifyStr);
         }
-        stmt.bindLong(17, entity.getActionType());
-        stmt.bindLong(18, entity.getOperaterId());
+        stmt.bindLong(18, entity.getActionType());
+        stmt.bindLong(19, entity.getOperaterId());
  
         String operaterName = entity.getOperaterName();
         if (operaterName != null) {
-            stmt.bindString(19, operaterName);
+            stmt.bindString(20, operaterName);
         }
-        stmt.bindLong(20, entity.getOperaterType());
-        stmt.bindLong(21, entity.getSelfSend() ? 1L: 0L);
-        stmt.bindLong(22, entity.getReaded());
-        stmt.bindLong(23, entity.getSendStatus());
+        stmt.bindLong(21, entity.getOperaterType());
+        stmt.bindLong(22, entity.getSelfSend() ? 1L: 0L);
+        stmt.bindLong(23, entity.getReaded());
+        stmt.bindLong(24, entity.getSendStatus());
     }
 
     @Override
@@ -248,18 +260,19 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
             cursor.getLong(offset + 8), // sendTime
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // content
             cursor.getInt(offset + 10), // audio_duration
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // video_image_url
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // imageT_icon
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // imageT_title
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // imageT_back
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // identifyStr
-            cursor.getInt(offset + 16), // actionType
-            cursor.getLong(offset + 17), // operaterId
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // operaterName
-            cursor.getInt(offset + 19), // operaterType
-            cursor.getShort(offset + 20) != 0, // selfSend
-            cursor.getInt(offset + 21), // readed
-            cursor.getInt(offset + 22) // sendStatus
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // audioLocationUrl
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // video_image_url
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // imageT_icon
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // imageT_title
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // imageT_back
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // identifyStr
+            cursor.getInt(offset + 17), // actionType
+            cursor.getLong(offset + 18), // operaterId
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // operaterName
+            cursor.getInt(offset + 20), // operaterType
+            cursor.getShort(offset + 21) != 0, // selfSend
+            cursor.getInt(offset + 22), // readed
+            cursor.getInt(offset + 23) // sendStatus
         );
         return entity;
     }
@@ -277,18 +290,19 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         entity.setSendTime(cursor.getLong(offset + 8));
         entity.setContent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setAudio_duration(cursor.getInt(offset + 10));
-        entity.setVideo_image_url(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setImageT_icon(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setImageT_title(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setImageT_back(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setIdentifyStr(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setActionType(cursor.getInt(offset + 16));
-        entity.setOperaterId(cursor.getLong(offset + 17));
-        entity.setOperaterName(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setOperaterType(cursor.getInt(offset + 19));
-        entity.setSelfSend(cursor.getShort(offset + 20) != 0);
-        entity.setReaded(cursor.getInt(offset + 21));
-        entity.setSendStatus(cursor.getInt(offset + 22));
+        entity.setAudioLocationUrl(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setVideo_image_url(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setImageT_icon(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setImageT_title(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setImageT_back(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setIdentifyStr(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setActionType(cursor.getInt(offset + 17));
+        entity.setOperaterId(cursor.getLong(offset + 18));
+        entity.setOperaterName(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setOperaterType(cursor.getInt(offset + 20));
+        entity.setSelfSend(cursor.getShort(offset + 21) != 0);
+        entity.setReaded(cursor.getInt(offset + 22));
+        entity.setSendStatus(cursor.getInt(offset + 23));
      }
     
     @Override

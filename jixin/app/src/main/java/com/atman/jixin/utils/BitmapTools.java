@@ -63,19 +63,21 @@ public class BitmapTools {
 
     /** 保存方法 */
     public static File saveBitmap(Bitmap bm) {
-        String SAVE_PIC_PATH= Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)
-                ? Environment.getExternalStorageDirectory().getAbsolutePath() : "/mnt/sdcard";//保存到SD卡
-        Log.e("TAG", "保存图片");
-        File f = new File(SAVE_PIC_PATH, "temp.jpg");
-        if (f.exists()) {
-            f.delete();
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return null;
         }
+        String path = Environment.getExternalStorageDirectory()+"/jiying/image";
+        File tempf = new File(path);
+        if (!tempf.exists()) {
+            tempf.mkdirs();
+        }
+        File f = new File(tempf.getPath(), System.currentTimeMillis()+".jpg");
         try {
             FileOutputStream out = new FileOutputStream(f);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
-            Log.e("TAG", "已经保存:SAVE_PIC_PATH");
+            Log.e("TAG", "已经保存:"+f.getPath());
             return f;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

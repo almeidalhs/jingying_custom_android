@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
+import com.atman.jixin.model.response.UpdateAudioResultModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
@@ -117,10 +119,18 @@ public class ShopIMActivity extends MyBaseActivity
 
     private P2PChatAdapter mAdapter;
 
+    private MessageModel temp;
+
     private final int CHOOSE_BIG_PICTURE = 444;
     private final int TAKE_BIG_PICTURE = 555;
     private Uri imageUri;
     private String path;
+
+    private int mTime;
+    private String audioURL;
+    private int positionAudio;
+    private MediaPlayer mMediaPlayer = new MediaPlayer();
+    private AnimationDrawable mAnimationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,26 +258,49 @@ public class ShopIMActivity extends MyBaseActivity
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
             }
-            updateChatMessage(0);
-        } else if (id == Common.NET_UP_File_ID) {
+            updateChatMessage(0, "");
+        } else if (id == Common.NET_UP_PIC_ID) {
+
             HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
             String str = mHeadImgResultModel.getBody().get(0).getUrl();
-            seedMessage(ADChatType.ADChatType_Image, str);
+            updateChatMessage(-1, str);
+
+            seedMessage(str);
+
+        } else if (id == Common.NET_UP_AUDIO_ID) {
+            UpdateAudioResultModel mUpdateAudioResultModel = mGson.fromJson(data, UpdateAudioResultModel.class);
+            String str = mUpdateAudioResultModel.getBody().get(0).getUrl();
+            updateChatMessage(-1, str);
+
+            seedMessage(str);
         }
+    }
+
+    private void seedMessage(String str) {
+        temp.setContent(str);
+        OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
+                .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
+                .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .build().execute(new MyStringCallback(mContext, "发送中...", ShopIMActivity.this, false));
     }
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
-        updateChatMessage(1);
+        updateChatMessage(1, "");
     }
 
-    private void updateChatMessage(int i) {
+    private void updateChatMessage(int i, String str) {
         if (allMessage!=null) {
             ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
                     ChatMessageModelDao.Properties.Id.eq(allMessage.getId())).build().unique();
             if (upMessage!=null) {
-                upMessage.setSendStatus(i);
+                if (i==-1) {
+                    upMessage.setContent(str);
+                } else {
+                    upMessage.setSendStatus(i);
+                }
                 mChatMessageModelDao.update(upMessage);
                 mAdapter.setImMessageStatus(upMessage.getId(), i);
             }
@@ -279,7 +312,8 @@ public class ShopIMActivity extends MyBaseActivity
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCHAT_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_SEED_USERCHAT_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_File_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_PIC_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_AUDIO_ID);
     }
 
     @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_service_or_keyboard_iv, R.id.p2pchat_send_bt
@@ -358,7 +392,7 @@ public class ShopIMActivity extends MyBaseActivity
                 handler.postDelayed(runnable, 200);
                 break;
             case R.id.p2pchat_send_bt:
-                seedMessage(ADChatType.ADChatType_Text, "");
+                buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim());
                 break;
             case R.id.p2pchat_add_picture_tv:
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
@@ -377,35 +411,32 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    private void seedMessage(int adChatType_text, String imageUrl) {
-        String str = "";
-        adChatTypeText = adChatType_text;
-        MessageModel temp = new MessageModel();
+    private void buildMessage(int adChatType, String content) {
+        adChatTypeText = adChatType;
+        temp = new MessageModel();
         temp.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
         temp.setTargetId(storeId);
         temp.setTargetName(name);
         temp.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
         temp.setSendTime(System.currentTimeMillis());
-        if (adChatType_text == ADChatType.ADChatType_Text) {
-            str = blogdetailAddcommentEt.getText().toString().trim();
-        } else if (adChatType_text == ADChatType.ADChatType_Image
-                || adChatType_text == ADChatType.ADChatType_ImageText) {
-            str = imageUrl;
-        } else if (adChatType_text == ADChatType.ADChatType_Audio) {
-            str = "[语音]";
-        } else if (adChatType_text == ADChatType.ADChatType_Video) {
-            str = "[视频]";
+        temp.setContent(content);
+        temp.setType(adChatType);
+        if (adChatType == ADChatType.ADChatType_Image) {
+            OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatI)
+                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()), new File(content))
+                    .id(Common.NET_UP_PIC_ID).tag(Common.NET_UP_PIC_ID)
+                    .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, false));
+        } else if (adChatType == ADChatType.ADChatType_ImageText) {
+        } else if (adChatType == ADChatType.ADChatType_Audio) {
+            temp.setAudio_duration(mTime);
+            OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatA)
+                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .addFile("files0_name", StringUtils.getFileName(audioURL), new File(content))
+                    .id(Common.NET_UP_AUDIO_ID).tag(Common.NET_UP_AUDIO_ID)
+                    .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, false));
+        } else if (adChatType == ADChatType.ADChatType_Video) {
         }
-        if (str.isEmpty()) {
-            return;
-        }
-        temp.setContent(str);
-        temp.setType(adChatType_text);
-        OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
-                .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
-                .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                .build().execute(new MyStringCallback(mContext, "发送中...", ShopIMActivity.this, true));
 
         //添加聊天列表
         ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
@@ -416,12 +447,13 @@ public class ShopIMActivity extends MyBaseActivity
             }
             ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
                     , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
-                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar);
+                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar, adChatType);
             mChatListModelDao.save(tempChat);
         } else {
             mChatListModel.setSendTime(temp.getSendTime());
             mChatListModel.setUnreadNum(0);
             mChatListModel.setContent(temp.getContent());
+            mChatListModel.setType(adChatType);
             mChatListModelDao.update(mChatListModel);
         }
         //添加聊天记录
@@ -442,6 +474,7 @@ public class ShopIMActivity extends MyBaseActivity
 
         if (temp.getAudio_duration()>0) {
             tempMessage.setAudio_duration(temp.getAudio_duration());
+            tempMessage.setAudioLocationUrl(audioURL);
         }
 
         if (temp.getImageT_back()!=null) {
@@ -482,6 +515,19 @@ public class ShopIMActivity extends MyBaseActivity
         }
         if (requestCode == Common.TO_RECORDE) {
             LogUtils.e("ShopIMActivity_URL:"+data.getStringExtra("url"));
+            audioURL = data.getStringExtra("url");
+            mTime = data.getIntExtra("time", 0);
+            if (audioURL.isEmpty()) {
+                showToast("语音录制失败!");
+            } else {
+                File f = new File(audioURL);
+                if (!f.exists()) {
+                    showToast("音频不存在");
+                    return;
+                }
+
+                buildMessage(ADChatType.ADChatType_Audio, audioURL);
+            }
         } else {
             if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
                 imageUri = data.getData();
@@ -496,11 +542,7 @@ public class ShopIMActivity extends MyBaseActivity
                         showToast("发送失败");
                         return;
                     }
-                    OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatI)
-                            .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                            .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()), temp)
-                            .id(Common.NET_UP_File_ID).tag(Common.NET_UP_File_ID)
-                            .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, true));
+                    buildMessage(ADChatType.ADChatType_Image, temp.getPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -553,7 +595,44 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     @Override
-    public void onItemAudio(View v, int position, AnimationDrawable animationDrawable) {
+    public void onItemAudio(View v, int position, final AnimationDrawable animationDrawable) {
+        switch (v.getId()) {
+            case R.id.item_p2pchat_audio_right_ll:
+            case R.id.item_p2pchat_audio_left_ll:
+                if ((new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
+                    try {
+                        if (mMediaPlayer.isPlaying()) {
+                            mMediaPlayer.stop();
+                            if (mAnimationDrawable!=null) {
+                                mAnimationDrawable.stop();
+                                mAnimationDrawable.selectDrawable(0);
+                            }
+                        } else {
+                            mAnimationDrawable = animationDrawable;
+                            mMediaPlayer.reset();
+                            mMediaPlayer.setDataSource(mAdapter.getItem(position).getAudioLocationUrl());
+                            mMediaPlayer.prepare();
+                            mMediaPlayer.start();
+                            mAnimationDrawable.start();
+                            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                public void onCompletion(MediaPlayer mp) {
+                                    if (!mp.isPlaying()) {
+                                        mAnimationDrawable.stop();
+                                        mAnimationDrawable.selectDrawable(0);
+                                    }
+                                }
+                            });
+                        }
 
+                    } catch (Exception e) {
+                        showToast("播放失败");
+                        e.printStackTrace();
+                    }
+                } else {
+                    showToast("没有文件");
+                }
+                positionAudio = position;
+                break;
+        }
     }
 }
