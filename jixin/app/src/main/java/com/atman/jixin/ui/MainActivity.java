@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.alan.codescanlibs.QrCodeActivity;
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.MessageSessionListAdapter;
+import com.atman.jixin.model.MessageEvent;
 import com.atman.jixin.model.bean.ChatListModel;
 import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
@@ -28,12 +29,17 @@ import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.ShapeImageView;
 import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +77,14 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
 
         if (isLogin()) {
             PushManager.getInstance().initialize(this.getApplicationContext());
+            String CliendId = PushManager.getInstance().getClientid(mContext);
+
+            OkHttpUtils.postString().url(Common.Url_Update_ClienId + CliendId).content("{}")
+                    .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                    .mediaType(Common.JSON).id(Common.NET_UP_GETTUI_ID).tag(Common.NET_UP_GETTUI_ID)
+                    .build().execute(new MyStringCallback(mContext, "链接中...", this, true, false));
+            EventBus.getDefault().register(this);
         }
     }
 
@@ -170,6 +184,12 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
         setUnreadMessageNum();
     }
 
+    //在注册了的Activity中,声明处理事件的方法
+    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
+    public void onUserEvent(MessageEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
+        setUnreadMessageNum();
+    }
+
     private void setUnreadMessageNum() {
         if (!isLogin()) {
             return;
@@ -199,6 +219,8 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
                     startActivity(QRScanCodeActivity.buildIntent(mContext, str));
                 }
             }
+        } else if (id == Common.NET_UP_GETTUI_ID) {
+
         }
     }
 
@@ -206,6 +228,8 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_QR_CODE_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_GETTUI_ID);
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.main_head_img, R.id.main_bottom_ll})
@@ -225,6 +249,9 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
         super.onError(call, e, code, id);
         if (id == Common.NET_QR_CODE_ID) {
             startActivity(QRScanCodeActivity.buildIntent(mContext, str));
+        } else if (id == Common.NET_UP_GETTUI_ID) {
+            clearData();
+            showWraning("链接失败,请重新登录!");
         }
     }
 

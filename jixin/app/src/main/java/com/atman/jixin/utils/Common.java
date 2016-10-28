@@ -71,6 +71,8 @@ public class Common {
     public static final String Url_Seed_UserChat = hostUrl + "baiye/rest/chat/send";
     //上传图片
     public static final String Url_Up_File = hostUrl + "upload?uploadType=";
+    //上传个推用户id (1是商家, 0是买家)
+    public static final String Url_Update_ClienId = hostUrl + "baiye/rest/user/getui/0/";
     /**************************http访问路径*****************************/
 
 
@@ -122,6 +124,8 @@ public class Common {
     public static int NET_UP_PIC_ID = 22;
     //上传音频
     public static int NET_UP_AUDIO_ID = 23;
+    //上传个推用户id (1是商家, 0是买家)
+    public static int NET_UP_GETTUI_ID = 24;
     /**************************http访问回应识别码*****************************/
 
 

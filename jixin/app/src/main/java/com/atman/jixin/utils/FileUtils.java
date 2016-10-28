@@ -16,6 +16,8 @@ public class FileUtils {
 			+ "/jiying/image/";
 	public static String SDPATH_FILE = Environment.getExternalStorageDirectory()
 			+ "/jiying/file/";
+	public static String SDPATH_AUDIO = Environment.getExternalStorageDirectory()
+			+ "/jiying/audio/";
 	public static String SDPATH_FILE_BOOT = Environment.getExternalStorageDirectory()
 			+ "/jiying/";
 

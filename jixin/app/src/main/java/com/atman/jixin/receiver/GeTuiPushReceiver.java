@@ -5,9 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.atman.jixin.model.MessageEvent;
+import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.bean.ChatMessageModel;
+import com.atman.jixin.model.greendao.gen.ChatListModelDao;
+import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
+import com.atman.jixin.model.response.GetMessageModel;
+import com.atman.jixin.ui.base.MyBaseApplication;
 import com.base.baselibs.util.LogUtils;
+import com.google.gson.Gson;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by tangbingliang on 16/10/25.
@@ -19,11 +29,17 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
      * 应用未启动, 个推 service已经被唤醒,保存在该时间段内离线消息(此时 GetuiSdkDemoActivity.tLogView == null)
      */
     public static StringBuilder payloadData = new StringBuilder();
+    private ChatListModelDao mChatListModelDao;
+    private ChatMessageModelDao mChatMessageModelDao;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         LogUtils.e("GetuiSdkDemo===onReceive() action=" + bundle.getInt("action"));
+        if (mChatListModelDao==null) {
+            mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
+            mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
+        }
 
         switch (bundle.getInt(PushConsts.CMD_ACTION)) {
             case PushConsts.GET_MSG_DATA:
@@ -47,6 +63,8 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
                     payloadData.append("\n");
 
                     LogUtils.e("data:"+data);
+                    GetMessageModel mGetMessageModel = new Gson().fromJson(data, GetMessageModel.class);
+                    saveGetMessage(mGetMessageModel);
                 }
                 break;
 
@@ -130,5 +148,69 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
             default:
                 break;
         }
+    }
+
+    private void saveGetMessage(GetMessageModel mGetMessageModel) {
+        GetMessageModel.ContentBean temp = mGetMessageModel.getContent();
+        //添加聊天列表
+        ChatListModel mChatListModel= mChatListModelDao.queryBuilder()
+                .where(ChatListModelDao.Properties.TargetId.eq(temp.getTargetId())
+                , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+        if (mChatListModel==null) {
+            ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
+                    , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
+                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName()
+                    , temp.getTargetAvatar(), temp.getType());
+            mChatListModelDao.save(tempChat);
+        } else {
+            mChatListModel.setSendTime(temp.getSendTime());
+            mChatListModel.setUnreadNum(mChatListModel.getUnreadNum()+1);
+            mChatListModel.setContent(temp.getContent());
+            mChatListModel.setType(temp.getType());
+            mChatListModelDao.update(mChatListModel);
+        }
+        //添加聊天记录
+        ChatMessageModel tempMessage = new ChatMessageModel();
+        tempMessage.setId(null);
+        tempMessage.setChatId(temp.getChatId());
+        tempMessage.setTargetId(temp.getTargetId());
+        tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
+        tempMessage.setType(temp.getType());
+        tempMessage.setTargetType(temp.getTargetType());
+        tempMessage.setTargetName(temp.getTargetName());
+        tempMessage.setTargetAvatar(temp.getTargetAvatar());
+        tempMessage.setSendTime(temp.getSendTime());
+        tempMessage.setContent(temp.getContent());
+
+//        if (temp.getVideo_image_url()!=null) {
+//            tempMessage.setVideo_image_url(temp.getVideo_image_url());
+//        }
+//
+        if (temp.getAudio_duration()>0) {
+            tempMessage.setAudio_duration(temp.getAudio_duration());
+//            tempMessage.setAudioLocationUrl(audioURL);
+        }
+//
+        if (temp.getImageT_back()!=null) {
+            tempMessage.setImageT_back(temp.getImageT_back());
+            tempMessage.setImageT_icon(temp.getImageT_icon());
+            tempMessage.setImageT_title(temp.getImageT_title());
+        }
+//
+        if (temp.getEventAction()!=null) {
+            tempMessage.setActionType(temp.getEventAction().getActionType());
+        }
+//
+//        if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {
+//            tempMessage.setOperaterId(temp.getOperaterList().get(0).getOperaterId());
+//            tempMessage.setOperaterName(temp.getOperaterList().get(0).getOperaterName());
+//            tempMessage.setOperaterType(temp.getOperaterList().get(0).getOperaterType());
+//        }
+
+        tempMessage.setReaded(1);
+        tempMessage.setSendStatus(0);
+        tempMessage.setSelfSend(false);
+        mChatMessageModelDao.save(tempMessage);
+        EventBus.getDefault().post(new MessageEvent(mGetMessageModel));
     }
 }

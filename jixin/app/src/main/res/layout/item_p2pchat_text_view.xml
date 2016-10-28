@@ -174,15 +174,6 @@
                     android:maxWidth="@dimen/dimen_dp_100"
                     android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/item_p2pchat_finger_right_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_dp_5"
-                    android:layout_marginRight="@dimen/dimen_dp_10"
-                    android:gravity="center"
-                    android:visibility="gone" />
-
                 <LinearLayout
                     android:id="@+id/item_p2pchat_audio_right_ll"
                     android:layout_width="@dimen/dimen_dp_250"

@@ -138,8 +138,10 @@ public class MessageSessionListAdapter extends BaseAdapter {
         } else {
             content = dataList.get(position).getContent();
         }
-        holder.itemSessionContentTx.setText(SmileUtils.getEmotionContent(context
-                , holder.itemSessionContentTx, content));
+        if (content!=null) {
+            holder.itemSessionContentTx.setText(SmileUtils.getEmotionContent(context
+                    , holder.itemSessionContentTx, content));
+        }
 
         return convertView;
     }

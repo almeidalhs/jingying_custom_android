@@ -113,6 +113,24 @@ public class P2PChatAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void setImMessageAudio(long id, String url) {
+        for (int i = 0; i < mImMessage.size(); i++) {
+            if (mImMessage.get(i).getId() == id) {
+                mImMessage.get(i).setAudioLocationUrl(url);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setImMessageContent(long id, String content) {
+        for (int i = 0; i < mImMessage.size(); i++) {
+            if (mImMessage.get(i).getId() == id) {
+                mImMessage.get(i).setContent(content);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public void addImMessageDao(ChatMessageModel mImMessageDao) {
         this.mImMessage.add(mImMessageDao);
         notifyDataSetChanged();
@@ -166,7 +184,6 @@ public class P2PChatAdapter extends BaseAdapter {
 
         holderText.itemP2pchatTextRightTx.setVisibility(View.GONE);
         holderText.itemP2pchatImageRightIv.setVisibility(View.GONE);
-        holderText.itemP2pchatFingerRightIv.setVisibility(View.GONE);
         holderText.itemP2pchatAudioRightLl.setVisibility(View.GONE);
         if (temp.getSelfSend()) {
             holderText.itemP2pchatTextHeadrightIv.setVisibility(View.VISIBLE);
@@ -268,54 +285,6 @@ public class P2PChatAdapter extends BaseAdapter {
                     holderText.itemP2pchatAudioLeftTx.setText(temp.getAudio_duration() + "''");
                 }
                 break;
-//            case ContentTypeInter.contentTypeImageSmall:
-//                LogUtils.e("temp.getImageSThumUrl():" + temp.getImageSThumUrl());
-//                LogUtils.e("temp.getImageSUrl():" + temp.getImageSUrl());
-//                LogUtils.e("temp.getImageSFilePath():" + temp.getImageSFilePath());
-//
-//                LogUtils.e("temp.getImageThumUrl():" + temp.getImageThumUrl());
-//                LogUtils.e("temp.getImageUrl():" + temp.getImageUrl());
-//                LogUtils.e("temp.getImageFilePath():" + temp.getImageFilePath());
-//                if (temp.getIsSelfSend()) {
-//                    holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
-//                    if (temp.getImageSThumUrl().startsWith("http")) {
-//                        ImageLoader.getInstance().displayImage(temp.getImageSUrl(), holderText.itemP2pchatImageRightIv
-//                                , MyBaseApplication.getApplication().getOptionsNot(), mListener);
-//                    } else {
-//                        File mFile = new File(temp.getImageSFilePath());
-//                        if (mFile.exists()) {
-//                            ImageLoader.getInstance().displayImage("file://" + temp.getImageSFilePath(), holderText.itemP2pchatImageRightIv);
-//                        } else {
-//                            ImageLoader.getInstance().displayImage(temp.getImageSUrl(), holderText.itemP2pchatImageRightIv
-//                                    , MyBaseApplication.getApplication().getOptionsNot(), mListener);
-//                        }
-//                    }
-//                } else {
-//                    holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
-//                    ImageLoader.getInstance().displayImage(temp.getImageSUrl(), holderText.itemP2pchatImageLeftIv, MyBaseApplication.getApplication().getOptionsNot());
-//                }
-//                break;
-//            case ContentTypeInter.contentTypeFinger:
-//                if (temp.getIsSelfSend()) {
-//                    holderText.itemP2pchatFingerRightIv.setVisibility(View.VISIBLE);
-//                    if (temp.getContent().equals("[石头]")) {
-//                        holderText.itemP2pchatFingerRightIv.setImageResource(R.mipmap.message_actionfunc_finger_0001);
-//                    } else if (temp.getContent().equals("[剪刀]")) {
-//                        holderText.itemP2pchatFingerRightIv.setImageResource(R.mipmap.message_actionfunc_finger_0002);
-//                    } else if (temp.getContent().equals("[布]")) {
-//                        holderText.itemP2pchatFingerRightIv.setImageResource(R.mipmap.message_actionfunc_finger_0003);
-//                    }
-//                } else {
-//                    holderText.itemP2pchatFingerLeftIv.setVisibility(View.VISIBLE);
-//                    if (temp.getContent().equals("[石头]")) {
-//                        holderText.itemP2pchatFingerLeftIv.setImageResource(R.mipmap.message_actionfunc_finger_0001);
-//                    } else if (temp.getContent().equals("[剪刀]")) {
-//                        holderText.itemP2pchatFingerLeftIv.setImageResource(R.mipmap.message_actionfunc_finger_0002);
-//                    } else if (temp.getContent().equals("[布]")) {
-//                        holderText.itemP2pchatFingerLeftIv.setImageResource(R.mipmap.message_actionfunc_finger_0003);
-//                    }
-//                }
-//                break;
         }
 
         final ViewHolder finalHolderText = holderText;
@@ -424,8 +393,6 @@ public class P2PChatAdapter extends BaseAdapter {
         TextView itemP2pchatTextRightTx;
         @Bind(R.id.item_p2pchat_image_right_iv)
         ImageView itemP2pchatImageRightIv;
-        @Bind(R.id.item_p2pchat_finger_right_iv)
-        ImageView itemP2pchatFingerRightIv;
         @Bind(R.id.item_p2pchat_audio_right_iv)
         ImageView itemP2pchatAudioRightIv;
         @Bind(R.id.item_p2pchat_audio_right_tx)
