@@ -106,16 +106,14 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_dp_150"
             android:layout_below="@+id/ll1"
-            android:paddingTop="@dimen/dimen_dp_15"
+            android:paddingLeft="@dimen/dimen_dp_8"
+            android:paddingRight="@dimen/dimen_dp_8"
             android:visibility="visible">
 
             <GridView
                 android:id="@+id/p2pchat_service_gv"
                 android:numColumns="2"
-                android:paddingLeft="@dimen/dimen_dp_15"
-                android:paddingRight="@dimen/dimen_dp_15"
-                android:verticalSpacing="@dimen/dimen_dp_15"
-                android:horizontalSpacing="@dimen/dimen_dp_15"
+                android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

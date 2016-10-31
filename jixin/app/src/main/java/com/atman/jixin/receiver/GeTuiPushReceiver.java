@@ -199,6 +199,10 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 //
         if (temp.getEventAction()!=null) {
             tempMessage.setActionType(temp.getEventAction().getActionType());
+            tempMessage.setChatId(temp.getEventAction().getCouponId());
+            tempMessage.setEnterpriseId(temp.getEventAction().getEnterpriseId());
+            tempMessage.setGoodId(temp.getEventAction().getGoodId());
+            tempMessage.setStoreId(temp.getEventAction().getStoreId());
         }
 //
 //        if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {

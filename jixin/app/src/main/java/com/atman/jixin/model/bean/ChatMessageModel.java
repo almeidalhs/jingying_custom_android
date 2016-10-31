@@ -34,10 +34,15 @@ public class ChatMessageModel {
     //C发送/B接收 识别编号 可能是任何类型消息
     private String identifyStr;
 
-    private int actionType;
     private long operaterId;
     private String operaterName;
     private int operaterType;
+
+    private int actionType;
+    private long couponId;
+    private int enterpriseId;
+    private long goodId;
+    private long storeId;
 
     //本地存储时使用
     private boolean selfSend;//是否自己发送
@@ -69,6 +74,46 @@ public class ChatMessageModel {
         this.selfSend = selfSend;
     }
 
+    public long getStoreId() {
+        return this.storeId;
+    }
+
+    public void setStoreId(long storeId) {
+        this.storeId = storeId;
+    }
+
+    public long getGoodId() {
+        return this.goodId;
+    }
+
+    public void setGoodId(long goodId) {
+        this.goodId = goodId;
+    }
+
+    public int getEnterpriseId() {
+        return this.enterpriseId;
+    }
+
+    public void setEnterpriseId(int enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
+    public long getCouponId() {
+        return this.couponId;
+    }
+
+    public void setCouponId(long couponId) {
+        this.couponId = couponId;
+    }
+
+    public int getActionType() {
+        return this.actionType;
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
+
     public int getOperaterType() {
         return this.operaterType;
     }
@@ -91,14 +136,6 @@ public class ChatMessageModel {
 
     public void setOperaterId(long operaterId) {
         this.operaterId = operaterId;
-    }
-
-    public int getActionType() {
-        return this.actionType;
-    }
-
-    public void setActionType(int actionType) {
-        this.actionType = actionType;
     }
 
     public String getIdentifyStr() {
@@ -237,13 +274,14 @@ public class ChatMessageModel {
         this.id = id;
     }
 
-    @Generated(hash = 1556638629)
+    @Generated(hash = 249558518)
     public ChatMessageModel(Long id, long chatId, long loginId, int type,
             int targetType, long targetId, String targetName, String targetAvatar,
             long sendTime, String content, int audio_duration,
             String audioLocationUrl, String video_image_url, String imageT_icon,
             String imageT_title, String imageT_back, String identifyStr,
-            int actionType, long operaterId, String operaterName, int operaterType,
+            long operaterId, String operaterName, int operaterType, int actionType,
+            long couponId, int enterpriseId, long goodId, long storeId,
             boolean selfSend, int readed, int sendStatus) {
         this.id = id;
         this.chatId = chatId;
@@ -262,10 +300,14 @@ public class ChatMessageModel {
         this.imageT_title = imageT_title;
         this.imageT_back = imageT_back;
         this.identifyStr = identifyStr;
-        this.actionType = actionType;
         this.operaterId = operaterId;
         this.operaterName = operaterName;
         this.operaterType = operaterType;
+        this.actionType = actionType;
+        this.couponId = couponId;
+        this.enterpriseId = enterpriseId;
+        this.goodId = goodId;
+        this.storeId = storeId;
         this.selfSend = selfSend;
         this.readed = readed;
         this.sendStatus = sendStatus;

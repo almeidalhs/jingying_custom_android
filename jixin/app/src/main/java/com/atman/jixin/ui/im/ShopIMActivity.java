@@ -247,11 +247,14 @@ public class ShopIMActivity extends MyBaseActivity
         p2pchatServiceGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LogUtils.e("position:"+position);
                 if (mGVAdapter.getItem(position).getOperaterType()==7) {
                     mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
                 } else {
+                    LogUtils.e("11111");
                     buildMessage(ADChatType.ADChatType_Text
                             , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
+                    LogUtils.e("22222");
                 }
             }
         });
@@ -471,6 +474,12 @@ public class ShopIMActivity extends MyBaseActivity
                 tempOper.setOperaterId(bean.getOperaterId());
                 tempOper.setOperaterType(bean.getOperaterType());
                 tempOper.setOperaterName(bean.getOperaterName());
+                tempOper.setIdentifyChange(bean.getIdentifyChange());
+                tempOper.setIdentifyNeed(bean.getIdentifyNeed());
+                tempOper.setStructLanguage(bean.isStructLanguage());
+                if (bean.getIdentifyChangeNotice()!=null) {
+                    tempOper.setIdentifyChangeNotice(bean.getIdentifyChangeNotice());
+                }
                 operaterList.add(tempOper);
                 temp.setOperaterList(operaterList);
                 seedMessage(mGson.toJson(temp));
@@ -564,7 +573,6 @@ public class ShopIMActivity extends MyBaseActivity
             return;
         }
         if (requestCode == Common.TO_RECORDE) {
-            LogUtils.e("ShopIMActivity_URL:"+data.getStringExtra("url"));
             audioURL = data.getStringExtra("url");
             mTime = data.getIntExtra("time", 0);
             if (audioURL.isEmpty()) {
@@ -656,8 +664,6 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
-        LogUtils.e("11111:"+mAdapter.getItem(position).getAudioLocationUrl());
-//        LogUtils.e("22222:"+(new File(mAdapter.getItem(position).getAudioLocationUrl()).exists()));
         if (mAdapter.getItem(position).getAudioLocationUrl()!=null
                 && (new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
             try {
@@ -698,7 +704,6 @@ public class ShopIMActivity extends MyBaseActivity
 
     @Override
     public void finish(String path) {
-        LogUtils.e(">>>>finish:"+path);
         updateChatMessage(-2, path, mAdapter.getItem(positionAudio).getChatId());
         playAudio(positionAudio, mAnimationDrawable, false);
 

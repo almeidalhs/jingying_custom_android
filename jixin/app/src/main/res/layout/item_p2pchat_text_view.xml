@@ -2,22 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:img="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_p2pchat_root_Rl"
-    android:clickable="true"
-    android:padding="@dimen/dimen_dp_5"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:padding="@dimen/dimen_dp_5">
 
     <TextView
         android:id="@+id/item_p2pchat_text_time_tx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"
         android:textColor="#a8a8a8"
-        android:textSize="@dimen/dimen_sp_10" />
+        android:textSize="@dimen/dimen_sp_10"
+        android:visibility="invisible" />
 
-    <com.base.baselibs.widget.ShapeImageView
-        xmlns:img="http://schemas.android.com/apk/res-auto"
+    <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
         android:id="@+id/item_p2pchat_text_headleft_iv"
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40"
@@ -28,23 +27,22 @@
         android:visibility="gone"
         img:shape="circle" />
 
-    <com.base.baselibs.widget.ShapeImageView
-        xmlns:img="http://schemas.android.com/apk/res-auto"
+    <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
         android:id="@+id/item_p2pchat_text_headright_iv"
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/item_p2pchat_text_time_tx"
-        android:layout_marginRight="@dimen/dimen_dp_10"
         android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
         android:visibility="gone"
         img:shape="circle" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dimen_dp_5"
         android:layout_below="@+id/item_p2pchat_text_time_tx"
+        android:layout_marginBottom="@dimen/dimen_dp_5"
         android:layout_toLeftOf="@+id/item_p2pchat_text_headright_iv"
         android:layout_toRightOf="@+id/item_p2pchat_text_headleft_iv">
 
@@ -58,13 +56,13 @@
                 android:id="@+id/item_p2pchat_text_left_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_dp_5"
                 android:background="@drawable/item_message_left_bg"
-                android:minHeight="@dimen/dimen_dp_40"
-                android:minWidth="@dimen/dimen_dp_40"
                 android:gravity="left|center_vertical"
                 android:maxWidth="@dimen/dimen_dp_200"
+                android:minHeight="@dimen/dimen_dp_40"
+                android:minWidth="@dimen/dimen_dp_40"
                 android:textColor="@color/color_black"
-                android:layout_marginTop="@dimen/dimen_dp_5"
                 android:textSize="@dimen/dimen_sp_15"
                 android:visibility="gone" />
 
@@ -72,30 +70,72 @@
                 android:id="@+id/item_p2pchat_image_left_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_dp_5"
                 android:background="@drawable/item_message_left_bg"
                 android:maxWidth="@dimen/dimen_dp_100"
-                android:layout_marginTop="@dimen/dimen_dp_5"
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/item_p2pchat_finger_left_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_dp_10"
-                android:layout_marginTop="@dimen/dimen_dp_5"
-                android:visibility="gone" />
+            <RelativeLayout
+                android:id="@+id/item_p2pchat_imagetext_left_rl"
+                android:layout_width="@dimen/dimen_dp_150"
+                android:layout_height="@dimen/dimen_dp_100"
+                android:background="@drawable/item_message_left_bg"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/item_p2pchat_imagetext_left_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center_vertical"
+                    android:background="@color/color_10a065"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_dp_5">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_dp_10"
+                        android:layout_height="@dimen/dimen_dp_10"
+                        android:src="@mipmap/ic_chat_one" />
+
+                    <TextView
+                        android:id="@+id/item_p2pchat_imagetext_left_title_tx"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_dp_5"
+                        android:layout_marginRight="@dimen/dimen_dp_5"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="haha"
+                        android:textColor="@color/color_ffffff"
+                        android:textSize="@dimen/dimen_sp_10" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_dp_10"
+                        android:layout_height="@dimen/dimen_dp_10"
+                        android:src="@mipmap/ic_chat_two" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/item_p2pchat_audio_left_ll"
                 android:layout_width="@dimen/dimen_dp_250"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_dp_5"
-                android:maxWidth="@dimen/dimen_dp_200"
-                android:gravity="center_vertical|right"
                 android:background="@drawable/item_message_left_bg"
-                android:visibility="gone"
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:gravity="center_vertical|right"
+                android:maxWidth="@dimen/dimen_dp_200"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/item_p2pchat_audio_left_iv"
@@ -108,8 +148,8 @@
                     android:id="@+id/item_p2pchat_audio_left_tx"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical|right"
                     android:layout_marginLeft="@dimen/dimen_dp_5"
+                    android:gravity="center_vertical|right"
                     android:text="0''"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/dimen_sp_15" />
@@ -157,10 +197,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/item_message_right_bg"
+                    android:gravity="left|center_vertical"
+                    android:maxWidth="@dimen/dimen_dp_200"
                     android:minHeight="@dimen/dimen_dp_40"
                     android:minWidth="@dimen/dimen_dp_40"
-                    android:maxWidth="@dimen/dimen_dp_200"
-                    android:gravity="left|center_vertical"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/dimen_sp_15"
                     android:visibility="gone" />
@@ -170,29 +210,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/item_message_right_bg"
-                    android:scaleType="centerInside"
                     android:maxWidth="@dimen/dimen_dp_100"
+                    android:scaleType="centerInside"
                     android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/item_p2pchat_audio_right_ll"
                     android:layout_width="@dimen/dimen_dp_200"
                     android:layout_height="wrap_content"
-                    android:maxWidth="@dimen/dimen_dp_200"
                     android:layout_marginTop="@dimen/dimen_dp_5"
-                    android:gravity="center_vertical"
                     android:background="@drawable/item_message_right_bg"
-                    android:visibility="gone"
                     android:clickable="true"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical"
+                    android:maxWidth="@dimen/dimen_dp_200"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/item_p2pchat_audio_right_tx"
                         android:layout_width="match_parent"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_marginRight="@dimen/dimen_dp_5"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
                         android:text="10''"
                         android:textColor="@color/color_black"
                         android:textSize="@dimen/dimen_sp_15" />

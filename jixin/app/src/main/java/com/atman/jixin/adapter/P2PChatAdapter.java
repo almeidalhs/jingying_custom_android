@@ -139,7 +139,8 @@ public class P2PChatAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 5;
+        //要比种类数大一点
+        return 6;
     }
 
     @Override
@@ -184,6 +185,7 @@ public class P2PChatAdapter extends BaseAdapter {
         holderText.itemP2pchatTextRightTx.setVisibility(View.GONE);
         holderText.itemP2pchatImageRightIv.setVisibility(View.GONE);
         holderText.itemP2pchatAudioRightLl.setVisibility(View.GONE);
+        holderText.itemP2pchatImagetextLeftRl.setVisibility(View.GONE);
         if (temp.getSelfSend()) {
             holderText.itemP2pchatTextHeadrightIv.setVisibility(View.VISIBLE);
             holderText.itemP2pchatTextHeadleftIv.setVisibility(View.GONE);
@@ -232,6 +234,23 @@ public class P2PChatAdapter extends BaseAdapter {
         }
 
         switch (type) {
+            case ADChatType.ADChatType_ImageText:
+                if (temp.getSelfSend()) {} else {
+                    holderText.itemP2pchatImagetextLeftRl.setVisibility(View.VISIBLE);
+                    holderText.itemP2pchatImagetextLeftTitleTx.setText(temp.getImageT_title());
+                    String url = temp.getContent();
+                    if (!url.contains("http")) {
+                        url = Common.ImageUrl + temp.getImageT_back();
+                    }
+                    File f = ImageLoader.getInstance().getDiskCache().get(url);
+                    if (f.exists()) {
+                        ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImagetextLeftIv);
+                    } else {
+                        ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImagetextLeftIv
+                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                    }
+                }
+                break;
             case ADChatType.ADChatType_Text:
                 if (temp.getSelfSend()) {
                     holderText.itemP2pchatTextRightTx.setVisibility(View.VISIBLE);
@@ -250,7 +269,7 @@ public class P2PChatAdapter extends BaseAdapter {
                 }
                 File f = ImageLoader.getInstance().getDiskCache().get(url);
                 if (f.exists()) {
-                    LogUtils.e("f:"+f);
+                    LogUtils.e("f:" + f);
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImageRightIv);
@@ -376,10 +395,16 @@ public class P2PChatAdapter extends BaseAdapter {
         TextView itemP2pchatTextLeftTx;
         @Bind(R.id.item_p2pchat_image_left_iv)
         ImageView itemP2pchatImageLeftIv;
-        @Bind(R.id.item_p2pchat_audio_left_tx)
-        TextView itemP2pchatAudioLeftTx;
+        @Bind(R.id.item_p2pchat_imagetext_left_iv)
+        ImageView itemP2pchatImagetextLeftIv;
+        @Bind(R.id.item_p2pchat_imagetext_left_title_tx)
+        TextView itemP2pchatImagetextLeftTitleTx;
+        @Bind(R.id.item_p2pchat_imagetext_left_rl)
+        RelativeLayout itemP2pchatImagetextLeftRl;
         @Bind(R.id.item_p2pchat_audio_left_iv)
         ImageView itemP2pchatAudioLeftIv;
+        @Bind(R.id.item_p2pchat_audio_left_tx)
+        TextView itemP2pchatAudioLeftTx;
         @Bind(R.id.item_p2pchat_audio_left_ll)
         LinearLayout itemP2pchatAudioLeftLl;
         @Bind(R.id.item_p2pchat_right_progress)
@@ -390,10 +415,10 @@ public class P2PChatAdapter extends BaseAdapter {
         TextView itemP2pchatTextRightTx;
         @Bind(R.id.item_p2pchat_image_right_iv)
         ImageView itemP2pchatImageRightIv;
-        @Bind(R.id.item_p2pchat_audio_right_iv)
-        ImageView itemP2pchatAudioRightIv;
         @Bind(R.id.item_p2pchat_audio_right_tx)
         TextView itemP2pchatAudioRightTx;
+        @Bind(R.id.item_p2pchat_audio_right_iv)
+        ImageView itemP2pchatAudioRightIv;
         @Bind(R.id.item_p2pchat_audio_right_ll)
         LinearLayout itemP2pchatAudioRightLl;
         @Bind(R.id.item_p2pchat_root_Rl)

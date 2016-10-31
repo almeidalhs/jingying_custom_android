@@ -210,7 +210,52 @@ public class GetChatServiceModel {
             public static class OperaterListBean {
                 private long operaterId;
                 private String operaterName;
+                private String operaterExtra;
+                private String identifyChangeNotice;
                 private int operaterType;
+                private int identifyChange;
+                private int identifyNeed;
+                private boolean structLanguage;
+
+                public boolean isStructLanguage() {
+                    return structLanguage;
+                }
+
+                public void setStructLanguage(boolean structLanguage) {
+                    this.structLanguage = structLanguage;
+                }
+
+                public String getIdentifyChangeNotice() {
+                    return identifyChangeNotice;
+                }
+
+                public void setIdentifyChangeNotice(String identifyChangeNotice) {
+                    this.identifyChangeNotice = identifyChangeNotice;
+                }
+
+                public int getIdentifyChange() {
+                    return identifyChange;
+                }
+
+                public void setIdentifyChange(int identifyChange) {
+                    this.identifyChange = identifyChange;
+                }
+
+                public int getIdentifyNeed() {
+                    return identifyNeed;
+                }
+
+                public void setIdentifyNeed(int identifyNeed) {
+                    this.identifyNeed = identifyNeed;
+                }
+
+                public String getOperaterExtra() {
+                    return operaterExtra;
+                }
+
+                public void setOperaterExtra(String operaterExtra) {
+                    this.operaterExtra = operaterExtra;
+                }
 
                 public long getOperaterId() {
                     return operaterId;
