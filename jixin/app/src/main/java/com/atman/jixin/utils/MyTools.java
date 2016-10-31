@@ -1,7 +1,10 @@
 package com.atman.jixin.utils;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.hardware.Camera;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -18,6 +21,20 @@ import java.util.Random;
  * 电话 18578909061
  */
 public class MyTools {
+
+    /**
+     * 实现文本复制功能
+     * add by wangqianzhou
+     * @param content
+     */
+    public static void copy(Context context, String content, boolean isShow) {
+        // 得到剪贴板管理器
+        ClipboardManager cmb = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(content.trim());
+        if (isShow) {
+            Toast.makeText(context, "复制成功" ,Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      *  返回true 表示可以使用  返回false表示不可以使用

@@ -136,6 +136,7 @@ public class ShopIMActivity extends MyBaseActivity
     private int positionAudio;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private AnimationDrawable mAnimationDrawable;
+    private boolean isChange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +220,8 @@ public class ShopIMActivity extends MyBaseActivity
                 mChatListModelDao.update(mChatListModel);
             }
 
-            if (mGetMessageModel.getContent().getOperaterList()!=null) {
+            if (mGetMessageModel.getContent().getOperaterList()!=null && !isChange) {
+                isChange = true;
                 mGVAdapter.updateListView(mGetMessageModel.getContent().getOperaterList());
             }
         }
@@ -247,14 +249,12 @@ public class ShopIMActivity extends MyBaseActivity
         p2pchatServiceGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogUtils.e("position:"+position);
                 if (mGVAdapter.getItem(position).getOperaterType()==7) {
+                    isChange = false;
                     mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
                 } else {
-                    LogUtils.e("11111");
                     buildMessage(ADChatType.ADChatType_Text
                             , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
-                    LogUtils.e("22222");
                 }
             }
         });

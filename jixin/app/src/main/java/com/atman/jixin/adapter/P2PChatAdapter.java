@@ -132,6 +132,10 @@ public class P2PChatAdapter extends BaseAdapter {
     }
 
     public void addImMessageDao(ChatMessageModel mImMessageDao) {
+        if (!mImMessageDao.getSelfSend()
+                && !mImMessageDao.getOperaterExtra().isEmpty()) {
+            MyTools.copy(context, mImMessageDao.getOperaterExtra(), false);
+        }
         this.mImMessage.add(mImMessageDao);
         notifyDataSetChanged();
         p2pChatLv.getRefreshableView().setSelection(p2pChatLv.getRefreshableView().getBottom());
@@ -176,11 +180,13 @@ public class P2PChatAdapter extends BaseAdapter {
             holderText = (ViewHolder) convertView.getTag();
         }
 
-        final ChatMessageModel temp = mImMessage.get(position);
+        ChatMessageModel temp = mImMessage.get(position);
 
         holderText.itemP2pchatTextLeftTx.setVisibility(View.GONE);
         holderText.itemP2pchatImageLeftIv.setVisibility(View.GONE);
         holderText.itemP2pchatAudioLeftLl.setVisibility(View.GONE);
+        holderText.itemP2pchatRightProgress.setVisibility(View.GONE);
+        holderText.itemP2pchatRightAlert.setVisibility(View.GONE);
 
         holderText.itemP2pchatTextRightTx.setVisibility(View.GONE);
         holderText.itemP2pchatImageRightIv.setVisibility(View.GONE);
@@ -257,9 +263,15 @@ public class P2PChatAdapter extends BaseAdapter {
                     holderText.itemP2pchatTextRightTx.setText(SmileUtils.getEmotionContent(context
                             , holderText.itemP2pchatTextRightTx, temp.getContent()));
                 } else {
+                    String tempStr = "";
+                    if (temp.getOperaterExtra()!=null) {
+                        tempStr = "你已经成功复制WiFi名称:"+temp.getOperaterName()+"的密码";
+                    } else {
+                        tempStr = temp.getContent();
+                    }
                     holderText.itemP2pchatTextLeftTx.setVisibility(View.VISIBLE);
                     holderText.itemP2pchatTextLeftTx.setText(SmileUtils.getEmotionContent(context
-                            , holderText.itemP2pchatTextRightTx, temp.getContent()));
+                            , holderText.itemP2pchatTextRightTx, tempStr));
                 }
                 break;
             case ADChatType.ADChatType_Image:

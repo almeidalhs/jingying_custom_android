@@ -205,11 +205,18 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
             tempMessage.setStoreId(temp.getEventAction().getStoreId());
         }
 //
-//        if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {
-//            tempMessage.setOperaterId(temp.getOperaterList().get(0).getOperaterId());
-//            tempMessage.setOperaterName(temp.getOperaterList().get(0).getOperaterName());
-//            tempMessage.setOperaterType(temp.getOperaterList().get(0).getOperaterType());
-//        }
+        if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {
+            if (temp.getOperaterList().get(1).getOperaterExtra()!=null) {
+                tempMessage.setOperaterExtra(temp.getOperaterList().get(1).getOperaterExtra());
+                tempMessage.setOperaterId(temp.getOperaterList().get(1).getOperaterId());
+                tempMessage.setOperaterName(temp.getOperaterList().get(1).getOperaterName());
+                tempMessage.setOperaterType(temp.getOperaterList().get(1).getOperaterType());
+            } else {
+                tempMessage.setOperaterId(temp.getOperaterList().get(0).getOperaterId());
+                tempMessage.setOperaterName(temp.getOperaterList().get(0).getOperaterName());
+                tempMessage.setOperaterType(temp.getOperaterList().get(0).getOperaterType());
+            }
+        }
 
         tempMessage.setReaded(1);
         tempMessage.setSendStatus(0);

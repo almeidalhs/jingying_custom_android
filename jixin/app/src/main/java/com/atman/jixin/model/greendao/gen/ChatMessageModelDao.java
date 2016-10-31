@@ -43,15 +43,16 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         public final static Property IdentifyStr = new Property(16, String.class, "identifyStr", false, "IDENTIFY_STR");
         public final static Property OperaterId = new Property(17, long.class, "operaterId", false, "OPERATER_ID");
         public final static Property OperaterName = new Property(18, String.class, "operaterName", false, "OPERATER_NAME");
-        public final static Property OperaterType = new Property(19, int.class, "operaterType", false, "OPERATER_TYPE");
-        public final static Property ActionType = new Property(20, int.class, "actionType", false, "ACTION_TYPE");
-        public final static Property CouponId = new Property(21, long.class, "couponId", false, "COUPON_ID");
-        public final static Property EnterpriseId = new Property(22, int.class, "enterpriseId", false, "ENTERPRISE_ID");
-        public final static Property GoodId = new Property(23, long.class, "goodId", false, "GOOD_ID");
-        public final static Property StoreId = new Property(24, long.class, "storeId", false, "STORE_ID");
-        public final static Property SelfSend = new Property(25, boolean.class, "selfSend", false, "SELF_SEND");
-        public final static Property Readed = new Property(26, int.class, "readed", false, "READED");
-        public final static Property SendStatus = new Property(27, int.class, "sendStatus", false, "SEND_STATUS");
+        public final static Property OperaterExtra = new Property(19, String.class, "operaterExtra", false, "OPERATER_EXTRA");
+        public final static Property OperaterType = new Property(20, int.class, "operaterType", false, "OPERATER_TYPE");
+        public final static Property ActionType = new Property(21, int.class, "actionType", false, "ACTION_TYPE");
+        public final static Property CouponId = new Property(22, long.class, "couponId", false, "COUPON_ID");
+        public final static Property EnterpriseId = new Property(23, int.class, "enterpriseId", false, "ENTERPRISE_ID");
+        public final static Property GoodId = new Property(24, long.class, "goodId", false, "GOOD_ID");
+        public final static Property StoreId = new Property(25, long.class, "storeId", false, "STORE_ID");
+        public final static Property SelfSend = new Property(26, boolean.class, "selfSend", false, "SELF_SEND");
+        public final static Property Readed = new Property(27, int.class, "readed", false, "READED");
+        public final static Property SendStatus = new Property(28, int.class, "sendStatus", false, "SEND_STATUS");
     }
 
 
@@ -86,15 +87,16 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
                 "\"IDENTIFY_STR\" TEXT," + // 16: identifyStr
                 "\"OPERATER_ID\" INTEGER NOT NULL ," + // 17: operaterId
                 "\"OPERATER_NAME\" TEXT," + // 18: operaterName
-                "\"OPERATER_TYPE\" INTEGER NOT NULL ," + // 19: operaterType
-                "\"ACTION_TYPE\" INTEGER NOT NULL ," + // 20: actionType
-                "\"COUPON_ID\" INTEGER NOT NULL ," + // 21: couponId
-                "\"ENTERPRISE_ID\" INTEGER NOT NULL ," + // 22: enterpriseId
-                "\"GOOD_ID\" INTEGER NOT NULL ," + // 23: goodId
-                "\"STORE_ID\" INTEGER NOT NULL ," + // 24: storeId
-                "\"SELF_SEND\" INTEGER NOT NULL ," + // 25: selfSend
-                "\"READED\" INTEGER NOT NULL ," + // 26: readed
-                "\"SEND_STATUS\" INTEGER NOT NULL );"); // 27: sendStatus
+                "\"OPERATER_EXTRA\" TEXT," + // 19: operaterExtra
+                "\"OPERATER_TYPE\" INTEGER NOT NULL ," + // 20: operaterType
+                "\"ACTION_TYPE\" INTEGER NOT NULL ," + // 21: actionType
+                "\"COUPON_ID\" INTEGER NOT NULL ," + // 22: couponId
+                "\"ENTERPRISE_ID\" INTEGER NOT NULL ," + // 23: enterpriseId
+                "\"GOOD_ID\" INTEGER NOT NULL ," + // 24: goodId
+                "\"STORE_ID\" INTEGER NOT NULL ," + // 25: storeId
+                "\"SELF_SEND\" INTEGER NOT NULL ," + // 26: selfSend
+                "\"READED\" INTEGER NOT NULL ," + // 27: readed
+                "\"SEND_STATUS\" INTEGER NOT NULL );"); // 28: sendStatus
     }
 
     /** Drops the underlying database table. */
@@ -169,15 +171,20 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         if (operaterName != null) {
             stmt.bindString(19, operaterName);
         }
-        stmt.bindLong(20, entity.getOperaterType());
-        stmt.bindLong(21, entity.getActionType());
-        stmt.bindLong(22, entity.getCouponId());
-        stmt.bindLong(23, entity.getEnterpriseId());
-        stmt.bindLong(24, entity.getGoodId());
-        stmt.bindLong(25, entity.getStoreId());
-        stmt.bindLong(26, entity.getSelfSend() ? 1L: 0L);
-        stmt.bindLong(27, entity.getReaded());
-        stmt.bindLong(28, entity.getSendStatus());
+ 
+        String operaterExtra = entity.getOperaterExtra();
+        if (operaterExtra != null) {
+            stmt.bindString(20, operaterExtra);
+        }
+        stmt.bindLong(21, entity.getOperaterType());
+        stmt.bindLong(22, entity.getActionType());
+        stmt.bindLong(23, entity.getCouponId());
+        stmt.bindLong(24, entity.getEnterpriseId());
+        stmt.bindLong(25, entity.getGoodId());
+        stmt.bindLong(26, entity.getStoreId());
+        stmt.bindLong(27, entity.getSelfSend() ? 1L: 0L);
+        stmt.bindLong(28, entity.getReaded());
+        stmt.bindLong(29, entity.getSendStatus());
     }
 
     @Override
@@ -246,15 +253,20 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         if (operaterName != null) {
             stmt.bindString(19, operaterName);
         }
-        stmt.bindLong(20, entity.getOperaterType());
-        stmt.bindLong(21, entity.getActionType());
-        stmt.bindLong(22, entity.getCouponId());
-        stmt.bindLong(23, entity.getEnterpriseId());
-        stmt.bindLong(24, entity.getGoodId());
-        stmt.bindLong(25, entity.getStoreId());
-        stmt.bindLong(26, entity.getSelfSend() ? 1L: 0L);
-        stmt.bindLong(27, entity.getReaded());
-        stmt.bindLong(28, entity.getSendStatus());
+ 
+        String operaterExtra = entity.getOperaterExtra();
+        if (operaterExtra != null) {
+            stmt.bindString(20, operaterExtra);
+        }
+        stmt.bindLong(21, entity.getOperaterType());
+        stmt.bindLong(22, entity.getActionType());
+        stmt.bindLong(23, entity.getCouponId());
+        stmt.bindLong(24, entity.getEnterpriseId());
+        stmt.bindLong(25, entity.getGoodId());
+        stmt.bindLong(26, entity.getStoreId());
+        stmt.bindLong(27, entity.getSelfSend() ? 1L: 0L);
+        stmt.bindLong(28, entity.getReaded());
+        stmt.bindLong(29, entity.getSendStatus());
     }
 
     @Override
@@ -284,15 +296,16 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // identifyStr
             cursor.getLong(offset + 17), // operaterId
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // operaterName
-            cursor.getInt(offset + 19), // operaterType
-            cursor.getInt(offset + 20), // actionType
-            cursor.getLong(offset + 21), // couponId
-            cursor.getInt(offset + 22), // enterpriseId
-            cursor.getLong(offset + 23), // goodId
-            cursor.getLong(offset + 24), // storeId
-            cursor.getShort(offset + 25) != 0, // selfSend
-            cursor.getInt(offset + 26), // readed
-            cursor.getInt(offset + 27) // sendStatus
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // operaterExtra
+            cursor.getInt(offset + 20), // operaterType
+            cursor.getInt(offset + 21), // actionType
+            cursor.getLong(offset + 22), // couponId
+            cursor.getInt(offset + 23), // enterpriseId
+            cursor.getLong(offset + 24), // goodId
+            cursor.getLong(offset + 25), // storeId
+            cursor.getShort(offset + 26) != 0, // selfSend
+            cursor.getInt(offset + 27), // readed
+            cursor.getInt(offset + 28) // sendStatus
         );
         return entity;
     }
@@ -318,15 +331,16 @@ public class ChatMessageModelDao extends AbstractDao<ChatMessageModel, Long> {
         entity.setIdentifyStr(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setOperaterId(cursor.getLong(offset + 17));
         entity.setOperaterName(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setOperaterType(cursor.getInt(offset + 19));
-        entity.setActionType(cursor.getInt(offset + 20));
-        entity.setCouponId(cursor.getLong(offset + 21));
-        entity.setEnterpriseId(cursor.getInt(offset + 22));
-        entity.setGoodId(cursor.getLong(offset + 23));
-        entity.setStoreId(cursor.getLong(offset + 24));
-        entity.setSelfSend(cursor.getShort(offset + 25) != 0);
-        entity.setReaded(cursor.getInt(offset + 26));
-        entity.setSendStatus(cursor.getInt(offset + 27));
+        entity.setOperaterExtra(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setOperaterType(cursor.getInt(offset + 20));
+        entity.setActionType(cursor.getInt(offset + 21));
+        entity.setCouponId(cursor.getLong(offset + 22));
+        entity.setEnterpriseId(cursor.getInt(offset + 23));
+        entity.setGoodId(cursor.getLong(offset + 24));
+        entity.setStoreId(cursor.getLong(offset + 25));
+        entity.setSelfSend(cursor.getShort(offset + 26) != 0);
+        entity.setReaded(cursor.getInt(offset + 27));
+        entity.setSendStatus(cursor.getInt(offset + 28));
      }
     
     @Override

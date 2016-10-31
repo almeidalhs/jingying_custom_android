@@ -36,6 +36,7 @@ public class ChatMessageModel {
 
     private long operaterId;
     private String operaterName;
+    private String operaterExtra;
     private int operaterType;
 
     private int actionType;
@@ -120,6 +121,14 @@ public class ChatMessageModel {
 
     public void setOperaterType(int operaterType) {
         this.operaterType = operaterType;
+    }
+
+    public String getOperaterExtra() {
+        return this.operaterExtra;
+    }
+
+    public void setOperaterExtra(String operaterExtra) {
+        this.operaterExtra = operaterExtra;
     }
 
     public String getOperaterName() {
@@ -274,15 +283,15 @@ public class ChatMessageModel {
         this.id = id;
     }
 
-    @Generated(hash = 249558518)
+    @Generated(hash = 508738304)
     public ChatMessageModel(Long id, long chatId, long loginId, int type,
             int targetType, long targetId, String targetName, String targetAvatar,
             long sendTime, String content, int audio_duration,
             String audioLocationUrl, String video_image_url, String imageT_icon,
             String imageT_title, String imageT_back, String identifyStr,
-            long operaterId, String operaterName, int operaterType, int actionType,
-            long couponId, int enterpriseId, long goodId, long storeId,
-            boolean selfSend, int readed, int sendStatus) {
+            long operaterId, String operaterName, String operaterExtra,
+            int operaterType, int actionType, long couponId, int enterpriseId,
+            long goodId, long storeId, boolean selfSend, int readed, int sendStatus) {
         this.id = id;
         this.chatId = chatId;
         this.loginId = loginId;
@@ -302,6 +311,7 @@ public class ChatMessageModel {
         this.identifyStr = identifyStr;
         this.operaterId = operaterId;
         this.operaterName = operaterName;
+        this.operaterExtra = operaterExtra;
         this.operaterType = operaterType;
         this.actionType = actionType;
         this.couponId = couponId;

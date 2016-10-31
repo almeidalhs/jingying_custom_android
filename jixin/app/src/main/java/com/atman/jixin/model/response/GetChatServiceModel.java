@@ -214,7 +214,7 @@ public class GetChatServiceModel {
                 private String identifyChangeNotice;
                 private int operaterType;
                 private int identifyChange;
-                private int identifyNeed;
+                private int identifyNeed;//操作此服务需要识别编号  1:需要 非1:不需要？
                 private boolean structLanguage;
 
                 public boolean isStructLanguage() {
