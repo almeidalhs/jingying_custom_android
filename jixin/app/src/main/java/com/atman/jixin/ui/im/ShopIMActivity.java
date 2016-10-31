@@ -36,7 +36,6 @@ import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.model.response.UpdateAudioResultModel;
-import com.atman.jixin.ui.SplashActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
@@ -45,7 +44,6 @@ import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.UiHelper;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.atman.jixin.widget.downfile.DownloadAudioFile;
-import com.atman.jixin.widget.downfile.DownloadFile;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
@@ -64,9 +62,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -222,6 +218,10 @@ public class ShopIMActivity extends MyBaseActivity
                 mChatListModel.setUnreadNum(0);
                 mChatListModelDao.update(mChatListModel);
             }
+
+            if (mGetMessageModel.getContent().getOperaterList()!=null) {
+                mGVAdapter.updateListView(mGetMessageModel.getContent().getOperaterList());
+            }
         }
     }
 
@@ -247,9 +247,12 @@ public class ShopIMActivity extends MyBaseActivity
         p2pchatServiceGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map<String, String> p = new HashMap<>();
-
-                seedMessage(mGson.toJson(p));
+                if (mGVAdapter.getItem(position).getOperaterType()==7) {
+                    mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
+                } else {
+                    buildMessage(ADChatType.ADChatType_Text
+                            , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
+                }
             }
         });
     }
@@ -301,7 +304,6 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     private void seedMessage(String str) {
-        temp.setContent(str);
         OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
                 .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
@@ -425,7 +427,8 @@ public class ShopIMActivity extends MyBaseActivity
                 handler.postDelayed(runnable, 200);
                 break;
             case R.id.p2pchat_send_bt:
-                buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim());
+                buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim()
+                        , false, null);
                 break;
             case R.id.p2pchat_add_picture_tv:
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
@@ -444,7 +447,8 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    private void buildMessage(int adChatType, String content) {
+    private void buildMessage(int adChatType, String content, boolean isService
+            , GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean bean) {
         adChatTypeText = adChatType;
         temp = new MessageModel();
         temp.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
@@ -461,7 +465,18 @@ public class ShopIMActivity extends MyBaseActivity
                     .id(Common.NET_UP_PIC_ID).tag(Common.NET_UP_PIC_ID)
                     .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, false));
         } else if (adChatType == ADChatType.ADChatType_Text) {
-            seedMessage(content);
+            if (isService) {//服务
+                List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> operaterList = new ArrayList<>();
+                GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean tempOper = new GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean();
+                tempOper.setOperaterId(bean.getOperaterId());
+                tempOper.setOperaterType(bean.getOperaterType());
+                tempOper.setOperaterName(bean.getOperaterName());
+                operaterList.add(tempOper);
+                temp.setOperaterList(operaterList);
+                seedMessage(mGson.toJson(temp));
+            } else {
+                seedMessage(content);
+            }
         } else if (adChatType == ADChatType.ADChatType_ImageText) {
         } else if (adChatType == ADChatType.ADChatType_Audio) {
             temp.setAudio_duration(mTime);
@@ -561,7 +576,7 @@ public class ShopIMActivity extends MyBaseActivity
                     return;
                 }
 
-                buildMessage(ADChatType.ADChatType_Audio, audioURL);
+                buildMessage(ADChatType.ADChatType_Audio, audioURL, false, null);
             }
         } else {
             if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
@@ -577,7 +592,7 @@ public class ShopIMActivity extends MyBaseActivity
                         showToast("发送失败");
                         return;
                     }
-                    buildMessage(ADChatType.ADChatType_Image, temp.getPath());
+                    buildMessage(ADChatType.ADChatType_Image, temp.getPath(), false, null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

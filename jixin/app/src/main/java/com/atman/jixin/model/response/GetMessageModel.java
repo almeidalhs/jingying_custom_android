@@ -1,5 +1,7 @@
 package com.atman.jixin.model.response;
 
+import java.util.List;
+
 /**
  * Created by tangbingliang on 16/10/28.
  */
@@ -66,6 +68,15 @@ public class GetMessageModel {
         private String targetName;
         private int targetType;
         private int type;
+        private List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> operaterList;
+
+        public List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> getOperaterList() {
+            return operaterList;
+        }
+
+        public void setOperaterList(List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> operaterList) {
+            this.operaterList = operaterList;
+        }
 
         public String getContent() {
             return content;

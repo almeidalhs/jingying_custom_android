@@ -179,7 +179,6 @@ public class P2PChatAdapter extends BaseAdapter {
 
         holderText.itemP2pchatTextLeftTx.setVisibility(View.GONE);
         holderText.itemP2pchatImageLeftIv.setVisibility(View.GONE);
-        holderText.itemP2pchatFingerLeftIv.setVisibility(View.GONE);
         holderText.itemP2pchatAudioLeftLl.setVisibility(View.GONE);
 
         holderText.itemP2pchatTextRightTx.setVisibility(View.GONE);
@@ -377,8 +376,6 @@ public class P2PChatAdapter extends BaseAdapter {
         TextView itemP2pchatTextLeftTx;
         @Bind(R.id.item_p2pchat_image_left_iv)
         ImageView itemP2pchatImageLeftIv;
-        @Bind(R.id.item_p2pchat_finger_left_iv)
-        ImageView itemP2pchatFingerLeftIv;
         @Bind(R.id.item_p2pchat_audio_left_tx)
         TextView itemP2pchatAudioLeftTx;
         @Bind(R.id.item_p2pchat_audio_left_iv)

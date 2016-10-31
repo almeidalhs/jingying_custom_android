@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.atman.jixin.R;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.utils.SoundMeter;
+import com.base.baselibs.util.LogUtils;
 
 import java.io.File;
 
@@ -159,6 +160,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
             if (!isCancel) {
                 recordingTipTx.setText("录音中.."+time+"s");
                 if (time >= MAX_TIME) {
+                    mTime = MAX_TIME;
                     File file = recordEnd();
                     backResuilt(file);
                 } else {

@@ -81,6 +81,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
      */
     private MyCleanEditText et_sendmessage;
     private ImageView blogdetail_addemol_iv;
+    private ImageView p2pchat_service_or_keyboard_iv;
 
     /**
      * 表情数据填充器
@@ -167,6 +168,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
                 if (view3!=null) {
                     view3.setVisibility(View.GONE);
                 }
+                p2pchat_service_or_keyboard_iv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
                 break;
 
         }
@@ -200,6 +202,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
         view = findViewById(R.id.ll_facechoose);
         view2 = findViewById(R.id.p2pchat_add_ll);
         view3 = findViewById(R.id.p2pchat_service_ll);
+        p2pchat_service_or_keyboard_iv = (ImageView) findViewById(R.id.p2pchat_service_or_keyboard_iv);
         blogdetail_addemol_iv = (ImageView) findViewById(R.id.blogdetail_addemol_iv);
         blogdetail_addemol_iv.setOnClickListener(this);
     }
