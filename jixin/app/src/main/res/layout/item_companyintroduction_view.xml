@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/color_ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/item_company_video_rl"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/dimen_dp_200"
+        android:background="@android:color/black">
+
+        <ImageView
+            android:id="@+id/item_company_video_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/item_company_video_start_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_vedio_start" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_company_audio_rl"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/dimen_dp_200"
+        android:background="@mipmap/voice_bg2">
+
+        <ImageView
+            android:id="@+id/item_company_audio_iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/audio_anim"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/item_company_audio_start_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_vedio_start" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/item_company_pictrue_iv"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/dimen_dp_200" />
+
+    <LinearLayout
+        android:id="@+id/item_company_content_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_dp_15">
+
+        <TextView
+            android:id="@+id/item_company_introduction_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingExtra="@dimen/dimen_dp_5"
+            android:textColor="@color/color_2B2B2B"
+            android:textSize="@dimen/dimen_sp_14" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text"
+                android:textColor="@color/color_000000"
+                android:textSize="@dimen/dimen_dp_20" />
+
+            <ImageView
+                android:layout_width="@dimen/dimen_dp_25"
+                android:layout_height="@dimen/dimen_dp_2"
+                android:layout_marginTop="@dimen/dimen_dp_10"
+                android:background="@color/color_000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

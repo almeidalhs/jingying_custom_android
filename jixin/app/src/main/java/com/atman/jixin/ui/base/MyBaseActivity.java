@@ -24,10 +24,8 @@ import android.widget.Toast;
 import com.atman.jixin.R;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.personal.LoginActivity;
-import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
-import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.google.gson.Gson;
 
@@ -66,6 +64,8 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     RelativeLayout rootBarRl;
     @Bind(R.id.root_content_ll)
     LinearLayout rootContentLl;
+    @Bind(R.id.base_line_iv)
+    ImageView baseLineIv;
     @Bind(R.id.bar_title_iv)
     ImageView barTitleIv;
 
@@ -161,6 +161,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     protected void hideTitleBar() {
         if (rootBarRl != null) {
             rootBarRl.setVisibility(View.GONE);
+            baseLineIv.setVisibility(View.GONE);
         }
     }
 
@@ -170,6 +171,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     protected void showTitleBar() {
         if (rootBarRl != null) {
             rootBarRl.setVisibility(View.VISIBLE);
+            baseLineIv.setVisibility(View.VISIBLE);
         }
     }
 

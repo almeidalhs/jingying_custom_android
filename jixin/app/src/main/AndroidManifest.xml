@@ -40,7 +40,7 @@
         <activity android:name=".ui.im.TAPersonalInformationActivity" />
         <activity android:name=".ui.im.RecordingActivity" android:theme="@style/recordingStyle" />
         <activity android:name=".ui.im.chatui.MenuPreviewActivity" />
-        <activity android:name=".ui.im.chatui.CompanyIntroductionActivity" />
+        <activity android:name=".ui.im.chatui.CompanyIntroductionActivity" android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".ui.im.chatui.StoreCommentActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.im.chatui.StoreDetailActivity" />
         <activity android:name=".ui.shop.MemberCenterActivity" />
