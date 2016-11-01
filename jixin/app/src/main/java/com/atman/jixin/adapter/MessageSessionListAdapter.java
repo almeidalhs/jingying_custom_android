@@ -15,7 +15,6 @@ import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -93,6 +92,12 @@ public class MessageSessionListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        if (dataList.get(position).getTargetType()==1) {
+            holder.itemSessionIsstoreTx.setVisibility(View.VISIBLE);
+        } else {
+            holder.itemSessionIsstoreTx.setVisibility(View.VISIBLE);
+        }
+
         if (dataList.get(position).getTargetAvatar() != null) {
             if (dataList.get(position).getTargetAvatar().isEmpty()) {
                 holder.itemSessionHeadIv.setBackgroundResource(R.mipmap.img_sign_logo);
@@ -134,11 +139,11 @@ public class MessageSessionListAdapter extends BaseAdapter {
         } else if (dataList.get(position).getType() == ADChatType.ADChatType_Video) {
             content = "[视频]";
         } else if (dataList.get(position).getType() == ADChatType.ADChatType_ImageText) {
-            content = "[图片]";
+            content = dataList.get(position).getContent();
         } else {
             content = dataList.get(position).getContent();
         }
-        if (content!=null) {
+        if (content != null) {
             holder.itemSessionContentTx.setText(SmileUtils.getEmotionContent(context
                     , holder.itemSessionContentTx, content));
         }
@@ -156,6 +161,8 @@ public class MessageSessionListAdapter extends BaseAdapter {
         ShapeImageView itemSessionHeadIv;
         @Bind(R.id.item_session_unread_tx)
         TextView itemSessionUnreadTx;
+        @Bind(R.id.item_session_isstore_tx)
+        TextView itemSessionIsstoreTx;
         @Bind(R.id.item_session_nick_tx)
         TextView itemSessionNickTx;
         @Bind(R.id.item_session_time_tx)

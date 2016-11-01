@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.iimp.CommentType;
@@ -13,8 +17,12 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
@@ -22,6 +30,13 @@ import okhttp3.Response;
  */
 
 public class CompanyIntroductionActivity extends MyBaseActivity {
+
+    @Bind(R.id.company_introduction_tx)
+    TextView companyIntroductionTx;
+    @Bind(R.id.company_top_iv)
+    ImageView companyTopIv;
+    @Bind(R.id.company_top_rl)
+    RelativeLayout companyTopRl;
 
     private Context mContext = CompanyIntroductionActivity.this;
 
@@ -35,9 +50,10 @@ public class CompanyIntroductionActivity extends MyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_companyintroduction);
+        ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent (Context context, String title, long id, String imgUrl){
+    public static Intent buildIntent(Context context, String title, long id, String imgUrl) {
         Intent intent = new Intent(context, CompanyIntroductionActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("id", id);
@@ -53,7 +69,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity {
         imgUrl = getIntent().getStringExtra("imgUrl");
         id = getIntent().getLongExtra("id", -1);
 
-        LogUtils.e("id:"+id+",title:"+title+",imgUrl:"+imgUrl);
+        LogUtils.e("id:" + id + ",title:" + title + ",imgUrl:" + imgUrl);
 
         setBarTitleTx(title);
         setBarRightTx("评论").setOnClickListener(new View.OnClickListener() {
@@ -62,6 +78,10 @@ public class CompanyIntroductionActivity extends MyBaseActivity {
                 startActivity(StoreCommentActivity.buildIntent(mContext, id, CommentType.CommentType_STORE));
             }
         });
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(getmWidth(),
+                getmWidth() * 9 / 16);
+        companyTopRl.setLayoutParams(params);
     }
 
     @Override
@@ -84,6 +104,13 @@ public class CompanyIntroductionActivity extends MyBaseActivity {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_STORE_INRRODUCTION_ID) {
             mGetCompanyIntrodutionModel = mGson.fromJson(data, GetCompanyIntrodutionModel.class);
+
+            companyIntroductionTx.setText(mGetCompanyIntrodutionModel.getBody().getFileList().get(0).getRemark());
+            String url = mGetCompanyIntrodutionModel.getBody().getFileList().get(0).getShowImg();
+            if (!url.startsWith("http")) {
+                url = Common.ImageUrl + mGetCompanyIntrodutionModel.getBody().getFileList().get(0).getShowImg();
+            }
+            ImageLoader.getInstance().displayImage(url, companyTopIv, MyBaseApplication.getApplication().optionsNot);
         }
     }
 
@@ -91,5 +118,15 @@ public class CompanyIntroductionActivity extends MyBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_STORE_INRRODUCTION_ID);
+    }
+
+    @OnClick({R.id.company_top_iv, R.id.company_top_start_iv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.company_top_iv:
+                break;
+            case R.id.company_top_start_iv:
+                break;
+        }
     }
 }
