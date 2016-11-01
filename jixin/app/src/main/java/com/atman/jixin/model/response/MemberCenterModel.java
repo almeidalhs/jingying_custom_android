@@ -45,9 +45,19 @@ public class MemberCenterModel {
         private long storeId;
         private String storeName;
         private String storeAvatar;
+        private String fullStoreBanner;
         private int couponNum;
         private int integral;
         private int consumeNum;
+
+        public String getFullStoreBanner() {
+            return fullStoreBanner;
+        }
+
+        public void setFullStoreBanner(String fullStoreBanner) {
+            this.fullStoreBanner = fullStoreBanner;
+        }
+
         /**
          * id : 1000000589
          * atmanUserId : 100004057

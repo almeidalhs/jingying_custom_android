@@ -41,6 +41,7 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
+import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
@@ -671,6 +672,9 @@ public class ShopIMActivity extends MyBaseActivity
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Coupon) {//优惠券
                 }
+                break;
+            case R.id.item_p2pchat_text_headleft_iv:
+                startActivity(StoreDetailActivity.buildIntent(mContext, storeId));
                 break;
         }
     }

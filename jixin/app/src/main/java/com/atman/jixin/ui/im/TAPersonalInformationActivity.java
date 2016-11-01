@@ -31,6 +31,8 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
 
     @Bind(R.id.tapersional_head_bg)
     ImageView tapersionalHeadBg;
+    @Bind(R.id.tapersional_head_befor_bg)
+    ImageView tapersionalHeadBeforBg;
     @Bind(R.id.tapersional_head_iv)
     ShapeImageView tapersionalHeadIv;
     @Bind(R.id.tapersional_head_name_tx)
@@ -75,6 +77,7 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(getmWidth(),
                 getmWidth() * 215 / 415);
         tapersionalHeadBg.setLayoutParams(params);
+        tapersionalHeadBeforBg.setLayoutParams(params);
     }
 
     @Override

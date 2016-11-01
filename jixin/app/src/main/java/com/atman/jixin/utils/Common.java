@@ -85,6 +85,8 @@ public class Common {
     public static final String Url_Comment_Like = hostUrl + "baiye/rest/comment/like/";
     //添加评论
     public static final String Url_Add_Comment = hostUrl + "baiye/rest/comment";
+    //获取店铺信息
+    public static final String Url_Get_StoreDetail = hostUrl + "baiye/rest/store/userchat/";
     /**************************http访问路径*****************************/
 
 
@@ -150,6 +152,8 @@ public class Common {
     public static int NET_COMMENT_LIKE_ID = 29;
     //添加评论
     public static int NET_ADD_COMMENT_ID = 30;
+    //获取店铺信息
+    public static int NET_GET_STOREDETAIL_ID = 30;
     /**************************http访问回应识别码*****************************/
 
 

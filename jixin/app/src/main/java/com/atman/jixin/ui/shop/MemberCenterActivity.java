@@ -47,6 +47,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
 
     private ShapeImageView membercenterHeadIv;
     private ImageView membercenterHeadBg;
+    private ImageView membercenterHeadBeforBg;
     private TextView membercenterHeadNameTx;
     private TextView membercenterHeadIntegralTx;
     private TextView membercenterHeadIntegralMarkTx;
@@ -72,6 +73,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         headView = LayoutInflater.from(mContext).inflate(R.layout.part_membercenter_head_view, null);
         membercenterHeadIv = (ShapeImageView) headView.findViewById(R.id.membercenter_head_iv);
         membercenterHeadBg = (ImageView) headView.findViewById(R.id.membercenter_head_bg);
+        membercenterHeadBeforBg = (ImageView) headView.findViewById(R.id.membercenter_head_befor_bg);
         membercenterHeadNameTx = (TextView) headView.findViewById(R.id.membercenter_head_name_tx);
         membercenterHeadIntegralTx = (TextView) headView.findViewById(R.id.membercenter_head_integral_tx);
         membercenterHeadIntegralMarkTx = (TextView) headView.findViewById(R.id.membercenter_head_integralmark_tx);
@@ -81,6 +83,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(getmWidth(),
                 getmWidth() * 215 / 415);
         membercenterHeadBg.setLayoutParams(params);
+        membercenterHeadBeforBg.setLayoutParams(params);
 
         mAdapter = new MemberCenterAdapter(mContext, this);
         membercenterListview.addHeaderView(headView);
@@ -121,8 +124,11 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
         }
         ImageLoader.getInstance().displayImage(Common.ImageUrl + mMemberCenterModel.getBody().getStoreAvatar()
                 , membercenterHeadIv, MyBaseApplication.getApplication().optionsHead);
-        ImageLoader.getInstance().displayImage(Common.ImageUrl + mMemberCenterModel.getBody().getStoreAvatar()
-                , membercenterHeadBg, MyBaseApplication.getApplication().optionsHead);
+        String url = mMemberCenterModel.getBody().getFullStoreBanner();
+        if (!url.startsWith("http")) {
+            url = Common.ImageUrl + mMemberCenterModel.getBody().getFullStoreBanner();
+        }
+        ImageLoader.getInstance().displayImage(url, membercenterHeadBg, MyBaseApplication.getApplication().optionsNot);
         membercenterHeadNameTx.setText(mMemberCenterModel.getBody().getStoreName());
         membercenterHeadIntegralTx.setText("  我的积分  " + mMemberCenterModel.getBody().getIntegral());
         mAdapter.updateListView(mMemberCenterModel.getBody().getUserList());
