@@ -73,6 +73,10 @@ public class Common {
     public static final String Url_Up_File = hostUrl + "upload?uploadType=";
     //上传个推用户id (1是商家, 0是买家)
     public static final String Url_Update_ClienId = hostUrl + "baiye/rest/user/getui/0/";
+    //获取商家商品分类
+    public static final String Url_Get_Store_GoodsClass = hostUrl + "baiye/rest/store/goodsclass/";
+    //获取商家商品分类下的商品
+    public static final String Url_Get_Store_Goods_By_Id = hostUrl + "baiye/rest/goods/store/";
     /**************************http访问路径*****************************/
 
 
@@ -126,6 +130,10 @@ public class Common {
     public static int NET_UP_AUDIO_ID = 23;
     //上传个推用户id (1是商家, 0是买家)
     public static int NET_UP_GETTUI_ID = 24;
+    //获取商家商品分类
+    public static int NET_GET_STORE_GOODSCLASS_ID = 25;
+    //获取商家商品分类下的商品
+    public static int NET_GET_STORE_GOODS_BY_ID_ID = 26;
     /**************************http访问回应识别码*****************************/
 
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.atman.jixin.R;
 import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.iimp.ADChatType;
+import com.atman.jixin.model.iimp.EventActionType;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
@@ -133,7 +134,7 @@ public class P2PChatAdapter extends BaseAdapter {
 
     public void addImMessageDao(ChatMessageModel mImMessageDao) {
         if (!mImMessageDao.getSelfSend()
-                && !mImMessageDao.getOperaterExtra().isEmpty()) {
+                && mImMessageDao.getOperaterExtra()!=null) {
             MyTools.copy(context, mImMessageDao.getOperaterExtra(), false);
         }
         this.mImMessage.add(mImMessageDao);
@@ -244,6 +245,13 @@ public class P2PChatAdapter extends BaseAdapter {
                 if (temp.getSelfSend()) {} else {
                     holderText.itemP2pchatImagetextLeftRl.setVisibility(View.VISIBLE);
                     holderText.itemP2pchatImagetextLeftTitleTx.setText(temp.getImageT_title());
+                    if (temp.getActionType() == EventActionType.EventActionType_Enterprise) {
+                        holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
+                    } else if (temp.getActionType() == EventActionType.EventActionType_GoodList) {
+                        holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_three);
+                    } else {
+                        holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
+                    }
                     String url = temp.getContent();
                     if (!url.contains("http")) {
                         url = Common.ImageUrl + temp.getImageT_back();
@@ -362,6 +370,13 @@ public class P2PChatAdapter extends BaseAdapter {
             }
         });
 
+        holderText.itemP2pchatImagetextLeftRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mP2PAdapterInter.onItem(v, position);
+            }
+        });
+
         return convertView;
     }
 
@@ -409,6 +424,8 @@ public class P2PChatAdapter extends BaseAdapter {
         ImageView itemP2pchatImageLeftIv;
         @Bind(R.id.item_p2pchat_imagetext_left_iv)
         ImageView itemP2pchatImagetextLeftIv;
+        @Bind(R.id.item_p2pchat_imagetext_left_ic_iv)
+        ImageView itemP2pchatImagetextLeftIcIv;
         @Bind(R.id.item_p2pchat_imagetext_left_title_tx)
         TextView itemP2pchatImagetextLeftTitleTx;
         @Bind(R.id.item_p2pchat_imagetext_left_rl)

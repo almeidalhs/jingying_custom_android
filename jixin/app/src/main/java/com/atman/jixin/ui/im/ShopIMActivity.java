@@ -29,6 +29,7 @@ import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
+import com.atman.jixin.model.iimp.EventActionType;
 import com.atman.jixin.model.iimp.UpChatFileType;
 import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.GetMessageModel;
@@ -38,6 +39,7 @@ import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.model.response.UpdateAudioResultModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
@@ -648,6 +650,22 @@ public class ShopIMActivity extends MyBaseActivity
                 p2pchatAddLl.setVisibility(View.GONE);
                 p2pchatServiceLl.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
+                break;
+            case R.id.item_p2pchat_imagetext_left_rl:
+                if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_GoodList) {//菜单预览
+                    startActivity(MenuPreviewActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getImageT_title()
+                            , mAdapter.getItem(position).getStoreId()));
+                } else if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_Enterprise) {//企业介绍
+                } else if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
+                } else if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_Good) {//商品
+                } else if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_Coupon) {//优惠券
+                }
                 break;
         }
     }
