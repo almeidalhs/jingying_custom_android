@@ -1,6 +1,5 @@
 package com.atman.jixin.adapter;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.atman.jixin.R;
 import com.atman.jixin.model.response.GetGoodsByClassIdModel;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -38,17 +36,13 @@ public class GoodsGridViewAdapter extends BaseAdapter {
     private Context mContext;
     private ViewHolder holder;
     protected LayoutInflater layoutInflater;
-    private ImageLoader mImageLoader;
-    private AdapterInterface mOnBack;
     private DecimalFormat df;
     private LinearLayout.LayoutParams params;
     private LinearLayout.LayoutParams paramsLl;
 
-    public GoodsGridViewAdapter(Context mContext, int wight, AdapterInterface mOnBack) {
+    public GoodsGridViewAdapter(Context mContext, int wight) {
         this.body = new ArrayList<>();
         this.mContext = mContext;
-        this.mImageLoader = ImageLoader.getInstance();
-        this.mOnBack = mOnBack;
         layoutInflater = LayoutInflater.from(mContext);
         df = new DecimalFormat("##0.00");
         int w = (wight - DensityUtil.dp2px(mContext,15))/2;
@@ -102,12 +96,6 @@ public class GoodsGridViewAdapter extends BaseAdapter {
         holder.itemGoodspreviewLl.setLayoutParams(paramsLl);
         holder.itemGoodspreviewNameTx.setText(mBodyEntity.getGoodsName());
         holder.itemGoodspreviewPriceTx.setText("¥ " + mBodyEntity.getPrice());
-        holder.itemGoodspreviewLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBack.onItemClick(v, position);
-            }
-        });
 
         return convertView;
     }

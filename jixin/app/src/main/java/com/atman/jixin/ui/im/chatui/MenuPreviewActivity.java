@@ -14,7 +14,6 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.NoSwipeViewPager;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -132,7 +131,6 @@ public class MenuPreviewActivity extends MyBaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 menupreviewViewpager.setCurrentItem(menupreviewTopTl.getSelectedTabPosition());
-                LogUtils.e("menupreviewTopTl:"+menupreviewTopTl.getSelectedTabPosition());
             }
 
             @Override

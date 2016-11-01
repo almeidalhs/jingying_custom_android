@@ -4,16 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.GoodsGridViewAdapter;
 import com.atman.jixin.model.response.GetGoodsByClassIdModel;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.base.MyBaseFragment;
+import com.atman.jixin.ui.shop.GoodsDetailActivity;
 import com.atman.jixin.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -29,7 +29,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/31.
  */
 
-public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterface {
+public class MenuPreviewFragment extends MyBaseFragment {
 
     @Bind(R.id.pullToRefreshGridView)
     PullToRefreshGridView pullToRefreshGridView;
@@ -43,7 +43,6 @@ public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterf
     private GetGoodsByClassIdModel mGetGoodsByClassIdModel;
     private List<GetGoodsByClassIdModel.BodyBean> mBodyEntityList;
     private GoodsGridViewAdapter mAdapter;
-    private boolean isUserVisibleHint = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,17 +69,23 @@ public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterf
     }
 
     private void initGridView() {
-        LogUtils.e("initGridView()");
         initRefreshView(PullToRefreshBase.Mode.BOTH, pullToRefreshGridView);
 
-        mAdapter = new GoodsGridViewAdapter(getActivity(), getmWidth(), this);
+        mAdapter = new GoodsGridViewAdapter(getActivity(), getmWidth());
         pullToRefreshGridView.setAdapter(mAdapter);
+        pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(GoodsDetailActivity.buildIntent(getActivity()
+                        , mAdapter.getItem(position).getId()
+                        , mAdapter.getItem(position).getGoodsName()));
+            }
+        });
     }
 
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
-        LogUtils.e("doInitBaseHttp");
         doHttp(false);
     }
 
@@ -120,7 +125,6 @@ public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterf
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        isUserVisibleHint = isVisibleToUser;
 //        if (isVisibleToUser && storeId!=null) {
 //            LogUtils.e("setUserVisibleHint");
 //            doHttp(false);
@@ -128,7 +132,6 @@ public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterf
     }
 
     private void doHttp(boolean b) {
-        LogUtils.e("url:"+(Common.Url_Get_Store_Goods_By_Id + storeId+"/"+stc_id+"/"+page+"/"+mPageSize));
         OkHttpUtils.get().url(Common.Url_Get_Store_Goods_By_Id + storeId+"/"+stc_id+"/"+page+"/"+mPageSize)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -158,12 +161,6 @@ public class MenuPreviewFragment extends MyBaseFragment implements AdapterInterf
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LogUtils.e("onDestroyView:"+stc_id);
         ButterKnife.unbind(this);
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-
     }
 }
