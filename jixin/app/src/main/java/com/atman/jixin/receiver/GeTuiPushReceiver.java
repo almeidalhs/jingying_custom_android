@@ -182,9 +182,9 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         tempMessage.setSendTime(temp.getSendTime());
         tempMessage.setContent(temp.getContent());
 
-//        if (temp.getVideo_image_url()!=null) {
-//            tempMessage.setVideo_image_url(temp.getVideo_image_url());
-//        }
+        if (temp.getImageT_back()!=null) {
+            tempMessage.setVideo_image_url(temp.getImageT_back());
+        }
 //
         if (temp.getAudio_duration()>0) {
             tempMessage.setAudio_duration(temp.getAudio_duration());

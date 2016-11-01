@@ -14,6 +14,7 @@
         android:paddingTop="@dimen/dimen_dp_10"
         android:paddingBottom="@dimen/dimen_dp_10"
         android:gravity="center"
+        android:singleLine="true"
         android:text="23岁"
         android:textColor="#ababab"
         android:textSize="@dimen/dimen_sp_15" />

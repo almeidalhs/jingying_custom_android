@@ -77,6 +77,14 @@ public class Common {
     public static final String Url_Get_Store_GoodsClass = hostUrl + "baiye/rest/store/goodsclass/";
     //获取商家商品分类下的商品
     public static final String Url_Get_Store_Goods_By_Id = hostUrl + "baiye/rest/goods/store/";
+    //获取商家介绍
+    public static final String Url_Get_Store_Introduction = hostUrl + "baiye/rest/business/detail/";
+    //获取评论
+    public static final String Url_Get_Comment = hostUrl + "baiye/rest/comment/getcomments/";
+    //评论点赞
+    public static final String Url_Comment_Like = hostUrl + "baiye/rest/comment/like/";
+    //添加评论
+    public static final String Url_Add_Comment = hostUrl + "baiye/rest/comment";
     /**************************http访问路径*****************************/
 
 
@@ -134,6 +142,14 @@ public class Common {
     public static int NET_GET_STORE_GOODSCLASS_ID = 25;
     //获取商家商品分类下的商品
     public static int NET_GET_STORE_GOODS_BY_ID_ID = 26;
+    //获取商家介绍
+    public static int NET_GET_STORE_INRRODUCTION_ID = 27;
+    //获取评论
+    public static int NET_GET_COMMENT_ID = 28;
+    //评论点赞
+    public static int NET_COMMENT_LIKE_ID = 29;
+    //添加评论
+    public static int NET_ADD_COMMENT_ID = 30;
     /**************************http访问回应识别码*****************************/
 
 

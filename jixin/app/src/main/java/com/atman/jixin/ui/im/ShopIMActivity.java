@@ -39,6 +39,7 @@ import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.model.response.UpdateAudioResultModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.BitmapTools;
@@ -659,6 +660,10 @@ public class ShopIMActivity extends MyBaseActivity
                             , mAdapter.getItem(position).getStoreId()));
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Enterprise) {//企业介绍
+                    startActivity(CompanyIntroductionActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getImageT_title()
+                            , mAdapter.getItem(position).getEnterpriseId()
+                            , mAdapter.getItem(position).getVideo_image_url()));
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                 } else if (mAdapter.getItem(position).getActionType()
