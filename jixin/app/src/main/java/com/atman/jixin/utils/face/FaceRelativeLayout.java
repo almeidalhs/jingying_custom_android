@@ -171,6 +171,9 @@ public class FaceRelativeLayout extends RelativeLayout implements
                 if (p2pchat_service_or_keyboard_iv!=null) {
                     p2pchat_service_or_keyboard_iv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
                 }
+                if (blogdetail_addemol_iv!=null) {
+                    blogdetail_addemol_iv.setImageResource(R.mipmap.adchat_input_action_icon_face);
+                }
                 break;
 
         }

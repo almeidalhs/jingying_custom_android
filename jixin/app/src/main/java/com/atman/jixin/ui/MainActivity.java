@@ -22,6 +22,7 @@ import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
@@ -124,6 +125,9 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
                     if (mAdapter.getItem(position).getTargetType() == ADChatTargetType.ADChatTargetType_Shop) {
                         startActivity(ShopIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
                                 , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar(), true));
+                    } else {
+                        startActivity(PersonalIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
+                                , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar()));
                     }
                 }
             }

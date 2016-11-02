@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.bean.ChatListModel;
+import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
@@ -92,10 +93,10 @@ public class MessageSessionListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (dataList.get(position).getTargetType()==1) {
+        if (dataList.get(position).getTargetType() == ADChatTargetType.ADChatTargetType_Shop) {
             holder.itemSessionIsstoreTx.setVisibility(View.VISIBLE);
         } else {
-            holder.itemSessionIsstoreTx.setVisibility(View.VISIBLE);
+            holder.itemSessionIsstoreTx.setVisibility(View.GONE);
         }
 
         if (dataList.get(position).getTargetAvatar() != null) {
