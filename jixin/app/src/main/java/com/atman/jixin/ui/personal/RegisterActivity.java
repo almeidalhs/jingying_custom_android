@@ -75,7 +75,38 @@ public class RegisterActivity extends MyBaseActivity {
         super.initWidget(v);
         hideTitleBar();
 
-        timeCount = new TimeCount(registerCodeTv, 60 * 1000, 1000, registerUsernameEt);
+        timeCount = new TimeCount(registerCodeTv, 60 * 1000, 1000);
+
+        registerUsernameEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    registerUsernameEt.setHint("");
+                } else {
+                    registerUsernameEt.setHint("手机号");
+                }
+            }
+        });
+        registerPasswordEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    registerPasswordEt.setHint("");
+                } else {
+                    registerPasswordEt.setHint("密  码");
+                }
+            }
+        });
+        registerCodeEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    registerCodeEt.setHint("");
+                } else {
+                    registerCodeEt.setHint("验证码");
+                }
+            }
+        });
     }
 
     @Override
@@ -136,6 +167,10 @@ public class RegisterActivity extends MyBaseActivity {
             BaseNormalModel base = mGson.fromJson(data, BaseNormalModel.class);
             if (base.getResult().equals("1")) {
                 showToast("注册成功！");
+                Intent mIntent = new Intent();
+                setResult(RESULT_OK,mIntent);
+                mIntent.putExtra("name", aount);
+                mIntent.putExtra("password", password);
                 finish();
             }
         }

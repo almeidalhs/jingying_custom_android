@@ -105,8 +105,14 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
 
             if (mGetLikeListModel.getBody().size()>0) {
                 mofriendTitleLayout.setVisibility(View.VISIBLE);
+                mofriendListview.setVisibility(View.VISIBLE);
+                mofriendSidrbar.setVisibility(View.VISIBLE);
+                mofriendNoFriends.setVisibility(View.GONE);
             } else {
+                mofriendListview.setVisibility(View.GONE);
                 mofriendTitleLayout.setVisibility(View.GONE);
+                mofriendSidrbar.setVisibility(View.GONE);
+                mofriendNoFriends.setVisibility(View.VISIBLE);
             }
             InitLieView();
         }

@@ -19,12 +19,14 @@
             android:textColor="#2b2b2b" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/pop_new_tx"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="15sp"
             android:layout_centerInParent="true"
-            android:text="选择生日"/>
+            android:gravity="center"
+            android:text="现在"
+            android:textColor="#000000"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/pop_ok"

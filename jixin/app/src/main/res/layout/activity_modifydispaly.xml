@@ -20,7 +20,7 @@
             android:background="@drawable/radius_edit_bg"
             android:gravity="center_vertical"
             android:hint="输入常出没地"
-            android:maxLength="30"
+            android:maxLength="24"
             android:paddingLeft="@dimen/dimen_dp_10"
             android:paddingRight="@dimen/dimen_dp_10"
             android:singleLine="true"

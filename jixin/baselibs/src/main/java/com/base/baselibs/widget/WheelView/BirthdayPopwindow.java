@@ -1,6 +1,7 @@
 package com.base.baselibs.widget.WheelView;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.base.baselibs.R;
 import com.base.baselibs.adapter.PopwindowsAdapter;
@@ -38,11 +40,15 @@ public class BirthdayPopwindow {
     private PopWindowsCallback mPopWindowsCallback;
     private int[] num = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private String date;
+    private TextView popNewTx;
+    private Time time;
 
     public BirthdayPopwindow(Context context, String date, PopWindowsCallback mPopWindowsCallback) {
         this.context = context;
         this.mPopWindowsCallback = mPopWindowsCallback;
         this.date = date;
+        time = new Time("GMT+8");
+        time.setToNow();
         initData();
     }
 
@@ -51,7 +57,7 @@ public class BirthdayPopwindow {
         mYear = str[0];
         mMonth = str[1];
         mDay = str[2];
-        for (int i=1930,n=0;i<2016;i++,n++) {
+        for (int i=1930,n=0;i<2026;i++,n++) {
             mYearList.add(i+"");
             if (mYear.equals(i+"")) {
                 mYearId = n;
@@ -71,6 +77,39 @@ public class BirthdayPopwindow {
         }
     }
 
+    private int getNowYear() {
+        int y = 0;
+        for (int i=1930,n=0;i<2026;i++,n++) {
+            if (time.year == i) {
+                y = n;
+                mYear = i+"";
+            }
+        }
+        return y;
+    }
+
+    private int getNowMonth() {
+        int y = 0;
+        for (int i=1,n=0;i<=12;i++,n++) {
+            if ((time.month+1) == i) {
+                y = n;
+                mMonth = i+"";
+            }
+        }
+        return y;
+    }
+
+    private int getNowMonthDay() {
+        int y = 0;
+        for (int i=1,n=0;i<=num[0];i++,n++) {
+            if (time.monthDay==i) {
+                y = n;
+                mDay = i+"";
+            }
+        }
+        return y;
+    }
+
     public void showTypePopupWindow(View view) {
 
         // 一个自定义的布局，作为显示的内容
@@ -78,6 +117,16 @@ public class BirthdayPopwindow {
 
         final PopupWindow mSelectTypePop = new PopupWindow(contentView,
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT, true);
+
+        popNewTx = (TextView) contentView.findViewById(R.id.pop_new_tx);
+        popNewTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mYearWheel.setCurrentItem(getNowYear());
+                mMonthWheel.setCurrentItem(getNowMonth());
+                mDayWheel.setCurrentItem(getNowMonthDay());
+            }
+        });
 
         mYearWheel = (WheelView) contentView.findViewById(R.id.popwin_select_year);
         mYearAdapter = new PopwindowsAdapter(context, mYearWheel, mYearList, 0, 0, 0);

@@ -44,7 +44,7 @@ public class ModifyNickActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        setBarTitleTx("修改昵称");
+        setBarTitleTx("编辑昵称");
         setBarRightTx("完成").setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

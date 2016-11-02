@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alan.codescanlibs.QrCodeActivity;
 import com.atman.jixin.R;
@@ -30,7 +32,6 @@ import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.ShapeImageView;
@@ -60,6 +61,8 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     LinearLayout mainBottomLl;
     @Bind(R.id.message_listview)
     ListView messageListview;
+    @Bind(R.id.message_empty_tv)
+    TextView messageEmptyTv;
 
     private Context mContext = MainActivity.this;
     private String headImge = "";
@@ -98,6 +101,10 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
+
+        messageEmptyTv.setText(Html.fromHtml(
+                "您还没有聊天记录<p>点击下方[<font color=\"#16c5ee\">一扫即应</font>]开始扫描二维码吧"));
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -141,7 +148,7 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        List<ChatMessageModel>  mImMessageDelete = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                        List<ChatMessageModel> mImMessageDelete = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
                                 , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
                         for (ChatMessageModel imMessageDelete : mImMessageDelete) {
                             mChatMessageModelDao.delete(imMessageDelete);
@@ -153,6 +160,10 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
                         if (mDelete != null) {
                             mChatListModelDao.delete(mDelete);
                             mAdapter.deleteItemById(position);
+                        }
+                        if (mAdapter.getCount()==0) {
+                            messageEmptyTv.setVisibility(View.VISIBLE);
+                            messageListview.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -198,15 +209,20 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
         if (!isLogin()) {
             return;
         }
-        if (mChatList!=null) {
+        if (mChatList != null) {
             mChatList.clear();
         }
-        if (mAdapter!=null) {
+        if (mAdapter != null) {
             mAdapter.clearData();
         }
         mChatList = mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties
                 .LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
-        if (mChatList!=null) {
+        if (mChatList == null || mChatList.size()==0) {
+            messageEmptyTv.setVisibility(View.VISIBLE);
+            messageListview.setVisibility(View.GONE);
+        } else {
+            messageEmptyTv.setVisibility(View.GONE);
+            messageListview.setVisibility(View.VISIBLE);
             mAdapter.addBody(mChatList);
         }
     }

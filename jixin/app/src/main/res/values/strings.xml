@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">即应</string>
+
+    <string name="pw_limit_str">&#124;&#062;&#060;&#038;,.?!/…@:;^~#*)("'\=_-+%·¥$₩£€￠`×÷¿¡][}{°○●□■♤♡◇♧☆ 1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM</string>
 </resources>

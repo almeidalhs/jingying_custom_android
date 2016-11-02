@@ -64,7 +64,38 @@ public class ForgetPassWordActivity extends MyBaseActivity {
         super.initWidget(v);
         hideTitleBar();
 
-        timeCount = new TimeCount(forgetCodeTv, 60 * 1000, 1000, forgetUsernameEt);
+        timeCount = new TimeCount(forgetCodeTv, 60 * 1000, 1000);
+
+        forgetUsernameEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    forgetUsernameEt.setHint("");
+                } else {
+                    forgetUsernameEt.setHint("手机号");
+                }
+            }
+        });
+        forgetPasswordEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    forgetPasswordEt.setHint("");
+                } else {
+                    forgetPasswordEt.setHint("新密码");
+                }
+            }
+        });
+        forgetCodeEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    forgetCodeEt.setHint("");
+                } else {
+                    forgetCodeEt.setHint("验证码");
+                }
+            }
+        });
     }
 
     @Override

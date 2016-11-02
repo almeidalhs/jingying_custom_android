@@ -85,6 +85,7 @@ public class PersonalSettingActivity extends MyBaseActivity {
             }
         });
         setSwitchButton();
+        settingOpenSb.setCheckedImmediately(false);
         settingOpenSb.setCanMoveChang(false);
         settingOpenSb.setOnClickListener(new View.OnClickListener() {
             @Override

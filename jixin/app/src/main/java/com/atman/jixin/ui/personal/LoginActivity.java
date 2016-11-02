@@ -90,6 +90,27 @@ public class LoginActivity extends MyBaseActivity {
             ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, partStorePreviewHeadImg
                     , MyBaseApplication.getApplication().optionsHead);
         }
+
+        loginPasswordEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    loginPasswordEt.setHint("");
+                } else {
+                    loginPasswordEt.setHint("密 码");
+                }
+            }
+        });
+        loginUsernameEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    loginUsernameEt.setHint("");
+                } else {
+                    loginUsernameEt.setHint("手机号");
+                }
+            }
+        });
     }
 
     @Override
@@ -181,7 +202,19 @@ public class LoginActivity extends MyBaseActivity {
             return;
         }
         if (requestCode == Common.TO_REGISTER) {
-
+            String name = data.getStringExtra("name");
+            String pw = data.getStringExtra("password");
+            password = pw;
+            LoginRequestModel mLoginRequestModel = new LoginRequestModel(name, MD5Util.getMD5(pw)
+                    , MyBaseApplication.USERTOKEN, MyBaseApplication.VERSION, MyBaseApplication.PLATFORM
+                    , MyBaseApplication.DEVICETYPE, MyBaseApplication.CHANNEL);
+            LogUtils.e("mGson.toJson(mLoginRequestModel):"+mGson.toJson(mLoginRequestModel));
+            OkHttpUtils.postString()
+                    .url(Common.Url_Login).tag(Common.NET_LOGIN_ID).id(Common.NET_LOGIN_ID)
+                    .content(mGson.toJson(mLoginRequestModel))
+                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                    .execute(new MyStringCallback(mContext, "Loading...", this, true));
         }
     }
 }

@@ -15,7 +15,7 @@
         android:gravity="left|top"
         android:hint="请在此处键入意见..."
         android:textSize="@dimen/dimen_sp_13"
-        android:maxLength="255"
+        android:maxLength="420"
         android:minLines="6"
         android:padding="5dp" />
 

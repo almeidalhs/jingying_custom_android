@@ -235,6 +235,7 @@ public class MyBaseApplication extends BaseApplication {
         PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USER_KEY, "");
         PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN, "");
         PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USERID, "");
+        PreferenceUtil.savePreference(getApplicationContext(), PreferenceUtil.PARM_USER_IMG, "");
         USERINFOR = null;
     }
 }

@@ -13,17 +13,17 @@
             android:id="@+id/mofriend_listview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:visibility="gone"
             android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/mofriend_no_friends"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/dimen_dp_30"
-            android:layout_gravity="right|top"
-            android:gravity="center_vertical"
-            android:text="没有匹配的联系人"
-            android:textColor="#454545"
-            android:visibility="gone" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="您还未关注任何商家哦~~"
+            android:textColor="#454545"/>
 
         <LinearLayout
             android:id="@+id/mofriend_title_layout"
