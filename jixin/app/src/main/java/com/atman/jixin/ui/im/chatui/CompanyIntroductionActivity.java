@@ -2,28 +2,37 @@ package com.atman.jixin.ui.im.chatui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.CompanyIntroductionAdapter;
+import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.CommentType;
 import com.atman.jixin.model.response.GetCompanyIntrodutionModel;
+import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.FileUtils;
+import com.atman.jixin.utils.MyTools;
+import com.atman.jixin.widget.downfile.DownloadAudioFile;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.universalvideoview.UniversalMediaController;
 import com.universalvideoview.UniversalVideoView;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +43,8 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/11/1.
  */
 
-public class CompanyIntroductionActivity extends MyBaseActivity implements AdapterInterface {
+public class CompanyIntroductionActivity extends MyBaseActivity implements AdapterInterface
+        , CompanyIntroductionAdapter.AdapterAnimInter, DownloadAudioFile.onDownInterface {
 
     @Bind(R.id.videoView)
     UniversalVideoView videoView;
@@ -57,6 +67,10 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     private GetCompanyIntrodutionModel mGetCompanyIntrodutionModel;
     private CompanyIntroductionAdapter mAdapter;
 
+    private int positionAudio;
+    private MediaPlayer mMediaPlayer = new MediaPlayer();
+    private AnimationDrawable mAnimationDrawable;
+    private ImageView mImageView;
     private int mSeekPosition;
     private int cachedHeight;
     private boolean isFullscreen;
@@ -98,7 +112,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(getmWidth(),
                 getmWidth() * 9 / 16);
 
-        mAdapter = new CompanyIntroductionAdapter(mContext, this);
+        mAdapter = new CompanyIntroductionAdapter(mContext, this, this);
         companyListView.setAdapter(mAdapter);
     }
 
@@ -230,6 +244,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
 
     @Override
     public void onItemClick(View view, int position) {
+        positionAudio = position;
         switch (view.getId()) {
             case R.id.item_company_video_start_iv:
                 videoUrl = mAdapter.getItem(position).getFileUrl();
@@ -239,6 +254,28 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                 videoLayout.setVisibility(View.VISIBLE);
                 initVideo();
                 videoView.start();
+                break;
+            case R.id.item_company_pictrue_iv:
+                String imagePath = "";
+                int n = 0;
+                for (int i=0,j=0;i<mAdapter.getCount();i++) {
+                    if (mAdapter.getItem(i).getType() == 1) {
+                        if (!imagePath.equals("")) {
+                            imagePath += ",";
+                        }
+                        imagePath += MyTools.getHttpUrl(mAdapter.getItem(i).getFileUrl());
+                        if (i == position) {
+                            n = j;
+                        }
+                        j++;
+                    }
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("image", imagePath);
+                intent.putExtra("num", n);
+                intent.setClass(mContext, PictureBrowsingActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -251,5 +288,75 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                 videoView.closePlayer();
                 break;
         }
+    }
+
+    @Override
+    public void onItemAudio(View v, int position, AnimationDrawable animationDrawable, ImageView imageView) {
+        positionAudio = position;
+        if (mImageView == null) {
+            mImageView = imageView;
+        }
+        switch (v.getId()) {
+            case R.id.item_company_audio_start_iv:
+                playAudio(position, animationDrawable, true);
+                break;
+        }
+    }
+
+    private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
+        if (mAdapter.getItem(position).getFileUrl()!=null) {
+            String path = FileUtils.SDPATH_AUDIO
+                    + DownloadAudioFile.getFileName(mAdapter.getItem(position).getFileUrl()+".aac");
+            LogUtils.e("path:"+path);
+            if ((new File(path).exists())) {
+                try {
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.stop();
+                        if (mAnimationDrawable!=null) {
+                            mAnimationDrawable.stop();
+                            mAnimationDrawable.selectDrawable(0);
+                            mImageView.setImageResource(R.mipmap.ic_vedio_start);
+                        }
+                    } else {
+                        mAnimationDrawable = animationDrawable;
+                        mImageView.setImageResource(R.mipmap.ic_vedio_stop);
+                        mMediaPlayer.reset();
+                        mMediaPlayer.setDataSource(path);
+                        mMediaPlayer.prepare();
+                        mMediaPlayer.start();
+                        mAnimationDrawable.start();
+                        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            public void onCompletion(MediaPlayer mp) {
+                                if (!mp.isPlaying()) {
+                                    mAnimationDrawable.stop();
+                                    mAnimationDrawable.selectDrawable(0);
+                                    mImageView.setImageResource(R.mipmap.ic_vedio_start);
+                                }
+                            }
+                        });
+                    }
+
+                } catch (Exception e) {
+                    showToast("播放失败");
+                    e.printStackTrace();
+                }
+            } else {
+                String downUrl = Common.ImageUrl + mAdapter.getItem(position).getFileUrl();
+                LogUtils.e("downUrl:"+downUrl);
+                if (b) {
+                    new DownloadAudioFile(CompanyIntroductionActivity.this, this).execute(downUrl);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void finish(String path) {
+        playAudio(positionAudio, mAnimationDrawable, false);
+    }
+
+    @Override
+    public void error() {
+        showToast("播放失败");
     }
 }

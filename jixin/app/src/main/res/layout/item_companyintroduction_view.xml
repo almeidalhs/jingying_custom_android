@@ -52,6 +52,18 @@
             android:layout_gravity="center"
             android:src="@mipmap/ic_vedio_start" />
 
+        <TextView
+            android:id="@+id/item_company_audio_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_ffffff"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/dimen_dp_15"
+            android:layout_marginBottom="@dimen/dimen_dp_15"
+            android:textSize="@dimen/dimen_sp_18"
+            android:text="00:00:00"/>
+
     </RelativeLayout>
 
     <ImageView

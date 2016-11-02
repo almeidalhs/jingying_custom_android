@@ -340,22 +340,19 @@ public class P2PChatAdapter extends BaseAdapter {
             }
         });
 
-//        holderText.itemP2pchatImageRightIv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (temp.getContentType() != ContentTypeInter.contentTypeImageSmall) {
-//                    mP2PAdapterInter.onItem(v, position);
-//                }
-//            }
-//        });
-//        holderText.itemP2pchatImageLeftIv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (temp.getContentType() != ContentTypeInter.contentTypeImageSmall) {
-//                    mP2PAdapterInter.onItem(v, position);
-//                }
-//            }
-//        });
+        holderText.itemP2pchatImageRightIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mP2PAdapterInter.onItem(v, position);
+            }
+        });
+        holderText.itemP2pchatImageLeftIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mP2PAdapterInter.onItem(v, position);
+            }
+        });
+
         holderText.itemP2pchatRootRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

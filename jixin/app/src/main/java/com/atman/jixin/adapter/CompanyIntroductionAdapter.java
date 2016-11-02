@@ -1,6 +1,7 @@
 package com.atman.jixin.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.atman.jixin.R;
 import com.atman.jixin.model.response.GetCompanyIntrodutionModel;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.MyTools;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -37,10 +39,13 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
     protected LayoutInflater layoutInflater;
     private List<GetCompanyIntrodutionModel.BodyBean.FileListBean> dataList;
     private AdapterInterface mAdapterInterface;
+    private AdapterAnimInter mAdapterAnimInter;
 
-    public CompanyIntroductionAdapter(Context context, AdapterInterface mAdapterInterface) {
+    public CompanyIntroductionAdapter(Context context, AdapterInterface mAdapterInterface
+            , AdapterAnimInter mAdapterAnimInter) {
         this.context = context;
         this.mAdapterInterface = mAdapterInterface;
+        this.mAdapterAnimInter = mAdapterAnimInter;
         layoutInflater = LayoutInflater.from(context);
         this.dataList = new ArrayList<>();
     }
@@ -94,7 +99,7 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
         String Url = "";
 
         holder.itemCompanyIntroductionTx.setText(temp.getRemark());
-        if (temp.getType()==3) {//视频
+        if (temp.getType() == 3) {//视频
             Url = temp.getShowImg();
             if (!Url.startsWith("http")) {
                 Url = Common.ImageUrl + temp.getShowImg();
@@ -102,9 +107,10 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
             holder.itemCompanyVideoRl.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().displayImage(Url, holder.itemCompanyVideoIv
                     , MyBaseApplication.getApplication().optionsNot);
-        } else if (temp.getType()==2) {//语音
+        } else if (temp.getType() == 2) {//语音
             holder.itemCompanyAudioRl.setVisibility(View.VISIBLE);
-        } else if (temp.getType()==1) {//图片
+            holder.itemCompanyAudioTv.setText(MyTools.secToTime(Integer.parseInt(temp.getLength())));
+        } else if (temp.getType() == 1) {//图片
             Url = temp.getFileUrl();
             if (!Url.startsWith("http")) {
                 Url = Common.ImageUrl + temp.getFileUrl();
@@ -121,12 +127,31 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
             }
         });
 
+        holder.itemCompanyAudioStartIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterAnimInter.onItemAudio(v, position, (AnimationDrawable) holder
+                        .itemCompanyAudioIv.getDrawable(), holder.itemCompanyAudioStartIv);
+            }
+        });
+
+        holder.itemCompanyPictrueIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterInterface.onItemClick(v, position);
+            }
+        });
+
         return convertView;
     }
 
     public void clearData() {
         dataList.clear();
         notifyDataSetChanged();
+    }
+
+    public interface AdapterAnimInter {
+        void onItemAudio(View v, int position, AnimationDrawable animationDrawable, ImageView mImageView);
     }
 
     static class ViewHolder {
@@ -140,6 +165,8 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
         ImageView itemCompanyAudioIv;
         @Bind(R.id.item_company_audio_start_iv)
         ImageView itemCompanyAudioStartIv;
+        @Bind(R.id.item_company_audio_tv)
+        TextView itemCompanyAudioTv;
         @Bind(R.id.item_company_audio_rl)
         RelativeLayout itemCompanyAudioRl;
         @Bind(R.id.item_company_pictrue_iv)

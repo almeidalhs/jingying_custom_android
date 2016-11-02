@@ -37,6 +37,7 @@ import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.model.response.UpdateAudioResultModel;
+import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
@@ -45,6 +46,7 @@ import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.UiHelper;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.atman.jixin.widget.downfile.DownloadAudioFile;
@@ -675,6 +677,33 @@ public class ShopIMActivity extends MyBaseActivity
                 break;
             case R.id.item_p2pchat_text_headleft_iv:
                 startActivity(StoreDetailActivity.buildIntent(mContext, storeId));
+                break;
+            case R.id.item_p2pchat_image_left_iv:
+            case R.id.item_p2pchat_image_right_iv:
+                String imagePath = "";
+                int n = 0;
+                for (int i=0,j=0;i<mAdapter.getCount();i++) {
+                    if (mAdapter.getItem(i).getType() == ADChatType.ADChatType_Image) {
+                        if (!imagePath.equals("")) {
+                            imagePath += ",";
+                        }
+                        if (mAdapter.getItem(i).getContent().startsWith("/")) {
+                            imagePath += mAdapter.getItem(i).getContent();
+                        } else {
+                            imagePath += MyTools.getHttpUrl(mAdapter.getItem(i).getContent());
+                        }
+                        if (i == position) {
+                            n = j;
+                        }
+                        j++;
+                    }
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("image", imagePath);
+                intent.putExtra("num", n);
+                intent.setClass(mContext, PictureBrowsingActivity.class);
+                startActivity(intent);
                 break;
         }
     }

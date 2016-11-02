@@ -33,7 +33,7 @@ public class DownloadAudioFile extends AsyncTask<String, Void, String> {
         this.down = down;
     }
 
-    public String getFileName(String pathandname){
+    public static String getFileName(String pathandname){
 
         int start=pathandname.lastIndexOf("/");
         int end=pathandname.lastIndexOf(".");
