@@ -91,6 +91,8 @@ public class Common {
     public static final String Url_Get_All_ExchangeRecord = hostUrl + "baiye/rest/integral/allexchangelog/";
     //删除兑换记录
     public static final String Url_Delete_ExchangeRecord = hostUrl + "baiye/rest/integral/manage";
+    //删除关注
+    public static final String Url_Delete_Attention = hostUrl + "baiye/rest/favor/cancel/";
     /**************************http访问路径*****************************/
 
 
@@ -160,6 +162,8 @@ public class Common {
     public static int NET_GET_STOREDETAIL_ID = 31;
     //删除兑换记录
     public static int NET_DELETE_EXHANGE_ID = 32;
+    //删除关注
+    public static int NET_DELETE_ATTENTION_ID = 33;
     /**************************http访问回应识别码*****************************/
 
 

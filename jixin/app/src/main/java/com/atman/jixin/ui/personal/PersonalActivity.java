@@ -72,11 +72,6 @@ public class PersonalActivity extends MyBaseActivity {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
-        OkHttpUtils.get().url(Common.Url_Personal + userId)
-                .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                .tag(Common.NET_PERSONAL_ID).id(Common.NET_PERSONAL_ID).build()
-                .execute(new MyStringCallback(mContext, "", this, true));
     }
 
     @Override
@@ -89,6 +84,12 @@ public class PersonalActivity extends MyBaseActivity {
                     , MyBaseApplication.getApplication().optionsHead);
             personalHeadNameTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
         }
+
+        OkHttpUtils.get().url(Common.Url_Personal + userId)
+                .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_PERSONAL_ID).id(Common.NET_PERSONAL_ID).build()
+                .execute(new MyStringCallback(mContext, "", this, false));
     }
 
     @Override

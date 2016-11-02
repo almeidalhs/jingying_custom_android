@@ -1,10 +1,12 @@
 package com.atman.jixin.ui.personal;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,12 +17,14 @@ import com.atman.jixin.model.response.GetLikeListModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.ShopIMActivity;
+import com.atman.jixin.ui.shop.ExchangeRecordActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.widget.telephonebook.CharacterParser;
 import com.atman.jixin.widget.telephonebook.FriendsPinyinComparator;
 import com.atman.jixin.widget.telephonebook.SideBar;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.widget.PromptDialog;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -68,6 +72,7 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
      * 上次第一个可见元素，用于滚动时记录标识。
      */
     private int lastFirstVisibleItem = -1;
+    private int allPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +120,8 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
                 mofriendNoFriends.setVisibility(View.VISIBLE);
             }
             InitLieView();
+        } else if (id == Common.NET_DELETE_ATTENTION_ID) {
+            adapter.removeItem(allPosition);
         }
     }
 
@@ -144,6 +151,42 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
 
         adapter = new SortGroupFriendsAdapter(mContext, SourceDateList, this);
         mofriendListview.setAdapter(adapter);
+        mofriendListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(ShopIMActivity.buildIntent(mContext, adapter.getItem(position).getId()
+                        , adapter.getItem(position).getStoreName(), adapter.getItem(position).getStoreBanner(), true));
+            }
+        });
+        mofriendListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                builder.setMessage("确定不再关注此商家？");
+                builder.setPositiveButton("不再关注", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        allPosition = position;
+                        OkHttpUtils.postString().url(Common.Url_Delete_Attention + adapter.getItem(position).getId())
+                                .tag(Common.NET_DELETE_ATTENTION_ID).id(Common.NET_DELETE_ATTENTION_ID)
+                                .content("{}").mediaType(Common.JSON)
+                                .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .build().execute(new MyStringCallback(mContext, "删除中..."
+                                , MyAttentionListActivity.this, true));
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+            }
+        });
         mofriendListview.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -267,11 +310,10 @@ public class MyAttentionListActivity extends MyBaseActivity implements AdapterIn
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GETLIKE_LIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_DELETE_ATTENTION_ID);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        startActivity(ShopIMActivity.buildIntent(mContext, adapter.getItem(position).getId()
-                , adapter.getItem(position).getStoreName(), adapter.getItem(position).getStoreBanner(), true));
     }
 }

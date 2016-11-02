@@ -60,6 +60,11 @@ public class SortGroupFriendsAdapter extends BaseAdapter implements SectionIndex
         }
     }
 
+    public void removeItem(int allPosition) {
+        list.remove(allPosition);
+        notifyDataSetChanged();
+    }
+
     public GetLikeListModel.BodyBean getItem(int position) {
         return list.get(position);
     }
@@ -94,13 +99,6 @@ public class SortGroupFriendsAdapter extends BaseAdapter implements SectionIndex
         viewHolder.itemFriendsLevelTx.setText(list.get(position).getIntegral()+" 积分");
         ImageLoader.getInstance().displayImage(Common.ImageUrl+list.get(position).getStoreBanner()
                 , viewHolder.personalHeadImgIv, MyBaseApplication.getApplication().optionsHead);
-
-        viewHolder.itemFriendsRootLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick.onItemClick(v, position);
-            }
-        });
 
         return view;
 
@@ -196,8 +194,6 @@ public class SortGroupFriendsAdapter extends BaseAdapter implements SectionIndex
         TextView itemFriendsNameTv;
         @Bind(R.id.item_friends_level_tx)
         TextView itemFriendsLevelTx;
-        @Bind(R.id.item_friends_root_ll)
-        LinearLayout itemFriendsRootLl;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
