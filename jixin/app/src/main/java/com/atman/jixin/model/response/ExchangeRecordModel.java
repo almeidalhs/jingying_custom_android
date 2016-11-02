@@ -57,6 +57,33 @@ public class ExchangeRecordModel {
         private long goodsId;
         private int integral;
         private long orderNo;
+        private long storeId;
+        private String storeName;
+        private String storeBanner;
+
+        public String getStoreName() {
+            return storeName;
+        }
+
+        public void setStoreName(String storeName) {
+            this.storeName = storeName;
+        }
+
+        public String getStoreBanner() {
+            return storeBanner;
+        }
+
+        public void setStoreBanner(String storeBanner) {
+            this.storeBanner = storeBanner;
+        }
+
+        public long getStoreId() {
+            return storeId;
+        }
+
+        public void setStoreId(long storeId) {
+            this.storeId = storeId;
+        }
 
         public long getId() {
             return id;

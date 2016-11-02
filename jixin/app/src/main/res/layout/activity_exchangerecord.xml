@@ -4,18 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
+    <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pullToRefreshListView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:id="@+id/pull_refresh_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/color_ffffff"
-        android:divider="@color/color_line"
-        android:dividerHeight="1px"
-        android:scrollbars="none"
-        ptr:ptrAnimationStyle="flip"
-        ptr:ptrMode="disabled"
-        ptr:ptrScrollingWhileRefreshingEnabled="true" />
+        android:background="#DCE0E3"
+        ptr:ptrMode="both" />
 
 </LinearLayout>

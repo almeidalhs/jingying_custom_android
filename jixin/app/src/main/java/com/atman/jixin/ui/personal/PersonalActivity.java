@@ -11,6 +11,7 @@ import com.atman.jixin.R;
 import com.atman.jixin.model.response.GetPersonalInformationModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.shop.ExchangeRecordActivity;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.PreferenceUtil;
@@ -62,7 +63,7 @@ public class PersonalActivity extends MyBaseActivity {
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        setBarTitleTx("个人");
+        setBarTitleTx("我");
 
         headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
         userId = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USERID);
@@ -106,7 +107,7 @@ public class PersonalActivity extends MyBaseActivity {
     }
 
     @OnClick({R.id.personal_information_ll, R.id.personal_attention_ll, R.id.personal_setting_ll
-            , R.id.personal_about_and_help_ll})
+            , R.id.personal_about_and_help_ll, R.id.personal_exchange_ll})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.personal_information_ll:
@@ -120,6 +121,9 @@ public class PersonalActivity extends MyBaseActivity {
                 break;
             case R.id.personal_about_and_help_ll:
                 startActivity(new Intent(mContext, AboutAndHelpActivity.class));
+                break;
+            case R.id.personal_exchange_ll:
+                startActivity(ExchangeRecordActivity.buildIntent(mContext, -1));
                 break;
         }
     }

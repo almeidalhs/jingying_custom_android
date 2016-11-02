@@ -123,6 +123,58 @@
             android:src="@mipmap/right_arrow" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/personal_exchange_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_dp_25"
+            android:layout_height="@dimen/dimen_dp_25"
+            android:src="@mipmap/ic_personal_exchange" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:layout_weight="1"
+            android:text="积分兑换记录"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"

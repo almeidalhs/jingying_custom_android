@@ -135,7 +135,7 @@ public class LoginActivity extends MyBaseActivity {
                 break;
             case R.id.login_bt:
                 username = loginUsernameEt.getText().toString().trim();
-                password = loginPasswordEt.getText().toString().trim();
+                password = loginPasswordEt.getText().toString();
                 if (checkInput()) {
                     return;
                 }

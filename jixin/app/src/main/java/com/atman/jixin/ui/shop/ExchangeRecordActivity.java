@@ -3,24 +3,25 @@ package com.atman.jixin.ui.shop;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.atman.jixin.R;
-import com.atman.jixin.adapter.ExchangeRecordAdapter;
-import com.atman.jixin.adapter.IntegralExchangeAdapter;
+import com.atman.jixin.adapter.ExchangeRecordAllAdapter;
 import com.atman.jixin.model.response.ExchangeRecordModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
 import com.atman.jixin.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,18 +32,21 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/24.
  */
 
-public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInterface {
-
-    @Bind(R.id.pullToRefreshListView)
-    PullToRefreshListView pullToRefreshListView;
+public class ExchangeRecordActivity extends MyBaseActivity implements
+        ExchangeRecordAllAdapter.IonSlidingViewClickListener {
+    
+    @Bind(R.id.pull_refresh_recycler)
+    PullToRefreshRecyclerView pullRefreshRecycler;
 
     private Context mContext = ExchangeRecordActivity.this;
-    private ExchangeRecordAdapter mAdapter;
+    private ExchangeRecordAllAdapter mAdapter;
     private ExchangeRecordModel mExchangeRecordModel;
 
+    private int allPosition;
     private int mPage = 1;
     private int mSize = 20;
     private long storeId;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +71,13 @@ public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInt
     }
 
     private void initListView() {
-        initRefreshView(PullToRefreshBase.Mode.BOTH, pullToRefreshListView);
+        initRefreshView(PullToRefreshBase.Mode.BOTH, pullRefreshRecycler);
 
-        mAdapter = new ExchangeRecordAdapter(mContext, this);
-        pullToRefreshListView.setAdapter(mAdapter);
-        pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(GoodsDetailActivity.buildIntent(mContext
-                        , mAdapter.getItem(position-1).getGoodsId()
-                        , mAdapter.getItem(position-1).getGoodsName()));
-            }
-        });
+        mAdapter = new ExchangeRecordAllAdapter(mContext, getmWidth(), this);
+
+        mRecyclerView = pullRefreshRecycler.getRefreshableView();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));//这里用线性显示 类似于listview
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -96,7 +95,7 @@ public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInt
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
         mPage = 1;
-        onLoad(PullToRefreshBase.Mode.BOTH, pullToRefreshListView);
+        onLoad(PullToRefreshBase.Mode.BOTH, pullRefreshRecycler);
     }
 
     @Override
@@ -115,8 +114,14 @@ public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInt
     }
 
     private void dohttp(boolean b) {
-        LogUtils.e("url:"+(Common.Url_Get_ExchangeRecord + storeId + "/" + mPage + "/" + mSize));
-        OkHttpUtils.get().url(Common.Url_Get_ExchangeRecord + storeId + "/" + mPage + "/" + mSize)
+        String url = "";
+        if (storeId == -1) {
+            url = Common.Url_Get_All_ExchangeRecord + mPage + "/" + mSize;
+        } else {
+            url = Common.Url_Get_ExchangeRecord + storeId + "/" + mPage + "/" + mSize;
+        }
+        LogUtils.e("url:" + url);
+        OkHttpUtils.get().url(url)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_GET_GOODS_EXCHANGERECORD_ID)
@@ -131,14 +136,16 @@ public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInt
             mExchangeRecordModel = mGson.fromJson(data, ExchangeRecordModel.class);
             if (mExchangeRecordModel.getBody() == null
                     || mExchangeRecordModel.getBody().size() == 0) {
-                if (mAdapter!=null && mAdapter.getCount()>0) {
+                if (mAdapter != null && mAdapter.getItemCount() > 0) {
                     showToast("没有更多");
                 }
-                onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
+                onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullRefreshRecycler);
             } else {
-                onLoad(PullToRefreshBase.Mode.BOTH, pullToRefreshListView);
-                mAdapter.addBody(mExchangeRecordModel.getBody());
+                onLoad(PullToRefreshBase.Mode.BOTH, pullRefreshRecycler);
+                mAdapter.addData(mExchangeRecordModel.getBody());
             }
+        } else if (id == Common.NET_DELETE_EXHANGE_ID) {
+            mAdapter.removeData(allPosition);
         }
     }
 
@@ -146,10 +153,38 @@ public class ExchangeRecordActivity extends MyBaseActivity implements AdapterInt
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GOODS_EXCHANGERECORD_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_DELETE_EXHANGE_ID);
     }
 
     @Override
     public void onItemClick(View view, int position) {
+        allPosition = position;
+        if (storeId == -1) {
+            startActivity(StoreDetailActivity.buildIntent(mContext
+                    , mAdapter.getItemById(position).getStoreId()));
+        } else {
+            startActivity(GoodsDetailActivity.buildIntent(mContext
+                    , mAdapter.getItemById(position).getGoodsId()
+                    , mAdapter.getItemById(position).getGoodsName()));
+        }
+    }
 
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+        allPosition = position;
+        if (mAdapter.getItemById(position).getState() == 1) {
+            showWraning("此订单正在处理中,不能删除");
+            return;
+        }
+        Map<String, String> p = new HashMap<>();
+        p.put("id", String.valueOf(mAdapter.getItemById(position).getId()));
+        p.put("result", "4"); //B端删除
+        OkHttpUtils.postString().url(Common.Url_Delete_ExchangeRecord)
+                .tag(Common.NET_DELETE_EXHANGE_ID).id(Common.NET_DELETE_EXHANGE_ID)
+                .content(mGson.toJson(p)).mediaType(Common.JSON)
+                .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .build().execute(new MyStringCallback(mContext, "删除中..."
+                , ExchangeRecordActivity.this, true));
     }
 }

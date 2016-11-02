@@ -39,7 +39,6 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
-import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
 import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
@@ -564,7 +563,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                 }
                 break;
             case R.id.item_p2pchat_text_headleft_iv:
-                startActivity(StoreDetailActivity.buildIntent(mContext, persionId));
+                startActivity(TAPersonalInformationActivity.buildIntent(mContext, persionId));
                 break;
             case R.id.item_p2pchat_image_left_iv:
             case R.id.item_p2pchat_image_right_iv:

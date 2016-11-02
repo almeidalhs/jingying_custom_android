@@ -87,6 +87,10 @@ public class Common {
     public static final String Url_Add_Comment = hostUrl + "baiye/rest/comment";
     //获取店铺信息
     public static final String Url_Get_StoreDetail = hostUrl + "baiye/rest/store/userchat/";
+    //获取所有兑换记录
+    public static final String Url_Get_All_ExchangeRecord = hostUrl + "baiye/rest/integral/allexchangelog/";
+    //删除兑换记录
+    public static final String Url_Delete_ExchangeRecord = hostUrl + "baiye/rest/integral/manage";
     /**************************http访问路径*****************************/
 
 
@@ -153,7 +157,9 @@ public class Common {
     //添加评论
     public static int NET_ADD_COMMENT_ID = 30;
     //获取店铺信息
-    public static int NET_GET_STOREDETAIL_ID = 30;
+    public static int NET_GET_STOREDETAIL_ID = 31;
+    //删除兑换记录
+    public static int NET_DELETE_EXHANGE_ID = 32;
     /**************************http访问回应识别码*****************************/
 
 
