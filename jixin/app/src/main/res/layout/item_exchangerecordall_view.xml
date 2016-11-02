@@ -104,13 +104,12 @@
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/dimen_dp_5"
-                android:paddingLeft="@dimen/dimen_dp_10"
-                android:paddingRight="@dimen/dimen_dp_10"
+                android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingTop="@dimen/dimen_dp_5">
 
                 <TextView
                     android:id="@+id/item_exchangerecord_status_tx"
-                    android:layout_width="@dimen/dimen_dp_50"
+                    android:layout_width="@dimen/dimen_dp_60"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"

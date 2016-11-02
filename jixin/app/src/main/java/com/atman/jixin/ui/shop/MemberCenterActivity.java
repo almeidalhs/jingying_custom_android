@@ -51,6 +51,7 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     private TextView membercenterHeadNameTx;
     private TextView membercenterHeadIntegralTx;
     private TextView membercenterHeadIntegralMarkTx;
+    private boolean isUpdata = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,17 +94,17 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public void doInitBaseHttp() {
-        super.doInitBaseHttp();
         storeId = getIntent().getLongExtra("storeId", -1);
         OkHttpUtils.get().url(Common.Url_MemberCenter + storeId)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_MEMBER_CENTRER_ID).id(Common.NET_MEMBER_CENTRER_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, true));
+    }
+
+    @Override
+    public void doInitBaseHttp() {
+        super.doInitBaseHttp();
     }
 
     @Override
@@ -117,22 +118,25 @@ public class MemberCenterActivity extends MyBaseActivity implements AdapterInter
     }
 
     private void updateUi() {
+        if (!isUpdata) {
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + mMemberCenterModel.getBody().getStoreAvatar()
+                    , membercenterHeadIv, MyBaseApplication.getApplication().optionsHead);
+            String url = mMemberCenterModel.getBody().getFullStoreBanner();
+            if (!url.startsWith("http")) {
+                url = Common.ImageUrl + mMemberCenterModel.getBody().getFullStoreBanner();
+            }
+            ImageLoader.getInstance().displayImage(url, membercenterHeadBg, MyBaseApplication.getApplication().optionsNot);
+            membercenterHeadNameTx.setText(mMemberCenterModel.getBody().getStoreName());
+            mAdapter.updateListView(mMemberCenterModel.getBody().getUserList());
+        }
         if (mMemberCenterModel.getBody().getUserList().size()==0) {
             partEmptyTx.setVisibility(View.VISIBLE);
         } else {
             partEmptyTx.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(Common.ImageUrl + mMemberCenterModel.getBody().getStoreAvatar()
-                , membercenterHeadIv, MyBaseApplication.getApplication().optionsHead);
-        String url = mMemberCenterModel.getBody().getFullStoreBanner();
-        if (!url.startsWith("http")) {
-            url = Common.ImageUrl + mMemberCenterModel.getBody().getFullStoreBanner();
-        }
-        ImageLoader.getInstance().displayImage(url, membercenterHeadBg, MyBaseApplication.getApplication().optionsNot);
-        membercenterHeadNameTx.setText(mMemberCenterModel.getBody().getStoreName());
         membercenterHeadIntegralTx.setText("  我的积分  " + mMemberCenterModel.getBody().getIntegral());
-        mAdapter.updateListView(mMemberCenterModel.getBody().getUserList());
         myIntegral = mMemberCenterModel.getBody().getIntegral();
+        isUpdata = true;
     }
 
     @Override

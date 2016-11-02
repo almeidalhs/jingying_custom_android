@@ -93,8 +93,8 @@ public class DataCleanManager {
     public static void cleanApplicationData(Context context, String... filepath) {
         cleanInternalCache(context);
         cleanExternalCache(context);
-        cleanDatabases(context);
-        cleanSharedPreference(context);
+//        cleanDatabases(context);
+//        cleanSharedPreference(context);
         cleanFiles(context);
         if (filepath == null) {
             return;

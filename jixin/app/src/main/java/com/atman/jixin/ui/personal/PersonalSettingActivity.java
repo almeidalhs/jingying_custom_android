@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
+import com.atman.jixin.model.greendao.gen.ChatListModelDao;
+import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.response.LoginResultModel;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
@@ -56,6 +58,9 @@ public class PersonalSettingActivity extends MyBaseActivity {
     private String mCachePath = "/data/data/com.atman.jixin/";
     private int setStatus;
 
+    private ChatListModelDao mChatListModelDao;
+    private ChatMessageModelDao mChatMessageModelDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,9 @@ public class PersonalSettingActivity extends MyBaseActivity {
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
+
+        mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
+        mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
 
         setBarTitleTx("个人设置");
         personalVersionTx.setText(MyBaseApplication.VERSION);
@@ -170,6 +178,8 @@ public class PersonalSettingActivity extends MyBaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                mChatListModelDao.deleteAll();
+                mChatMessageModelDao.deleteAll();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

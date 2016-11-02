@@ -109,8 +109,18 @@ public class GoodsDetailActivity extends MyBaseActivity {
     private void updateView() {
         goodsdetailNameTv.setText(mGoodsDetailModel.getBody().getGoodsName());
         goodsdetailPriceTv.setText("￥ "+mGoodsDetailModel.getBody().getPrice());
-        goodsdetailIntroductionTv.setText(mGoodsDetailModel.getBody().getGoodsSpec());
-        goodsdetailDescriptionTv.setText(mGoodsDetailModel.getBody().getGoodsDescription());
+        if (mGoodsDetailModel.getBody().getGoodsSpec() == null
+                || mGoodsDetailModel.getBody().getGoodsSpec().isEmpty()) {
+            goodsdetailIntroductionTv.setText("暂未添加规格");
+        } else {
+            goodsdetailIntroductionTv.setText(mGoodsDetailModel.getBody().getGoodsSpec());
+        }
+        if (mGoodsDetailModel.getBody().getGoodsDescription() == null
+                || mGoodsDetailModel.getBody().getGoodsDescription().isEmpty()) {
+            goodsdetailDescriptionTv.setText("暂未添加说明");
+        } else {
+            goodsdetailDescriptionTv.setText(mGoodsDetailModel.getBody().getGoodsDescription());
+        }
 
         imageUrls = new String[mGoodsDetailModel.getBody().getGoodsImageMoreList().size()];
         for (int i = 0; i < mGoodsDetailModel.getBody().getGoodsImageMoreList().size(); i++) {
