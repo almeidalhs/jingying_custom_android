@@ -12,8 +12,15 @@ public  class SoundMeter {
 	static final private double EMA_FILTER = 0.6;
 
 	private MediaRecorder mRecorder = null;
+	private onRecordError monRecordError;
 	private double mEMA = 0.0;
 	private String path = Environment.getExternalStorageDirectory()+"/jiying/audio";
+
+	public SoundMeter () {}
+
+	public SoundMeter (onRecordError monRecordError) {
+		this.monRecordError = monRecordError;
+	}
 
 	public String getPath() {
 		return path;
@@ -40,8 +47,13 @@ public  class SoundMeter {
 				
 				mEMA = 0.0;
 			} catch (IllegalStateException e) {
+				monRecordError.onFaild(onRecordError.mIllegalStateException);
+				System.out.print(e.getMessage());
+			}  catch (RuntimeException e) {
+				monRecordError.onFaild(onRecordError.mRuntimeException);
 				System.out.print(e.getMessage());
 			} catch (IOException e) {
+				monRecordError.onFaild(onRecordError.mIOException);
 				System.out.print(e.getMessage());
 			}
 
@@ -84,5 +96,12 @@ public  class SoundMeter {
 		double amp = getAmplitude();
 		mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
 		return mEMA;
+	}
+
+	public interface onRecordError {
+		int mIOException = 1;//输入输出异常
+		int mRuntimeException = 2; //运行时异常
+		int mIllegalStateException = 3; //非法状态异常
+		void onFaild(int ExceptionId);
 	}
 }

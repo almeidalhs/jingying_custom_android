@@ -466,7 +466,9 @@ public static class Builder {
     public PromptDialog show() {
         PromptDialog dialog = build();
 
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 
         return dialog;
     }

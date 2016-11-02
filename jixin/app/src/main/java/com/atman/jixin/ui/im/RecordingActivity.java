@@ -27,7 +27,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/10/26.
  */
 
-public class RecordingActivity extends MyBaseActivity implements View.OnTouchListener {
+public class RecordingActivity extends MyBaseActivity implements View.OnTouchListener, SoundMeter.onRecordError {
 
     @Bind(R.id.recording_tip_tx)
     TextView recordingTipTx;
@@ -57,6 +57,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     private boolean isCancel = false;
     private boolean isFinish = false;
     private int mTime;
+    private boolean isFail = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         ll = getRootContentLl();
         ll.setBackgroundColor(getResources().getColor(R.color.color_00000000));
 
-        mSensor = new SoundMeter();
+        mSensor = new SoundMeter(this);
 
         recordingIv.setOnTouchListener(this);
     }
@@ -164,6 +165,14 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                     File file = recordEnd();
                     backResuilt(file);
                 } else {
+                    if (isFail) {
+                        File file = recordEnd();
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        showWraning("录音失败,请查看是否已开启麦克风权限");
+                        return;
+                    }
                     mTimeHandler.postDelayed(mTimeTask, TIME_INTERVAL);
                 }
             }
@@ -301,5 +310,17 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         stop();
         File file = new File(mSensor.getPath()+"/"+ voiceName);
         return file;
+    }
+
+    @Override
+    public void onFaild(int ExceptionId) {
+        isFail = true;
+        if (ExceptionId == SoundMeter.onRecordError.mRuntimeException) {
+//            showWraning("录音失败,请查看是否已开启麦克风权限");
+        } else if (ExceptionId == SoundMeter.onRecordError.mIOException) {
+//            showWraning("录音失败,请查看内存卡是否存在");
+        } else if (ExceptionId == SoundMeter.onRecordError.mIllegalStateException) {
+//            showWraning("录音失败");
+        }
     }
 }
