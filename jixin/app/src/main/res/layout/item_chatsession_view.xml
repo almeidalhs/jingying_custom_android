@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.atman.jixin.widget.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="#f3f2f2">
+
+    <RelativeLayout
+        android:id="@+id/item_fullcut_root_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/layout_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:id="@+id/member_ll"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/msg_list_action_member" />
+
+                <TextView
+                    android:id="@+id/tv_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="top|center_horizontal"
+                    android:text="会员"
+                    android:textColor="#41d9f0"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_line" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:id="@+id/delete_ll"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/msg_list_action_delete" />
+
+                <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal"
+                    android:layout_weight="1"
+                    android:text="删除"
+                    android:textColor="#FF0000"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_line" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_content"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_ffffff"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_5">
+
+            <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/item_session_head_iv"
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_margin="@dimen/dimen_dp_10"
+                android:src="@mipmap/img_sign_logo"
+                img:shape="circle" />
+
+            <TextView
+                android:id="@+id/item_session_unread_tx"
+                android:layout_width="@dimen/dimen_dp_17"
+                android:layout_height="@dimen/dimen_dp_17"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/dote_pressed"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/color_ffffff"
+                android:textSize="@dimen/dimen_sp_10" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/item_session_isstore_tx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dimen_dp_5"
+                        android:text="[商家]"
+                        android:textColor="@color/color_10a065"
+                        android:textSize="@dimen/dimen_sp_15"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/item_session_nick_tx"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="nick"
+                        android:textColor="#484848"
+                        android:textSize="@dimen/dimen_sp_15" />
+
+                    <TextView
+                        android:id="@+id/item_session_time_tx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2016-11-11"
+                        android:textColor="#a2a2a2"
+                        android:textSize="@dimen/dimen_sp_13" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/item_session_content_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_dp_5"
+                    android:singleLine="true"
+                    android:text="neirong"
+                    android:textColor="#a2a2a2"
+                    android:textSize="@dimen/dimen_sp_13" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/item_line_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_line" />
+    </RelativeLayout>
+</com.atman.jixin.widget.SlidingButtonView>

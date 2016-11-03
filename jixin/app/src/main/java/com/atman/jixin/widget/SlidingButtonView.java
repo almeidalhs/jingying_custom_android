@@ -12,6 +12,7 @@ import com.atman.jixin.R;
 public class SlidingButtonView extends HorizontalScrollView   {
 
     private TextView mTextView_Delete;
+    private TextView mTextView_Member;
 
     private int mScrollWidth;
 
@@ -42,6 +43,7 @@ public class SlidingButtonView extends HorizontalScrollView   {
 
         if(!once){
             mTextView_Delete = (TextView) findViewById(R.id.tv_delete);
+            mTextView_Member = (TextView) findViewById(R.id.tv_member);
             once = true;
         }
 
@@ -53,7 +55,11 @@ public class SlidingButtonView extends HorizontalScrollView   {
         if(changed){
             this.scrollTo(0,0);
             //获取水平滚动条可以滑动的范围，即右侧按钮的宽度
-            mScrollWidth = mTextView_Delete.getWidth();
+            if (mTextView_Member!=null) {
+                mScrollWidth = mTextView_Delete.getWidth() + mTextView_Member.getWidth();
+            } else {
+                mScrollWidth = mTextView_Delete.getWidth();
+            }
         }
 
     }
@@ -93,7 +99,7 @@ public class SlidingButtonView extends HorizontalScrollView   {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        mTextView_Delete.setTranslationX(l - mScrollWidth);
+//        mTextView_Delete.setTranslationX(l - mScrollWidth);
     }
 
     /**

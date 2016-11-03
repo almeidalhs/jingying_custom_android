@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.alan.codescanlibs.QrCodeActivity;
 import com.atman.jixin.R;
-import com.atman.jixin.adapter.MessageSessionListAdapter;
+import com.atman.jixin.adapter.ChatSessionListAdapter;
 import com.atman.jixin.model.MessageEvent;
 import com.atman.jixin.model.bean.ChatListModel;
 import com.atman.jixin.model.bean.ChatMessageModel;
@@ -28,13 +28,15 @@ import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
+import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceConversionUtil;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.ShapeImageView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
 import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -53,16 +55,16 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
-public class MainActivity extends MyBaseActivity implements AdapterInterface {
+public class MainActivity extends MyBaseActivity implements ChatSessionListAdapter.IonSlidingViewClickListener {
 
     @Bind(R.id.main_head_img)
     ShapeImageView mainHeadImg;
     @Bind(R.id.main_bottom_ll)
     LinearLayout mainBottomLl;
-    @Bind(R.id.message_listview)
-    ListView messageListview;
     @Bind(R.id.message_empty_tv)
     TextView messageEmptyTv;
+    @Bind(R.id.pull_refresh_recycler)
+    PullToRefreshRecyclerView pullRefreshRecycler;
 
     private Context mContext = MainActivity.this;
     private String headImge = "";
@@ -70,7 +72,8 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     private ChatListModelDao mChatListModelDao;
     private ChatMessageModelDao mChatMessageModelDao;
     private List<ChatListModel> mChatList;
-    private MessageSessionListAdapter mAdapter;
+    private ChatSessionListAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,65 +121,14 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
     }
 
     private void initListView() {
-        mAdapter = new MessageSessionListAdapter(mContext, this);
-        messageListview.setAdapter(mAdapter);
-        messageListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ChatListModel mChatListModel = mChatListModelDao.queryBuilder()
-                        .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())).build().unique();
-                if (mChatListModel != null) {
-                    mChatListModel.setUnreadNum(0);
-                    mChatListModelDao.update(mChatListModel);
-                    mAdapter.clearUnreadNum(position);
-                    if (mAdapter.getItem(position).getTargetType() == ADChatTargetType.ADChatTargetType_Shop) {
-                        startActivity(ShopIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
-                                , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar(), true));
-                    } else {
-                        startActivity(PersonalIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
-                                , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar()));
-                    }
-                }
-            }
-        });
-        messageListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
-                PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
-                builder.setMessage("您确定要将该消息删除吗？");
-                builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        List<ChatMessageModel> mImMessageDelete = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
-                                , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
-                        for (ChatMessageModel imMessageDelete : mImMessageDelete) {
-                            mChatMessageModelDao.delete(imMessageDelete);
-                        }
 
-                        ChatListModel mDelete = mChatListModelDao.queryBuilder()
-                                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
-                                        , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
-                        if (mDelete != null) {
-                            mChatListModelDao.delete(mDelete);
-                            mAdapter.deleteItemById(position);
-                        }
-                        if (mAdapter.getCount()==0) {
-                            messageEmptyTv.setVisibility(View.VISIBLE);
-                            messageListview.setVisibility(View.GONE);
-                        }
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-                return true;
-            }
-        });
+        initRefreshView(PullToRefreshBase.Mode.DISABLED, pullRefreshRecycler);
+
+        mAdapter = new ChatSessionListAdapter(mContext, getmWidth(), this);
+
+        mRecyclerView = pullRefreshRecycler.getRefreshableView();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));//这里用线性显示 类似于listview
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -217,13 +169,13 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
         }
         mChatList = mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties
                 .LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
-        if (mChatList == null || mChatList.size()==0) {
+        if (mChatList == null || mChatList.size() == 0) {
             messageEmptyTv.setVisibility(View.VISIBLE);
-            messageListview.setVisibility(View.GONE);
+            pullRefreshRecycler.setVisibility(View.GONE);
         } else {
             messageEmptyTv.setVisibility(View.GONE);
-            messageListview.setVisibility(View.VISIBLE);
-            mAdapter.addBody(mChatList);
+            pullRefreshRecycler.setVisibility(View.VISIBLE);
+            mAdapter.addData(mChatList);
         }
     }
 
@@ -295,6 +247,62 @@ public class MainActivity extends MyBaseActivity implements AdapterInterface {
 
     @Override
     public void onItemClick(View view, int position) {
+        ChatListModel mChatListModel = mChatListModelDao.queryBuilder()
+                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())).build().unique();
+        if (mChatListModel != null) {
+            mChatListModel.setUnreadNum(0);
+            mChatListModelDao.update(mChatListModel);
+            mAdapter.clearUnreadNum(position);
+            if (mAdapter.getItem(position).getTargetType() == ADChatTargetType.ADChatTargetType_Shop) {
+                startActivity(ShopIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
+                        , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar(), true));
+            } else {
+                startActivity(PersonalIMActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()
+                        , mAdapter.getItem(position).getTargetName(), mAdapter.getItem(position).getTargetAvatar()));
+            }
+        }
+    }
 
+    @Override
+    public void onDeleteBtnCilck(View view, final int position) {
+        switch (view.getId()) {
+            case R.id.member_ll:
+                startActivity(MemberCenterActivity.buildIntent(mContext, mAdapter.getItem(position).getTargetId()));
+                break;
+            case R.id.delete_ll:
+                PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                builder.setMessage("您确定要将该消息删除吗？");
+                builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        List<ChatMessageModel> mImMessageDelete = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                                , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
+                        for (ChatMessageModel imMessageDelete : mImMessageDelete) {
+                            mChatMessageModelDao.delete(imMessageDelete);
+                        }
+
+                        ChatListModel mDelete = mChatListModelDao.queryBuilder()
+                                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                                        , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                        if (mDelete != null) {
+                            mChatListModelDao.delete(mDelete);
+                            mAdapter.removeData(position);
+                        }
+                        if (mAdapter.getItemCount() == 0) {
+                            messageEmptyTv.setVisibility(View.VISIBLE);
+                            pullRefreshRecycler.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                break;
+        }
     }
 }

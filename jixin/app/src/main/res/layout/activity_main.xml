@@ -38,12 +38,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/message_listview"
-            android:divider="@color/color_line"
-            android:dividerHeight="1px"
+        <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pull_refresh_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DCE0E3"
+            ptr:ptrMode="both" />
 
         <TextView
             android:id="@+id/message_empty_tv"
