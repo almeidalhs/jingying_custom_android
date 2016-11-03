@@ -1,5 +1,6 @@
 package com.atman.jixin.model;
 
+import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.response.GetMessageModel;
 
 /**
@@ -8,8 +9,10 @@ import com.atman.jixin.model.response.GetMessageModel;
 
 public class MessageEvent {
     public GetMessageModel mGetMessageModel;
+    public ChatMessageModel mChatMessageModel;
 
-    public MessageEvent (GetMessageModel mGetMessageModel) {
+    public MessageEvent (GetMessageModel mGetMessageModel, ChatMessageModel mChatMessageModel) {
         this.mGetMessageModel = mGetMessageModel;
+        this.mChatMessageModel = mChatMessageModel;
     }
 }

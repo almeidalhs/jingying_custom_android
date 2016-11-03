@@ -212,19 +212,13 @@ public class ShopIMActivity extends MyBaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(MessageEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         GetMessageModel mGetMessageModel = event.mGetMessageModel;
-        LogUtils.e("storeId:"+storeId);
-        if (mGetMessageModel.getContent().getTargetId() == storeId) {
-            LogUtils.e("mGetMessageModel.getContent().getTargetId():"+mGetMessageModel.getContent().getTargetId());
-            LogUtils.e("mGetMessageModel.getContent().getChatId():"+mGetMessageModel.getContent().getChatId());
-            ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
-                    ChatMessageModelDao.Properties.ChatId.eq(mGetMessageModel.getContent().getChatId()))
-                    .build().unique();
-            LogUtils.e("upMessage:"+upMessage);
-            if (upMessage!=null) {
-                mAdapter.addImMessageDao(upMessage);
-            }
+        ChatMessageModel mChatMessageModel = event.mChatMessageModel;
+        if (mChatMessageModel.getTargetId() == storeId) {
+            mAdapter.addImMessageDao(mChatMessageModel);
+
             ChatListModel mChatListModel = mChatListModelDao.queryBuilder()
-                    .where(ChatListModelDao.Properties.TargetId.eq(mGetMessageModel.getContent().getTargetId())).build().unique();
+                    .where(ChatListModelDao.Properties.TargetId.eq(mGetMessageModel.getContent().getTargetId())
+                            , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
             if (mChatListModel != null) {
                 mChatListModel.setUnreadNum(0);
                 mChatListModelDao.update(mChatListModel);

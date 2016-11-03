@@ -171,13 +171,9 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(MessageEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         GetMessageModel mGetMessageModel = event.mGetMessageModel;
+        ChatMessageModel mChatMessageModel = event.mChatMessageModel;
         if (mGetMessageModel.getContent().getTargetId() == persionId) {
-            ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
-                    ChatMessageModelDao.Properties.ChatId.eq(mGetMessageModel.getContent().getChatId()))
-                    .build().unique();
-            if (upMessage != null) {
-                mAdapter.addImMessageDao(upMessage);
-            }
+            mAdapter.addImMessageDao(mChatMessageModel);
             ChatListModel mChatListModel = mChatListModelDao.queryBuilder()
                     .where(ChatListModelDao.Properties.TargetId.eq(mGetMessageModel.getContent().getTargetId())).build().unique();
             if (mChatListModel != null) {

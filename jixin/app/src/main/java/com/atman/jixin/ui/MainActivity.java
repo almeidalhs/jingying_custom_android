@@ -249,7 +249,8 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     @Override
     public void onItemClick(View view, int position) {
         ChatListModel mChatListModel = mChatListModelDao.queryBuilder()
-                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())).build().unique();
+                .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
+                        , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
         if (mChatListModel != null) {
             mChatListModel.setUnreadNum(0);
             mChatListModelDao.update(mChatListModel);

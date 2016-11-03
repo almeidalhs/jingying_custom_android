@@ -64,6 +64,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 
                     LogUtils.e("data:"+data);
                     GetMessageModel mGetMessageModel = new Gson().fromJson(data, GetMessageModel.class);
+                    LogUtils.e("mGetMessageModel.getContent().getChatId():"+mGetMessageModel.getContent().getChatId());
                     saveGetMessage(mGetMessageModel);
                 }
                 break;
@@ -152,6 +153,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 
     private void saveGetMessage(GetMessageModel mGetMessageModel) {
         GetMessageModel.ContentBean temp = mGetMessageModel.getContent();
+        LogUtils.e("temp.getChatId():"+temp.getChatId());
         //添加聊天列表
         ChatListModel mChatListModel= mChatListModelDao.queryBuilder()
                 .where(ChatListModelDao.Properties.TargetId.eq(temp.getTargetId())
@@ -159,7 +161,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         if (mChatListModel==null) {
             ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
                     , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
-                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName()
+                    , temp.getSendTime(), temp.getContent(), 1, "", temp.getTargetName()
                     , temp.getTargetAvatar(), temp.getType());
             mChatListModelDao.save(tempChat);
         } else {
@@ -172,6 +174,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         //添加聊天记录
         ChatMessageModel tempMessage = new ChatMessageModel();
         tempMessage.setId(null);
+        LogUtils.e(">>>>>temp.getChatId():"+temp.getChatId());
         tempMessage.setChatId(temp.getChatId());
         tempMessage.setTargetId(temp.getTargetId());
         tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
@@ -222,6 +225,6 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         tempMessage.setSendStatus(0);
         tempMessage.setSelfSend(false);
         mChatMessageModelDao.save(tempMessage);
-        EventBus.getDefault().post(new MessageEvent(mGetMessageModel));
+        EventBus.getDefault().post(new MessageEvent(mGetMessageModel,tempMessage));
     }
 }

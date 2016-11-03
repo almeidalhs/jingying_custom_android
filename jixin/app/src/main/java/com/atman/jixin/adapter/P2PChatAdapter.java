@@ -252,7 +252,7 @@ public class P2PChatAdapter extends BaseAdapter {
                     } else {
                         holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
                     }
-                    String url = temp.getContent();
+                    String url = temp.getImageT_back();
                     if (!url.contains("http")) {
                         url = Common.ImageUrl + temp.getImageT_back();
                     }
