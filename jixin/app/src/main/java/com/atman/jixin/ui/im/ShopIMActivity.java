@@ -212,10 +212,14 @@ public class ShopIMActivity extends MyBaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(MessageEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         GetMessageModel mGetMessageModel = event.mGetMessageModel;
+        LogUtils.e("storeId:"+storeId);
         if (mGetMessageModel.getContent().getTargetId() == storeId) {
+            LogUtils.e("mGetMessageModel.getContent().getTargetId():"+mGetMessageModel.getContent().getTargetId());
+            LogUtils.e("mGetMessageModel.getContent().getChatId():"+mGetMessageModel.getContent().getChatId());
             ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
                     ChatMessageModelDao.Properties.ChatId.eq(mGetMessageModel.getContent().getChatId()))
                     .build().unique();
+            LogUtils.e("upMessage:"+upMessage);
             if (upMessage!=null) {
                 mAdapter.addImMessageDao(upMessage);
             }
@@ -288,6 +292,9 @@ public class ShopIMActivity extends MyBaseActivity
             mGetChatServiceModel = mGson.fromJson(data, GetChatServiceModel.class);
 
             mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
+            if (mGVAdapter.getCount()==0) {
+                setNotService();
+            }
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
             super.onStringResponse(data, response, id);
             if (adChatTypeText == ADChatType.ADChatType_Text
@@ -312,7 +319,14 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
+    private void setNotService() {
+        p2pchatServiceLl.setVisibility(View.GONE);
+        p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
+        p2pchatSendBt.setVisibility(View.VISIBLE);
+    }
+
     private void seedMessage(String str) {
+        temp.setContent(str);
         OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
                 .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
@@ -488,7 +502,7 @@ public class ShopIMActivity extends MyBaseActivity
                 }
                 operaterList.add(tempOper);
                 temp.setOperaterList(operaterList);
-                seedMessage(mGson.toJson(temp));
+                seedMessage(bean.getOperaterName());
             } else {
                 seedMessage(content);
             }
@@ -629,7 +643,8 @@ public class ShopIMActivity extends MyBaseActivity
 
     @Override
     public void isNull() {
-        if (TextUtils.isEmpty(blogdetailAddcommentEt.getText().toString())) {
+        if (TextUtils.isEmpty(blogdetailAddcommentEt.getText().toString())
+                && mGVAdapter.getCount()!=0) {
             p2pchatSendBt.setVisibility(View.GONE);
             p2pchatServiceOrKeyboardIv.setVisibility(View.VISIBLE);
         } else {
@@ -716,6 +731,18 @@ public class ShopIMActivity extends MyBaseActivity
                 positionAudio = position;
                 playAudio(position, animationDrawable, true);
                 break;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            if (mAnimationDrawable!=null) {
+                mAnimationDrawable.stop();
+                mAnimationDrawable.selectDrawable(0);
+            }
         }
     }
 

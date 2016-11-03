@@ -168,7 +168,8 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
             mAdapter.clearData();
         }
         mChatList = mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties
-                .LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
+                .LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId()))
+                .orderDesc(ChatListModelDao.Properties.SendTime).build().list();
         if (mChatList == null || mChatList.size() == 0) {
             messageEmptyTv.setVisibility(View.VISIBLE);
             pullRefreshRecycler.setVisibility(View.GONE);

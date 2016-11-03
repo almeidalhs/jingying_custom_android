@@ -83,6 +83,12 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         mSensor = new SoundMeter(this);
 
         recordingIv.setOnTouchListener(this);
+        recordingIv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                LogUtils.e("hasFocus:"+hasFocus);
+            }
+        });
     }
 
     @Override
@@ -170,7 +176,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                         if (file.exists()) {
                             file.delete();
                         }
-                        showWraning("录音失败,请查看是否已开启麦克风权限");
+                        showWraning(mContext, "录音失败,请查看是否已开启麦克风权限", false);
                         return;
                     }
                     mTimeHandler.postDelayed(mTimeTask, TIME_INTERVAL);
@@ -271,8 +277,8 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                LogUtils.e("ACTION_UP");
                 if (flag == 2) {
-
                     File file = recordEnd();
 
                     if (event.getRawY() >= recordingIv_Y

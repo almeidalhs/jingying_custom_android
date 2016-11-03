@@ -272,11 +272,22 @@ public class P2PChatAdapter extends BaseAdapter {
                             , holderText.itemP2pchatTextRightTx, temp.getContent()));
                 } else {
                     String tempStr = "";
-                    if (temp.getOperaterExtra()!=null) {
-                        tempStr = "你已经成功复制WiFi名称:"+temp.getOperaterName()+"的密码";
+
+                    if (temp.getOperaterName()!=null){
+                        if (temp.getContent().contains("请选择下方")) {
+                            tempStr = temp.getContent();
+                        } else {
+                            if (temp.getOperaterType()==3) {
+                                tempStr = "你已经成功复制WiFi名称:"+temp.getOperaterName()+"的密码";
+                            } else {
+                                tempStr = temp.getContent();
+                            }
+                        }
                     } else {
                         tempStr = temp.getContent();
                     }
+
+
                     holderText.itemP2pchatTextLeftTx.setVisibility(View.VISIBLE);
                     holderText.itemP2pchatTextLeftTx.setText(SmileUtils.getEmotionContent(context
                             , holderText.itemP2pchatTextRightTx, tempStr));

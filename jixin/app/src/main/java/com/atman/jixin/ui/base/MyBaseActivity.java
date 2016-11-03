@@ -451,6 +451,20 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         builder.show();
     }
 
+    public void showWraning(final Context context, String str, boolean b) {
+        PromptDialog.Builder builder = new PromptDialog.Builder(context);
+        builder.setMessage(str);
+        builder.setCancelable(b);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                ((Activity) context).finish();
+            }
+        });
+        builder.show();
+    }
+
     public File createFile(String versionName) {
         File updateDir = null;
         File updateFile = null;

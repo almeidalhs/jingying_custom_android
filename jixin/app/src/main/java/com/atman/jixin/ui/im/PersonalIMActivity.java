@@ -240,6 +240,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     }
 
     private void seedMessage(String str) {
+        temp.setContent(str);
         OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
                 .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
@@ -603,6 +604,18 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                 positionAudio = position;
                 playAudio(position, animationDrawable, true);
                 break;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            if (mAnimationDrawable!=null) {
+                mAnimationDrawable.stop();
+                mAnimationDrawable.selectDrawable(0);
+            }
         }
     }
 

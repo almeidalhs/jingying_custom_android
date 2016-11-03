@@ -87,6 +87,9 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
 
         storeId = getIntent().getLongExtra("storeId", -1);
         myIntegral = getIntent().getIntExtra("myIntegral", 0);
+        if (myIntegral<0) {
+            myIntegral = 0;
+        }
         setBarTitleTx("积分商城("+myIntegral+")");
 
         initListView();
@@ -173,6 +176,9 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
                 showToast("商品兑换成功");
                 myIntegral -= (cion*totalNum);
                 LogUtils.e("myIntegral:"+myIntegral);
+                if (myIntegral<0) {
+                    myIntegral = 0;
+                }
                 setBarTitleTx("积分商城("+myIntegral+")");
                 mPage = 1;
                 mAdapter.clearData();

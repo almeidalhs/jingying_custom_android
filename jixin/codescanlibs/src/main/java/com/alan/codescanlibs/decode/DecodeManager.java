@@ -14,14 +14,15 @@ import com.alan.codescanlibs.R;
  */
 public class DecodeManager {
 
-    public void showPermissionDeniedDialog(Context context) {
+    public void showPermissionDeniedDialog(final Context context) {
         // 权限在安装时被关闭了，如小米手机
-        new AlertDialog.Builder(context).setTitle(R.string.qr_code_notification)
+        new AlertDialog.Builder(context).setTitle(R.string.qr_code_notification).setCancelable(false)
             .setMessage(R.string.qr_code_camera_not_open)
             .setPositiveButton(R.string.qr_code_positive_button_know, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    ((Activity)context).finish();
                 }
             }).show();
     }

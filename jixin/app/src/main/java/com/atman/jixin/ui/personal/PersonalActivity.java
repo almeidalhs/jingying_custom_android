@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
@@ -30,18 +32,24 @@ import okhttp3.Response;
 
 public class PersonalActivity extends MyBaseActivity {
 
+    @Bind(R.id.personal_head_bg)
+    ImageView personalHeadBg;
+    @Bind(R.id.personal_head_befor_bg)
+    ImageView personalHeadBeforBg;
     @Bind(R.id.personal_head_img_iv)
     ShapeImageView personalHeadImgIv;
     @Bind(R.id.personal_head_name_tx)
     TextView personalHeadNameTx;
     @Bind(R.id.personal_head_ll)
-    LinearLayout personalHeadLl;
+    RelativeLayout personalHeadLl;
     @Bind(R.id.personal_information_ll)
     LinearLayout personalInformationLl;
     @Bind(R.id.personal_attention_num_tx)
     TextView personalAttentionNumTx;
     @Bind(R.id.personal_attention_ll)
     LinearLayout personalAttentionLl;
+    @Bind(R.id.personal_exchange_ll)
+    LinearLayout personalExchangeLl;
     @Bind(R.id.personal_setting_ll)
     LinearLayout personalSettingLl;
     @Bind(R.id.personal_about_and_help_ll)
@@ -80,14 +88,16 @@ public class PersonalActivity extends MyBaseActivity {
         headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
         userId = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USERID);
         if (!headImge.isEmpty()) {
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, personalHeadImgIv
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + headImge, personalHeadImgIv
+                    , MyBaseApplication.getApplication().optionsHead);
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + headImge, personalHeadBg
                     , MyBaseApplication.getApplication().optionsHead);
             personalHeadNameTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
         }
 
         OkHttpUtils.get().url(Common.Url_Personal + userId)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_PERSONAL_ID).id(Common.NET_PERSONAL_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, false));
     }
@@ -97,7 +107,7 @@ public class PersonalActivity extends MyBaseActivity {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_PERSONAL_ID) {
             mGetPersonalInformationModel = mGson.fromJson(data, GetPersonalInformationModel.class);
-            personalAttentionNumTx.setText(mGetPersonalInformationModel.getBody().getLikeNum()+"");
+            personalAttentionNumTx.setText(mGetPersonalInformationModel.getBody().getLikeNum() + "");
         }
     }
 

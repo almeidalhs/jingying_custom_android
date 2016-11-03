@@ -35,6 +35,7 @@ public  class SoundMeter {
 		if (!f.exists()) {
 			f.mkdirs();
 		}
+
 		if (mRecorder == null) {
 			mRecorder = new MediaRecorder();
 			mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);

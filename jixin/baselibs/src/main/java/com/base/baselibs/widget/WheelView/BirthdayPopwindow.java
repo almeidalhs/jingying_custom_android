@@ -122,9 +122,9 @@ public class BirthdayPopwindow {
         popNewTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mYearWheel.setCurrentItem(getNowYear());
-                mMonthWheel.setCurrentItem(getNowMonth());
-                mDayWheel.setCurrentItem(getNowMonthDay());
+                mYearWheel.setCurrentItem(getNowYear(), true);
+                mMonthWheel.setCurrentItem(getNowMonth(), true);
+                mDayWheel.setCurrentItem(getNowMonthDay(), true);
             }
         });
 
@@ -133,6 +133,7 @@ public class BirthdayPopwindow {
         mYearWheel.setVisibleItems(5);
         mYearWheel.setViewAdapter(mYearAdapter);
         mYearWheel.setCurrentItem(mYearId);
+        mYearWheel.setCyclic(true);
         mYearWheel.addChangingListener(new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
@@ -147,6 +148,11 @@ public class BirthdayPopwindow {
             public void onScrollingFinished(WheelView wheel) {
                 mYear = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
                 mYearId = wheel.getCurrentItem();
+                if (Integer.parseInt(mYear) > time.year) {
+                    mYearWheel.setCurrentItem(getNowYear(), true);
+                    mMonthWheel.setCurrentItem(getNowMonth(), true);
+                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
+                }
             }
         });
 
@@ -155,6 +161,7 @@ public class BirthdayPopwindow {
         mMonthWheel.setVisibleItems(5);
         mMonthWheel.setViewAdapter(mMonthAdapter);
         mMonthWheel.setCurrentItem(mMonthId);
+        mMonthWheel.setCyclic(true);
         mMonthWheel.addChangingListener(new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
@@ -177,9 +184,18 @@ public class BirthdayPopwindow {
                 mDayAdapter = new PopwindowsAdapter(context, mDayWheel, mDayList, 0, 0, 0);
                 mDayWheel.setViewAdapter(mDayAdapter);
                 if (mDayId>=mDayAdapter.getItemsCount()) {
-                    mDayWheel.setCurrentItem(mDayAdapter.getItemsCount()-1);
+                    mDayWheel.setCurrentItem(mDayAdapter.getItemsCount()-1, true);
                 } else {
-                    mDayWheel.setCurrentItem(mDayId);
+                    mDayWheel.setCurrentItem(mDayId, true);
+                }
+
+                if (Integer.parseInt(mYear) >= time.year
+                        && Integer.parseInt(mMonth) >= (time.month+1)) {
+                    if (Integer.parseInt(mMonth) > (time.month+1)) {
+                        mMonthWheel.setCurrentItem(getNowMonth(), true);
+                    }
+                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
+                    mDayId = getNowMonthDay();
                 }
             }
         });
@@ -189,6 +205,7 @@ public class BirthdayPopwindow {
         mDayWheel.setVisibleItems(5);
         mDayWheel.setViewAdapter(mDayAdapter);
         mDayWheel.setCurrentItem(mDayId);
+        mDayWheel.setCyclic(true);
         mDayWheel.addChangingListener(new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
@@ -203,6 +220,11 @@ public class BirthdayPopwindow {
             public void onScrollingFinished(WheelView wheel) {
                 mDay = (String) mDayAdapter.getItemText(wheel.getCurrentItem());
                 mDayId = wheel.getCurrentItem();
+                if (Integer.parseInt(mYear) >= time.year
+                        && Integer.parseInt(mMonth) >= (time.month+1)
+                        && Integer.parseInt(mDay) > time.monthDay) {
+                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
+                }
             }
         });
 

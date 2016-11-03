@@ -112,9 +112,17 @@ public class StoreDetailActivity extends MyBaseActivity {
             storedetailHeadIntegralTx.setText(mStoreInformationModel.getBody().getDescription());
             storedetailAddrTx.setText(mStoreInformationModel.getBody().getStoreAddress());
             storedetailPhoneTx.setText(mStoreInformationModel.getBody().getStoreTel());
-            storedetailWorktimeTx.setText(mStoreInformationModel.getBody().getStoreWorkingTime());
+            storedetailWorktimeTx.setText(changeStr(mStoreInformationModel.getBody().getOpenTime()));
 
         }
+    }
+
+    private StringBuilder changeStr(String str) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(2, ":");
+        sb.insert(5, "-");
+        sb.insert(8, ":");
+        return sb;
     }
 
     @Override
