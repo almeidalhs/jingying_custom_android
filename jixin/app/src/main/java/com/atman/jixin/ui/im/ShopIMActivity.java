@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,8 +26,10 @@ import com.atman.jixin.adapter.P2PChatAdapter;
 import com.atman.jixin.model.MessageEvent;
 import com.atman.jixin.model.bean.ChatListModel;
 import com.atman.jixin.model.bean.ChatMessageModel;
+import com.atman.jixin.model.bean.LocationNumberModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
+import com.atman.jixin.model.greendao.gen.LocationNumberModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.EventActionType;
@@ -49,6 +52,7 @@ import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.UiHelper;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
+import com.atman.jixin.widget.EditTextDialog;
 import com.atman.jixin.widget.downfile.DownloadAudioFile;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.iimp.EditCheckBack;
@@ -81,7 +85,8 @@ import okhttp3.Response;
  */
 
 public class ShopIMActivity extends MyBaseActivity
-        implements AdapterInterface, EditCheckBack, P2PChatAdapter.P2PAdapterInter, DownloadAudioFile.onDownInterface {
+        implements AdapterInterface, EditCheckBack, P2PChatAdapter.P2PAdapterInter
+        , DownloadAudioFile.onDownInterface, EditTextDialog.ETOnClick {
 
     @Bind(R.id.p2pchat_lv)
     PullToRefreshListView p2pchatLv;
@@ -125,6 +130,7 @@ public class ShopIMActivity extends MyBaseActivity
 
     private ChatListModelDao mChatListModelDao;
     private ChatMessageModelDao mChatMessageModelDao;
+    private LocationNumberModelDao mLocationNumberModelDao;
     private ChatMessageModel allMessage;
     private List<ChatMessageModel> allMessageList = new ArrayList<>();
 
@@ -143,6 +149,8 @@ public class ShopIMActivity extends MyBaseActivity
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private AnimationDrawable mAnimationDrawable;
     private boolean isChange = false;
+
+    private EditTextDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +209,7 @@ public class ShopIMActivity extends MyBaseActivity
 
         mChatListModelDao = MyBaseApplication.getApplication().getDaoSession().getChatListModelDao();
         mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
+        mLocationNumberModelDao = MyBaseApplication.getApplication().getDaoSession().getLocationNumberModelDao();
 
         allMessageList = mChatMessageModelDao.queryBuilder().where(ChatMessageModelDao.Properties.TargetId.eq(storeId)
                 , ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().list();
@@ -257,8 +266,26 @@ public class ShopIMActivity extends MyBaseActivity
                     isChange = false;
                     mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
                 } else {
-                    buildMessage(ADChatType.ADChatType_Text
-                            , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
+                    if (mGVAdapter.getItem(position).getIdentifyChange()==1) {
+                        LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
+                                .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                                        , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                        String content = "";
+                        if (locationNumberModel!=null && locationNumberModel.getLocation()!=null) {
+                            content = locationNumberModel.getLocation();
+                        }
+                        dialog = new EditTextDialog(mContext
+                                , mGVAdapter.getItem(position).getIdentifyChangeNotice(), "", content
+                                , false, ShopIMActivity.this);
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                            p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+                            p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
+                        }
+                    } else {
+                        buildMessage(ADChatType.ADChatType_Text
+                                , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
+                    }
                 }
             }
         });
@@ -789,5 +816,47 @@ public class ShopIMActivity extends MyBaseActivity
     @Override
     public void error() {
         showToast("播放失败");
+    }
+
+    @Override
+    public void onItemClick(View view, String str) {
+        if (isIMOpen() && view.getWindowToken()!=null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+        }
+        switch (view.getId()) {
+            case R.id.edittext_dialog_cancel_tx:
+                dialog.dismiss();
+                break;
+            case R.id.edittext_dialog_ok_tx:
+                dialog.dismiss();
+                LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
+                        .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                                , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                if (locationNumberModel==null) {
+                    LocationNumberModel locationTemp = new LocationNumberModel(null, storeId
+                            , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), str);
+                    mLocationNumberModelDao.save(locationTemp);
+                } else {
+                    locationNumberModel.setLocation(str);
+                    mLocationNumberModelDao.update(locationNumberModel);
+                }
+                if (str.isEmpty()) {
+                    showToast("您已取消设置");
+                } else {
+                    showToast("修改成功");
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onTouchOutside(EditText edittextDialogEt) {
+        if (isIMOpen() && edittextDialogEt.getWindowToken()!=null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(edittextDialogEt.getWindowToken(), 0); //强制隐藏键盘
+        } else {
+            dialog.dismiss();
+        }
     }
 }

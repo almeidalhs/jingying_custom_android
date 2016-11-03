@@ -51,7 +51,7 @@ public class ExchangeRecordModel {
         private int state;
         private int amount;
         private String goodsImage;
-        private int goodsPrice;
+        private double goodsPrice;
         private String goodsName;
         private int userLimit;
         private long goodsId;
@@ -125,11 +125,11 @@ public class ExchangeRecordModel {
             this.goodsImage = goodsImage;
         }
 
-        public int getGoodsPrice() {
+        public double getGoodsPrice() {
             return goodsPrice;
         }
 
-        public void setGoodsPrice(int goodsPrice) {
+        public void setGoodsPrice(double goodsPrice) {
             this.goodsPrice = goodsPrice;
         }
 

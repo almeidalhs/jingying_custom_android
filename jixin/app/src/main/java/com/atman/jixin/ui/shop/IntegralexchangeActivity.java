@@ -214,7 +214,7 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
                         }
                         cion = mAdapter.getItem(position).getIntegral();
                         id = mAdapter.getItem(position).getId();
-                        dialog = new EditTextDialog(mContext, str, this);
+                        dialog = new EditTextDialog(mContext, "", str, "1", true, this);
                         dialog.show();
                     } else {
                         showWraning("此商品已兑换完,看看其他商品吧");
