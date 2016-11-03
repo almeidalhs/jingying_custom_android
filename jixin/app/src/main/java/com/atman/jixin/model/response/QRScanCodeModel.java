@@ -286,6 +286,43 @@ public class QRScanCodeModel implements Serializable {
             private long sendTime;
             private String content;
             private int type;
+            private String imageT_icon;
+            private String imageT_title;
+            private String imageT_back;
+            private EventActionBean eventAction;
+
+            public String getImageT_icon() {
+                return imageT_icon;
+            }
+
+            public void setImageT_icon(String imageT_icon) {
+                this.imageT_icon = imageT_icon;
+            }
+
+            public String getImageT_title() {
+                return imageT_title;
+            }
+
+            public void setImageT_title(String imageT_title) {
+                this.imageT_title = imageT_title;
+            }
+
+            public String getImageT_back() {
+                return imageT_back;
+            }
+
+            public void setImageT_back(String imageT_back) {
+                this.imageT_back = imageT_back;
+            }
+
+            public EventActionBean getEventAction() {
+                return eventAction;
+            }
+
+            public void setEventAction(EventActionBean eventAction) {
+                this.eventAction = eventAction;
+            }
+
             /**
              * operaterId : 1685
              * operaterName : 返回上级
@@ -366,10 +403,103 @@ public class QRScanCodeModel implements Serializable {
                 this.operaterList = operaterList;
             }
 
+            public static class EventActionBean implements Serializable {
+                private int actionType;
+                private long couponId;
+                private int enterpriseId;
+                private long goodId;
+                private long storeId;
+
+                public int getActionType() {
+                    return actionType;
+                }
+
+                public void setActionType(int actionType) {
+                    this.actionType = actionType;
+                }
+
+                public long getCouponId() {
+                    return couponId;
+                }
+
+                public void setCouponId(long couponId) {
+                    this.couponId = couponId;
+                }
+
+                public int getEnterpriseId() {
+                    return enterpriseId;
+                }
+
+                public void setEnterpriseId(int enterpriseId) {
+                    this.enterpriseId = enterpriseId;
+                }
+
+                public long getGoodId() {
+                    return goodId;
+                }
+
+                public void setGoodId(long goodId) {
+                    this.goodId = goodId;
+                }
+
+                public long getStoreId() {
+                    return storeId;
+                }
+
+                public void setStoreId(long storeId) {
+                    this.storeId = storeId;
+                }
+            }
+
             public static class OperaterListBean implements Serializable {
                 private long operaterId;
                 private String operaterName;
+                private String operaterExtra;
+                private String identifyChangeNotice;
                 private int operaterType;
+                private int identifyChange;
+                private int identifyNeed;//操作此服务需要识别编号  1:需要 非1:不需要？
+                private boolean structLanguage;
+
+                public boolean isStructLanguage() {
+                    return structLanguage;
+                }
+
+                public void setStructLanguage(boolean structLanguage) {
+                    this.structLanguage = structLanguage;
+                }
+
+                public String getOperaterExtra() {
+                    return operaterExtra;
+                }
+
+                public void setOperaterExtra(String operaterExtra) {
+                    this.operaterExtra = operaterExtra;
+                }
+
+                public String getIdentifyChangeNotice() {
+                    return identifyChangeNotice;
+                }
+
+                public void setIdentifyChangeNotice(String identifyChangeNotice) {
+                    this.identifyChangeNotice = identifyChangeNotice;
+                }
+
+                public int getIdentifyChange() {
+                    return identifyChange;
+                }
+
+                public void setIdentifyChange(int identifyChange) {
+                    this.identifyChange = identifyChange;
+                }
+
+                public int getIdentifyNeed() {
+                    return identifyNeed;
+                }
+
+                public void setIdentifyNeed(int identifyNeed) {
+                    this.identifyNeed = identifyNeed;
+                }
 
                 public long getOperaterId() {
                     return operaterId;

@@ -64,6 +64,7 @@ import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
+import com.tbl.okhttputils.utils.L;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -329,6 +330,93 @@ public class ShopIMActivity extends MyBaseActivity
             mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
             if (mGVAdapter.getCount()==0) {
                 setNotService();
+            }
+            if (!isFromList) {
+                if (mQRScanCodeModel!=null && !isChange) {
+
+                    //添加聊天列表
+                    ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
+                            , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                    if (mChatListModel==null) {
+                        if (avatar.isEmpty() || mQRScanCodeModel.getBody().getMessageBean().getTargetName().isEmpty()) {
+                            return;
+                        }
+                        ChatListModel tempChat = new ChatListModel(null, mQRScanCodeModel.getBody().getMessageBean().getTargetId()
+                                , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), mQRScanCodeModel.getBody().getMessageBean().getTargetType()
+                                , mQRScanCodeModel.getBody().getMessageBean().getSendTime(), mQRScanCodeModel.getBody().getMessageBean().getContent(), 0, "", mQRScanCodeModel.getBody().getMessageBean().getTargetName(), avatar
+                                , mQRScanCodeModel.getBody().getMessageBean().getType());
+                        mChatListModelDao.save(tempChat);
+                    } else {
+                        mChatListModel.setSendTime(mQRScanCodeModel.getBody().getMessageBean().getSendTime());
+                        mChatListModel.setUnreadNum(0);
+                        mChatListModel.setContent(mQRScanCodeModel.getBody().getMessageBean().getContent());
+                        mChatListModel.setType(mQRScanCodeModel.getBody().getMessageBean().getType());
+                        mChatListModelDao.update(mChatListModel);
+                    }
+
+                    //添加聊天记录
+                    ChatMessageModel tempMessage = new ChatMessageModel();
+                    tempMessage.setId(null);
+                    tempMessage.setTargetId(mQRScanCodeModel.getBody().getMessageBean().getTargetId());
+                    tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
+                    tempMessage.setType(mQRScanCodeModel.getBody().getMessageBean().getType());
+                    tempMessage.setTargetType(mQRScanCodeModel.getBody().getMessageBean().getTargetType());
+                    tempMessage.setTargetName(mQRScanCodeModel.getBody().getMessageBean().getTargetName());
+                    tempMessage.setTargetAvatar(avatar);
+                    tempMessage.setSendTime(mQRScanCodeModel.getBody().getMessageBean().getSendTime());
+                    tempMessage.setContent(mQRScanCodeModel.getBody().getMessageBean().getContent());
+
+                    if (mQRScanCodeModel.getBody().getMessageBean().getImageT_back()!=null) {
+                        tempMessage.setImageT_back(mQRScanCodeModel.getBody().getMessageBean().getImageT_back());
+                        tempMessage.setImageT_icon(mQRScanCodeModel.getBody().getMessageBean().getImageT_icon());
+                        tempMessage.setImageT_title(mQRScanCodeModel.getBody().getMessageBean().getImageT_title());
+                    }
+
+                    if (mQRScanCodeModel.getBody().getMessageBean().getEventAction()!=null) {
+                        tempMessage.setActionType(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType());
+                    }
+
+                    if (mQRScanCodeModel.getBody().getMessageBean().getOperaterList()!=null
+                            && mQRScanCodeModel.getBody().getMessageBean().getOperaterList().size()>=1) {
+                        tempMessage.setOperaterId(mQRScanCodeModel.getBody().getMessageBean().getOperaterList().get(0).getOperaterId());
+                        tempMessage.setOperaterName(mQRScanCodeModel.getBody().getMessageBean().getOperaterList().get(0).getOperaterName());
+                        tempMessage.setOperaterType(mQRScanCodeModel.getBody().getMessageBean().getOperaterList().get(0).getOperaterType());
+                    }
+
+                    tempMessage.setReaded(0);
+                    tempMessage.setSendStatus(0);
+                    tempMessage.setSelfSend(false);
+                    mAdapter.addImMessageDao(tempMessage);
+                    mChatMessageModelDao.save(tempMessage);
+
+                    List<QRScanCodeModel.BodyBean.MessageBeanBean.OperaterListBean> tempList =
+                            mQRScanCodeModel.getBody().getMessageBean().getOperaterList();
+                    if (tempList==null) {
+                        return;
+                    }
+                    isChange = true;
+                    List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> allList = new ArrayList<>();
+                    for (int i=0;i<tempList.size();i++) {
+                        GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean temp
+                                = new GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean();
+                        temp.setOperaterId(tempList.get(i).getOperaterId());
+                        temp.setOperaterName(tempList.get(i).getOperaterName());
+                        temp.setOperaterType(tempList.get(i).getOperaterType());
+                        if (tempList.get(i).getOperaterExtra()!=null) {
+                            temp.setOperaterExtra(tempList.get(i).getOperaterExtra());
+                        }
+                        if (tempList.get(i).getIdentifyChangeNotice()!=null) {
+                            temp.setIdentifyChangeNotice(tempList.get(i).getIdentifyChangeNotice());
+                        }
+                        temp.setIdentifyChange(tempList.get(i).getIdentifyChange());
+                        temp.setIdentifyNeed(tempList.get(i).getIdentifyNeed());
+                        allList.add(temp);
+                    }
+                    GetMessageModel.ContentBean operaterList = new GetMessageModel.ContentBean();
+                    operaterList.setOperaterList(allList);
+
+                    mGVAdapter.updateListView(operaterList.getOperaterList());
+                }
             }
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
             super.onStringResponse(data, response, id);
