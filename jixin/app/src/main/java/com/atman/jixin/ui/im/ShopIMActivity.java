@@ -262,33 +262,47 @@ public class ShopIMActivity extends MyBaseActivity
         p2pchatServiceGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mGVAdapter.getItem(position).getOperaterType()==7) {
+                if (mGVAdapter.getItem(position).getOperaterType()==7) {//返回上一级
                     isChange = false;
                     mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
                 } else {
-                    if (mGVAdapter.getItem(position).getIdentifyChange()==1) {
-                        LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
-                                .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
-                                        , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                    LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
+                            .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                                    , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+                    if (mGVAdapter.getItem(position).getIdentifyChange()==1) {//更改桌号
                         String content = "";
                         if (locationNumberModel!=null && locationNumberModel.getLocation()!=null) {
                             content = locationNumberModel.getLocation();
                         }
-                        dialog = new EditTextDialog(mContext
-                                , mGVAdapter.getItem(position).getIdentifyChangeNotice(), "", content
-                                , false, ShopIMActivity.this);
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                            p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
-                            p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
-                        }
+                        showLactionDialog(position, content);
                     } else {
+                        String loactionNum = "";
+                        if (mGVAdapter.getItem(position).getIdentifyNeed()==1) {//是否需要桌号
+                            if (locationNumberModel==null || locationNumberModel.getLocation().isEmpty()) {
+                                showLactionDialog(position, "");
+                                return;
+                            } else {
+                                loactionNum = locationNumberModel.getLocation();
+                            }
+                        }
                         buildMessage(ADChatType.ADChatType_Text
-                                , mGVAdapter.getItem(position).getOperaterName(), true, mGVAdapter.getItem(position));
+                                , mGVAdapter.getItem(position).getOperaterName(), loactionNum, true
+                                , mGVAdapter.getItem(position));
                     }
                 }
             }
         });
+    }
+
+    private void showLactionDialog(int position, String content) {
+        dialog = new EditTextDialog(mContext
+                , mGVAdapter.getItem(position).getIdentifyChangeNotice(), "", content
+                , false, 0, ShopIMActivity.this);
+        if (!dialog.isShowing()) {
+            dialog.show();
+            p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+            p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -472,7 +486,7 @@ public class ShopIMActivity extends MyBaseActivity
                 break;
             case R.id.p2pchat_send_bt:
                 buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim()
-                        , false, null);
+                        , "", false, null);
                 break;
             case R.id.p2pchat_add_picture_tv:
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
@@ -491,13 +505,14 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    private void buildMessage(int adChatType, String content, boolean isService
+    private void buildMessage(int adChatType, String content, String loactionNum, boolean isService
             , GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean bean) {
         adChatTypeText = adChatType;
         temp = new MessageModel();
         temp.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
         temp.setTargetId(storeId);
         temp.setTargetName(name);
+        temp.setIdentifyStr(loactionNum);
         temp.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
         temp.setSendTime(System.currentTimeMillis());
         temp.setContent(content);
@@ -625,7 +640,7 @@ public class ShopIMActivity extends MyBaseActivity
                     return;
                 }
 
-                buildMessage(ADChatType.ADChatType_Audio, audioURL, false, null);
+                buildMessage(ADChatType.ADChatType_Audio, audioURL, "", false, null);
             }
         } else {
             if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
@@ -641,7 +656,7 @@ public class ShopIMActivity extends MyBaseActivity
                         showToast("发送失败");
                         return;
                     }
-                    buildMessage(ADChatType.ADChatType_Image, temp.getPath(), false, null);
+                    buildMessage(ADChatType.ADChatType_Image, temp.getPath(), "",false, null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -819,7 +834,7 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     @Override
-    public void onItemClick(View view, String str) {
+    public void onItemClick(View view, String str, int tagId) {
         if (isIMOpen() && view.getWindowToken()!=null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘

@@ -28,15 +28,17 @@ public class EditTextDialog extends Dialog {
     private Context context;;
     private String str;
     private String strTitle;
+    private int tagId;
     private String content;
     private ETOnClick mETOnClick;
     private boolean isNum;
 
     public EditTextDialog(Context context, String strTitle, String str, String content, boolean isNum
-            , ETOnClick mETOnClick) {
+            , int tagId, ETOnClick mETOnClick) {
         super(context, R.style.edittextDialog);
         this.context = context;
         this.str = str;
+        this.tagId = tagId;
         this.strTitle = strTitle;
         this.content = content;
         this.isNum = isNum;
@@ -84,14 +86,14 @@ public class EditTextDialog extends Dialog {
         edittextDialogCancelTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mETOnClick.onItemClick(v, edittextDialogNumEt.getText().toString().trim());
+                mETOnClick.onItemClick(v, edittextDialogNumEt.getText().toString().trim(), tagId);
             }
         });
 
         edittextDialogOkTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mETOnClick.onItemClick(v, edittextDialogNumEt.getText().toString().trim());
+                mETOnClick.onItemClick(v, edittextDialogNumEt.getText().toString().trim(), tagId);
             }
         });
     }
@@ -115,7 +117,7 @@ public class EditTextDialog extends Dialog {
     }
 
     public interface ETOnClick {
-        void onItemClick(View view, String str);
+        void onItemClick(View view, String str, int tag);
 
         void onTouchOutside(EditText edittextDialogEt);
     }

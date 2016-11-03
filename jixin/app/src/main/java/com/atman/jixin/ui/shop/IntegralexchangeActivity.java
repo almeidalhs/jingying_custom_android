@@ -13,9 +13,12 @@ import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.IntegralExchangeAdapter;
+import com.atman.jixin.model.bean.LocationNumberModel;
+import com.atman.jixin.model.greendao.gen.LocationNumberModelDao;
 import com.atman.jixin.model.response.IntegralGoodsModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.widget.EditTextDialog;
 import com.base.baselibs.iimp.AdapterInterface;
@@ -60,6 +63,10 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     private long id;
     private int displayNum;
     private int totalNum = 0;
+    private int tagNumId = 11;
+    private int tagLocationId = 22;
+
+    private LocationNumberModelDao mLocationNumberModelDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,9 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
+
+        mLocationNumberModelDao = MyBaseApplication.getApplication().getDaoSession().getLocationNumberModelDao();
+
         setBarRightIv(R.mipmap.exchangerecode_ic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +183,9 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
         } else if (id == Common.NET_EXCHANGE_ID) {
             BaseNormalModel temp = mGson.fromJson(data, BaseNormalModel.class);
             if (temp.getResult().equals("1")) {
+                if (dialog!=null) {
+                    dialog.dismiss();
+                }
                 showToast("商品兑换成功");
                 myIntegral -= (cion*totalNum);
                 LogUtils.e("myIntegral:"+myIntegral);
@@ -214,7 +227,7 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
                         }
                         cion = mAdapter.getItem(position).getIntegral();
                         id = mAdapter.getItem(position).getId();
-                        dialog = new EditTextDialog(mContext, "", str, "1", true, this);
+                        dialog = new EditTextDialog(mContext, "", str, "1", true, tagNumId, this);
                         dialog.show();
                     } else {
                         showWraning("此商品已兑换完,看看其他商品吧");
@@ -225,22 +238,35 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     }
 
     @Override
-    public void onItemClick(View view, String str) {
+    public void onItemClick(View view, String str, int tagId) {
         switch (view.getId()) {
             case R.id.edittext_dialog_cancel_tx:
                 dialog.dismiss();
                 break;
             case R.id.edittext_dialog_ok_tx:
-                if (str.isEmpty()) {
-                    showToast("请输入兑换数量");
-                    return;
+                if (tagId == tagNumId) {
+                    if (str.isEmpty()) {
+                        showToast("请输入兑换数量");
+                        return;
+                    }
+                    if (Integer.parseInt(str) > displayNum) {
+                        showToast("超过最大兑换数量");
+                        return;
+                    }
+                    dialog.dismiss();
+                    showAgain(cion, Integer.parseInt(str));
+                } else if (tagId == tagLocationId) {
+                    Map<String, String> p = new HashMap<String, String>();
+                    p.put("id", id+"");
+                    p.put("amount", totalNum+"");
+                    p.put("addressDetail", str);
+                    OkHttpUtils.postString().url(Common.Url_Exchange).tag(Common.NET_EXCHANGE_ID)
+                            .id(Common.NET_EXCHANGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
+                            .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .build().execute(new MyStringCallback(mContext, "兑换中..."
+                            , IntegralexchangeActivity.this, true));
                 }
-                if (Integer.parseInt(str) > displayNum) {
-                    showToast("超过最大兑换数量");
-                    return;
-                }
-                dialog.dismiss();
-                showAgain(cion, Integer.parseInt(str));
                 break;
         }
     }
@@ -259,18 +285,27 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                Map<String, String> p = new HashMap<String, String>();
-                p.put("id", id+"");
-                p.put("amount", num+"");
-                OkHttpUtils.postString().url(Common.Url_Exchange).tag(Common.NET_EXCHANGE_ID)
-                        .id(Common.NET_EXCHANGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
-                        .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .build().execute(new MyStringCallback(mContext, "兑换中..."
-                        , IntegralexchangeActivity.this, true));
+                LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
+                        .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                                , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+
+                String content = "";
+                if (locationNumberModel!=null && locationNumberModel.getLocation()!=null) {
+                    content = locationNumberModel.getLocation();
+                }
+                showLactionDialog(0, content);
             }
         });
         builder.show();
+    }
+
+    private void showLactionDialog(int position, String content) {
+        dialog = new EditTextDialog(mContext
+                , "请输入您的桌号或区域编号", "", content
+                , false, tagLocationId, IntegralexchangeActivity.this);
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override
