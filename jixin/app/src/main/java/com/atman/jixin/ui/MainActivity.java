@@ -29,7 +29,6 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
-import com.atman.jixin.ui.personal.PersonalSettingActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
@@ -128,9 +127,20 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
         initListView();
     }
 
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        super.onPullDownToRefresh(refreshView);
+        onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullRefreshRecycler);
+        startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
+    }
+
     private void initListView() {
 
-        initRefreshView(PullToRefreshBase.Mode.DISABLED, pullRefreshRecycler);
+        initRefreshView(PullToRefreshBase.Mode.PULL_FROM_START, pullRefreshRecycler);
+        // 下拉刷新时的提示文本设置
+        pullRefreshRecycler.getLoadingLayoutProxy(true, false).setPullLabel("下拉进行扫一扫");
+        pullRefreshRecycler.getLoadingLayoutProxy(true, false).setRefreshingLabel("下拉进行扫一扫");
+        pullRefreshRecycler.getLoadingLayoutProxy(true, false).setReleaseLabel("松开来扫一扫");
 
         mAdapter = new ChatSessionListAdapter(mContext, getmWidth(), this);
 

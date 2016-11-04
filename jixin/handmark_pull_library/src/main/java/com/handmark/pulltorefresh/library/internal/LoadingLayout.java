@@ -33,6 +33,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -47,7 +48,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
 	static final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
 
-	private FrameLayout mInnerLayout;
+	private RelativeLayout mInnerLayout;
 
 	protected final ImageView mHeaderImage;
 	protected final ProgressBar mHeaderProgress;
@@ -79,7 +80,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 				break;
 		}
 
-		mInnerLayout = (FrameLayout) findViewById(R.id.fl_inner);
+		mInnerLayout = (RelativeLayout) findViewById(R.id.fl_inner);
 		mHeaderText = (TextView) mInnerLayout.findViewById(R.id.pull_to_refresh_text);
 		mHeaderProgress = (ProgressBar) mInnerLayout.findViewById(R.id.pull_to_refresh_progress);
 		mSubHeaderText = (TextView) mInnerLayout.findViewById(R.id.pull_to_refresh_sub_text);
