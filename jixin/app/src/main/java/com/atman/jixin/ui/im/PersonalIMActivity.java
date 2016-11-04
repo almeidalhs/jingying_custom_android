@@ -410,7 +410,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
             }
             ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
                     , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
-                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar, adChatType);
+                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar, adChatType, temp.getChatId());
             mChatListModelDao.save(tempChat);
         } else {
             mChatListModel.setSendTime(temp.getSendTime());

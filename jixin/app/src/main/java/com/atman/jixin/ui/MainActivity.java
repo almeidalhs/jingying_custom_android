@@ -31,6 +31,7 @@ import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceConversionUtil;
+import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
@@ -104,6 +105,9 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
+
+        int noticeId = getIntent().getIntExtra(ResidentNotificationHelper.NOTICE_ID_KEY, -1);
+        ResidentNotificationHelper.clearNotification(mContext, noticeId);
 
         messageEmptyTv.setText(Html.fromHtml(
                 "您还没有聊天记录<p>点击下方[<font color=\"#16c5ee\">一扫即应</font>]开始扫描二维码吧"));
@@ -252,6 +256,7 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                 .where(ChatListModelDao.Properties.TargetId.eq(mAdapter.getItem(position).getTargetId())
                         , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
         if (mChatListModel != null) {
+            ResidentNotificationHelper.clearNotification(mContext, (int) mChatListModel.getChatId());
             mChatListModel.setUnreadNum(0);
             mChatListModelDao.update(mChatListModel);
             mAdapter.clearUnreadNum(position);

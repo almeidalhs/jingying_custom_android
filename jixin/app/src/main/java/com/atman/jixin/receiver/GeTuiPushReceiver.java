@@ -1,23 +1,30 @@
 package com.atman.jixin.receiver;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.atman.jixin.R;
 import com.atman.jixin.model.MessageEvent;
 import com.atman.jixin.model.bean.ChatListModel;
 import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
+import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.response.GetMessageModel;
+import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.util.LogUtils;
 import com.google.gson.Gson;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 /**
  * Created by tangbingliang on 16/10/25.
@@ -65,7 +72,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
                     LogUtils.e("data:"+data);
                     GetMessageModel mGetMessageModel = new Gson().fromJson(data, GetMessageModel.class);
                     LogUtils.e("mGetMessageModel.getContent().getChatId():"+mGetMessageModel.getContent().getChatId());
-                    saveGetMessage(mGetMessageModel);
+                    saveGetMessage(context, mGetMessageModel);
                 }
                 break;
 
@@ -151,8 +158,27 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         }
     }
 
-    private void saveGetMessage(GetMessageModel mGetMessageModel) {
+    private void saveGetMessage(Context context, GetMessageModel mGetMessageModel) {
+
         GetMessageModel.ContentBean temp = mGetMessageModel.getContent();
+        String content = temp.getTargetName()+" : ";
+        String sessionContent = "";
+        if (temp.getType() == ADChatType.ADChatType_Text) {
+            content += temp.getContent();
+            sessionContent = temp.getContent();
+        } else if (temp.getType() == ADChatType.ADChatType_Image) {
+            content += "[图片]";
+            sessionContent = "[图片]";
+        } else if (temp.getType() == ADChatType.ADChatType_ImageText) {
+            content += temp.getImageT_title();
+            sessionContent = temp.getImageT_title();
+        } else if (temp.getType() == ADChatType.ADChatType_Audio) {
+            content += "[语音]";
+            sessionContent = "[语音]";
+        } else if (temp.getType() == ADChatType.ADChatType_Video) {
+            sessionContent = "[视频]";
+        }
+
         LogUtils.e("temp.getChatId():"+temp.getChatId());
         //添加聊天列表
         ChatListModel mChatListModel= mChatListModelDao.queryBuilder()
@@ -162,12 +188,13 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
             ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
                     , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
                     , temp.getSendTime(), temp.getContent(), 1, "", temp.getTargetName()
-                    , temp.getTargetAvatar(), temp.getType());
+                    , temp.getTargetAvatar(), temp.getType(), temp.getChatId());
             mChatListModelDao.save(tempChat);
         } else {
             mChatListModel.setSendTime(temp.getSendTime());
             mChatListModel.setUnreadNum(mChatListModel.getUnreadNum()+1);
-            mChatListModel.setContent(temp.getContent());
+
+            mChatListModel.setContent(sessionContent);
             mChatListModel.setType(temp.getType());
             mChatListModelDao.update(mChatListModel);
         }
@@ -225,6 +252,31 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         tempMessage.setSendStatus(0);
         tempMessage.setSelfSend(false);
         mChatMessageModelDao.save(tempMessage);
+        if (!isAppOnFreground(context)) {
+            ResidentNotificationHelper.sendResidentNoticeType0(context
+                    , temp.getSendTime(), content, temp.getChatId());
+        }
         EventBus.getDefault().post(new MessageEvent(mGetMessageModel,tempMessage));
+    }
+
+    /**
+     * 是否在后台
+     *
+     * @return
+     */
+    public boolean isAppOnFreground(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        String curPackageName = MyBaseApplication.getApplication().getApplicationContext().getPackageName();
+        List<ActivityManager.RunningAppProcessInfo> app = am.getRunningAppProcesses();
+        if (app == null) {
+            return false;
+        }
+        for (ActivityManager.RunningAppProcessInfo a : app) {
+            if (a.processName.equals(curPackageName) &&
+                    a.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true;
+            }
+        }
+        return false;
     }
 }

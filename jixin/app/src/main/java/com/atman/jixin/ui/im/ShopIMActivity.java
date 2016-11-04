@@ -344,7 +344,7 @@ public class ShopIMActivity extends MyBaseActivity
                         ChatListModel tempChat = new ChatListModel(null, mQRScanCodeModel.getBody().getMessageBean().getTargetId()
                                 , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), mQRScanCodeModel.getBody().getMessageBean().getTargetType()
                                 , mQRScanCodeModel.getBody().getMessageBean().getSendTime(), mQRScanCodeModel.getBody().getMessageBean().getContent(), 0, "", mQRScanCodeModel.getBody().getMessageBean().getTargetName(), avatar
-                                , mQRScanCodeModel.getBody().getMessageBean().getType());
+                                , mQRScanCodeModel.getBody().getMessageBean().getType(),mQRScanCodeModel.getBody().getMessageBean().getChatId());
                         mChatListModelDao.save(tempChat);
                     } else {
                         mChatListModel.setSendTime(mQRScanCodeModel.getBody().getMessageBean().getSendTime());
@@ -650,7 +650,7 @@ public class ShopIMActivity extends MyBaseActivity
             }
             ChatListModel tempChat = new ChatListModel(null, temp.getTargetId()
                     , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), temp.getTargetType()
-                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar, adChatType);
+                    , temp.getSendTime(), temp.getContent(), 0, "", temp.getTargetName(), avatar, adChatType, temp.getChatId());
             mChatListModelDao.save(tempChat);
         } else {
             mChatListModel.setSendTime(temp.getSendTime());
