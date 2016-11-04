@@ -93,6 +93,8 @@ public class Common {
     public static final String Url_Delete_ExchangeRecord = hostUrl + "baiye/rest/integral/manage";
     //删除关注
     public static final String Url_Delete_Attention = hostUrl + "baiye/rest/favor/cancel/";
+    //检查版本更新
+    public static String Url_Get_Version = hostUrl + "baiye/rest/common/androidjyneedUpdate";
     /**************************http访问路径*****************************/
 
 
@@ -164,6 +166,8 @@ public class Common {
     public static int NET_DELETE_EXHANGE_ID = 32;
     //删除关注
     public static int NET_DELETE_ATTENTION_ID = 33;
+    //检查版本更新
+    public static int NET_GET_VERSION_ID = 34;
     /**************************http访问回应识别码*****************************/
 
 

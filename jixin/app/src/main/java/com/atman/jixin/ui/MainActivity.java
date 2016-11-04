@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,12 +22,14 @@ import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
+import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
+import com.atman.jixin.ui.personal.PersonalSettingActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
@@ -46,6 +49,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +142,10 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
+        OkHttpUtils.get().url(Common.Url_Get_Version+"?version="+MyBaseApplication.VERSION)
+                .tag(Common.NET_GET_VERSION_ID).id(Common.NET_GET_VERSION_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .build().execute(new MyStringCallback(mContext, "", MainActivity.this, false));
     }
 
     @Override
@@ -198,6 +206,40 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
             }
         } else if (id == Common.NET_UP_GETTUI_ID) {
 
+        } else if (id == Common.NET_GET_VERSION_ID) {
+            final CheckVersionModel mCheckVersionModel = mGson.fromJson(data, CheckVersionModel.class);
+            if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody()!=null) {
+                PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                builder.setMessage(mCheckVersionModel.getBody().getWarn());
+                builder.setPositiveButton("升级", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        final File updateFile = createFile(MyBaseApplication.VERSION);
+                        if (updateFile != null) {
+                            /**调用系统浏览器在页面中下载*/
+                            Uri uri = Uri.parse(mCheckVersionModel.getBody().getUrl());
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(intent);
+                        } else {
+                            showToast("SD卡路径错误，无法下载");
+                        }
+                    }
+                });
+                if (mCheckVersionModel.getBody().getForce().equals("0")) {
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    builder.setCancelable(false);
+                }
+                builder.show();
+            } else {
+                showToast("已是最新版本");
+            }
         }
     }
 

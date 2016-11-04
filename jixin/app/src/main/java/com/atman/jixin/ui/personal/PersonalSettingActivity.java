@@ -3,6 +3,7 @@ package com.atman.jixin.ui.personal;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.atman.jixin.R;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
+import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.LoginResultModel;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
@@ -134,6 +136,40 @@ public class PersonalSettingActivity extends MyBaseActivity {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
             setSwitchButton();
+        } else if (id == Common.NET_GET_VERSION_ID) {
+            final CheckVersionModel mCheckVersionModel = mGson.fromJson(data, CheckVersionModel.class);
+            if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody()!=null) {
+                PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                builder.setMessage(mCheckVersionModel.getBody().getWarn());
+                builder.setPositiveButton("升级", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        final File updateFile = createFile(MyBaseApplication.VERSION);
+                        if (updateFile != null) {
+                            /**调用系统浏览器在页面中下载*/
+                            Uri uri = Uri.parse(mCheckVersionModel.getBody().getUrl());
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(intent);
+                        } else {
+                            showToast("SD卡路径错误，无法下载");
+                        }
+                    }
+                });
+                if (mCheckVersionModel.getBody().getForce().equals("0")) {
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    builder.setCancelable(false);
+                }
+                builder.show();
+            } else {
+                showToast("已是最新版本");
+            }
         }
     }
 
@@ -151,6 +187,7 @@ public class PersonalSettingActivity extends MyBaseActivity {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_LOGOUT_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_MANAGE_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_VERSION_ID);
     }
 
     @OnClick({R.id.personal_clean_cachedata_ll, R.id.personal_clean_all_ll, R.id.personal_version_ll
@@ -165,6 +202,10 @@ public class PersonalSettingActivity extends MyBaseActivity {
                 break;
             case R.id.personal_version_ll:
                 showToast("检查更新版本...");
+                OkHttpUtils.get().url(Common.Url_Get_Version+"?version="+MyBaseApplication.VERSION)
+                        .tag(Common.NET_GET_VERSION_ID).id(Common.NET_GET_VERSION_ID)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .build().execute(new MyStringCallback(mContext, "检查更新版本...", PersonalSettingActivity.this, true));
                 break;
             case R.id.personal_logout_bt:
                 showExit();

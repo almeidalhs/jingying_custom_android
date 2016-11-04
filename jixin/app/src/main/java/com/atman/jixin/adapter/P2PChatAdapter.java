@@ -253,15 +253,19 @@ public class P2PChatAdapter extends BaseAdapter {
                         holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
                     }
                     String url = temp.getImageT_back();
-                    if (!url.contains("http")) {
-                        url = Common.ImageUrl + temp.getImageT_back();
-                    }
-                    File f = ImageLoader.getInstance().getDiskCache().get(url);
-                    if (f.exists()) {
-                        ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImagetextLeftIv);
+                    if (url.equals("adchat_imagetext_image_coupon")) {
+                        holderText.itemP2pchatImagetextLeftIv.setImageResource(R.mipmap.caidan0003);
                     } else {
-                        ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImagetextLeftIv
-                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                        if (!url.contains("http")) {
+                            url = Common.ImageUrl + temp.getImageT_back();
+                        }
+                        File f = ImageLoader.getInstance().getDiskCache().get(url);
+                        if (f.exists()) {
+                            ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImagetextLeftIv);
+                        } else {
+                            ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImagetextLeftIv
+                                    , MyBaseApplication.getApplication().optionsHead, mListener);
+                        }
                     }
                 }
                 break;
