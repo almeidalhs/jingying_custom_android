@@ -70,7 +70,6 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     private int positionAudio;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private AnimationDrawable mAnimationDrawable;
-    private ImageView mImageView;
     private int mSeekPosition;
     private int cachedHeight;
     private boolean isFullscreen;
@@ -214,6 +213,18 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            if (mAnimationDrawable!=null) {
+                mAnimationDrawable.stop();
+                mAnimationDrawable.selectDrawable(0);
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_STORE_INRRODUCTION_ID);
@@ -293,9 +304,6 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     @Override
     public void onItemAudio(View v, int position, AnimationDrawable animationDrawable, ImageView imageView) {
         positionAudio = position;
-        if (mImageView == null) {
-            mImageView = imageView;
-        }
         switch (v.getId()) {
             case R.id.item_company_audio_start_iv:
                 playAudio(position, animationDrawable, true);
@@ -303,23 +311,25 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         }
     }
 
-    private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
+    private void playAudio(final int position, AnimationDrawable animationDrawable, boolean b) {
         if (mAdapter.getItem(position).getFileUrl()!=null) {
             String path = FileUtils.SDPATH_AUDIO
                     + DownloadAudioFile.getFileName(mAdapter.getItem(position).getFileUrl()+".aac");
             LogUtils.e("path:"+path);
             if ((new File(path).exists())) {
+                cancelLoading();
                 try {
                     if (mMediaPlayer.isPlaying()) {
                         mMediaPlayer.stop();
                         if (mAnimationDrawable!=null) {
                             mAnimationDrawable.stop();
                             mAnimationDrawable.selectDrawable(0);
-                            mImageView.setImageResource(R.mipmap.ic_vedio_start);
+                            mAdapter.updataView(position, companyListView, 0, false);
                         }
                     } else {
                         mAnimationDrawable = animationDrawable;
-                        mImageView.setImageResource(R.mipmap.ic_vedio_stop);
+                        mAdapter.updataView(position, companyListView, 0, false);
+                        mAdapter.updataView(position, companyListView, 0, true);
                         mMediaPlayer.reset();
                         mMediaPlayer.setDataSource(path);
                         mMediaPlayer.prepare();
@@ -330,7 +340,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                                 if (!mp.isPlaying()) {
                                     mAnimationDrawable.stop();
                                     mAnimationDrawable.selectDrawable(0);
-                                    mImageView.setImageResource(R.mipmap.ic_vedio_start);
+                                    mAdapter.updataView(position, companyListView, 0, true);
                                 }
                             }
                         });
@@ -341,6 +351,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                     e.printStackTrace();
                 }
             } else {
+                showLoading("加载中...", false);
                 String downUrl = Common.ImageUrl + mAdapter.getItem(position).getFileUrl();
                 LogUtils.e("downUrl:"+downUrl);
                 if (b) {

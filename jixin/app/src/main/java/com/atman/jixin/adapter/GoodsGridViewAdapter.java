@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +39,7 @@ public class GoodsGridViewAdapter extends BaseAdapter {
     protected LayoutInflater layoutInflater;
     private DecimalFormat df;
     private LinearLayout.LayoutParams params;
-    private LinearLayout.LayoutParams paramsLl;
+    private AbsListView.LayoutParams paramsLl;
 
     public GoodsGridViewAdapter(Context mContext, int wight) {
         this.body = new ArrayList<>();
@@ -47,7 +48,7 @@ public class GoodsGridViewAdapter extends BaseAdapter {
         df = new DecimalFormat("##0.00");
         int w = (wight - DensityUtil.dp2px(mContext,15))/2;
         params = new LinearLayout.LayoutParams(w, w);
-        paramsLl = new LinearLayout.LayoutParams(w, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramsLl = new AbsListView.LayoutParams(w, AbsListView.LayoutParams.WRAP_CONTENT);
     }
 
     public void setBody(List<GetGoodsByClassIdModel.BodyBean> body) {

@@ -61,10 +61,12 @@ import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
+import com.base.baselibs.widget.localalbum.common.ImageUtils;
+import com.base.baselibs.widget.localalbum.common.LocalImageHelper;
+import com.base.baselibs.widget.localalbum.ui.LocalAlbum;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
-import com.tbl.okhttputils.utils.L;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -133,6 +135,7 @@ public class ShopIMActivity extends MyBaseActivity
     private ChatMessageModelDao mChatMessageModelDao;
     private LocationNumberModelDao mLocationNumberModelDao;
     private ChatMessageModel allMessage;
+    private LocationNumberModel mNumberModel;
     private List<ChatMessageModel> allMessageList = new ArrayList<>();
 
     private P2PChatAdapter mAdapter;
@@ -332,7 +335,8 @@ public class ShopIMActivity extends MyBaseActivity
                 setNotService();
             }
             if (!isFromList) {
-                if (mQRScanCodeModel!=null && !isChange) {
+                if (mQRScanCodeModel!=null && mQRScanCodeModel.getBody().getMessageBean()!=null
+                        && !isChange) {
 
                     //添加聊天列表
                     ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
@@ -420,11 +424,16 @@ public class ShopIMActivity extends MyBaseActivity
             }
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
             super.onStringResponse(data, response, id);
+            updateChatMessage(0, "", -1);
             if (adChatTypeText == ADChatType.ADChatType_Text
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
+            } else if (adChatTypeText == ADChatType.ADChatType_Image) {
+                files.remove(fileID);
+                //设置当前选中的图片数量
+                LocalImageHelper.getInstance().setCurrentSize(files.size());
+                seedMorePicMessage();
             }
-            updateChatMessage(0, "", -1);
         } else if (id == Common.NET_UP_PIC_ID) {
 
             HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
@@ -573,14 +582,19 @@ public class ShopIMActivity extends MyBaseActivity
                 handler.postDelayed(runnable, 200);
                 break;
             case R.id.p2pchat_send_bt:
+                if (blogdetailAddcommentEt.getText().toString().trim().isEmpty()) {
+                    return;
+                }
                 buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim()
                         , "", false, null);
                 break;
             case R.id.p2pchat_add_picture_tv:
-                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
-                getAlbum.setType("image/*");
-                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
-                p2pchatAddLl.setVisibility(View.GONE);
+//                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+//                getAlbum.setType("image/*");
+//                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+//                p2pchatAddLl.setVisibility(View.GONE);
+                Intent intent = new Intent(mContext, LocalAlbum.class);
+                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
                 break;
             case R.id.p2pchat_add_camera_tv:
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
@@ -595,12 +609,19 @@ public class ShopIMActivity extends MyBaseActivity
 
     private void buildMessage(int adChatType, String content, String loactionNum, boolean isService
             , GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean bean) {
+
+        mNumberModel = mLocationNumberModelDao.queryBuilder()
+                .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                        , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+
         adChatTypeText = adChatType;
         temp = new MessageModel();
         temp.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
         temp.setTargetId(storeId);
         temp.setTargetName(name);
-        temp.setIdentifyStr(loactionNum);
+        if (mNumberModel!=null) {
+            temp.setIdentifyStr(mNumberModel.getLocation());
+        }
         temp.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
         temp.setSendTime(System.currentTimeMillis());
         temp.setContent(content);
@@ -710,9 +731,21 @@ public class ShopIMActivity extends MyBaseActivity
         overridePendingTransition(com.base.baselibs.R.anim.activity_bottom_in, com.base.baselibs.R.anim.activity_bottom_out);
     }
 
+    private List<LocalImageHelper.LocalFile> files = new ArrayList<>();
+    private int fileID = 0;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP) {
+            if (LocalImageHelper.getInstance().isResultOk()) {
+                LocalImageHelper.getInstance().setResultOk(false);
+                //获取选中的图片
+                files.addAll(0,LocalImageHelper.getInstance().getCheckedItems());
+                seedMorePicMessage();
+            }
+            //清空选中的图片
+            LocalImageHelper.getInstance().getCheckedItems().clear();
+        }
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -738,6 +771,31 @@ public class ShopIMActivity extends MyBaseActivity
             }
             if (imageUri != null) {
                 LogUtils.e("imageUri:"+imageUri);
+                try {
+                    File temp = BitmapTools.revitionImage(mContext, imageUri);
+                    if (temp==null) {
+                        showToast("发送失败");
+                        return;
+                    }
+                    buildMessage(ADChatType.ADChatType_Image, temp.getPath(), "",false, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void seedMorePicMessage() {
+        fileID = files.size()-1;
+        if (fileID<0) {
+            fileID = 0;
+            return;
+        }
+        for (int i = 0; i < files.size(); i++) {
+            if (i==fileID) {
+                LocalImageHelper.getInstance().setCurrentSize(files.size());
+                imageUri = Uri.parse(files.get(i).getOriginalUri());
+                LogUtils.e("imageUri:"+imageUri.toString());
                 try {
                     File temp = BitmapTools.revitionImage(mContext, imageUri);
                     if (temp==null) {

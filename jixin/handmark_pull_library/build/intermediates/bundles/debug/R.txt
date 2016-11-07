@@ -38,6 +38,7 @@ int drawable indicator_bg_bottom 0x7f020003
 int drawable indicator_bg_top 0x7f020004
 int id both 0x7f070004
 int id disabled 0x7f070005
+int id fl 0x7f070010
 int id fl_inner 0x7f07000d
 int id flip 0x7f07000b
 int id gridview 0x7f070000
@@ -49,8 +50,8 @@ int id pullFromStart 0x7f070009
 int id pullUpFromBottom 0x7f07000a
 int id pull_to_refresh_image 0x7f07000e
 int id pull_to_refresh_progress 0x7f07000f
-int id pull_to_refresh_sub_text 0x7f070011
-int id pull_to_refresh_text 0x7f070010
+int id pull_to_refresh_sub_text 0x7f070012
+int id pull_to_refresh_text 0x7f070011
 int id rotate 0x7f07000c
 int id scrollview 0x7f070002
 int id webview 0x7f070003

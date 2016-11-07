@@ -50,6 +50,7 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
 
     private Context mContext = TAPersonalInformationActivity.this;
     private long persionId;
+    private boolean isPersonalIM;
 
     private GetPersonalInformationModel mGetPersonalInformationModel;
 
@@ -65,6 +66,12 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
         intent.putExtra("persionId", persionId);
         return intent;
     }
+    public static Intent buildIntent(Context context, long persionId, boolean isPersonalIM) {
+        Intent intent = new Intent(context, TAPersonalInformationActivity.class);
+        intent.putExtra("persionId", persionId);
+        intent.putExtra("isPersonalIM", isPersonalIM);
+        return intent;
+    }
 
     @Override
     public void initWidget(View... v) {
@@ -73,6 +80,7 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
         setBarTitleTx("TA的资料");
 
         persionId = getIntent().getLongExtra("persionId", -1);
+        isPersonalIM = getIntent().getBooleanExtra("persionId", false);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(getmWidth(),
                 getmWidth() * 215 / 415);
@@ -142,6 +150,10 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tapersional_tochat_bt:
+                if (isPersonalIM) {
+                    finish();
+                    return;
+                }
                 startActivity(PersonalIMActivity.buildIntent(mContext, persionId
                         , mGetPersonalInformationModel.getBody().getMemberName()
                         , mGetPersonalInformationModel.getBody().getMemberAvatar()));

@@ -176,6 +176,7 @@ containing a value of this type.
     public static final class id {
         public static int both=0x7f070004;
         public static int disabled=0x7f070005;
+        public static int fl=0x7f070010;
         public static int fl_inner=0x7f07000d;
         public static int flip=0x7f07000b;
         public static int gridview=0x7f070000;
@@ -187,8 +188,8 @@ containing a value of this type.
         public static int pullUpFromBottom=0x7f07000a;
         public static int pull_to_refresh_image=0x7f07000e;
         public static int pull_to_refresh_progress=0x7f07000f;
-        public static int pull_to_refresh_sub_text=0x7f070011;
-        public static int pull_to_refresh_text=0x7f070010;
+        public static int pull_to_refresh_sub_text=0x7f070012;
+        public static int pull_to_refresh_text=0x7f070011;
         public static int rotate=0x7f07000c;
         public static int scrollview=0x7f070002;
         public static int webview=0x7f070003;

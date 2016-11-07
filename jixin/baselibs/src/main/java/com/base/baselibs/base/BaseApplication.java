@@ -3,8 +3,18 @@ package com.base.baselibs.base;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.view.Display;
+import android.view.WindowManager;
 
+import com.base.baselibs.widget.localalbum.common.LocalImageHelper;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.tbl.okhttputils.utils.L;
+
+import java.io.File;
 
 /**
  * 描述
@@ -17,12 +27,15 @@ public class BaseApplication extends Application {
 
     private static Context mBaseContext = null;
     protected static BaseApplication mBaseInstance = null;
+    private Display display;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mBaseContext = getApplicationContext();
         mBaseInstance = this;
+        //本地图片辅助类初始化
+        LocalImageHelper.init(this);
     }
 
     public static Context getmContext() {

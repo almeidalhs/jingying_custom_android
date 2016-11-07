@@ -54,7 +54,7 @@
                     android:background="@drawable/et_addcomment_bg_selector"
                     android:hint=""
                     android:imeOptions="actionSend"
-                    android:maxLength="250"
+                    android:maxLength="150"
                     android:maxLines="3"
                     android:padding="@dimen/dimen_dp_5"
                     android:textColor="@color/color_black"

@@ -2,12 +2,14 @@ package com.atman.jixin.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
 import com.base.baselibs.iimp.AdapterInterface;
+import com.base.baselibs.util.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -98,7 +101,12 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
 
         String Url = "";
 
-        holder.itemCompanyIntroductionTx.setText(temp.getRemark());
+        if (temp.getRemark()==null || temp.getRemark().isEmpty()) {
+            holder.itemCompanyContentLl.setVisibility(View.GONE);
+        } else {
+            holder.itemCompanyIntroductionTx.setText(temp.getRemark());
+            holder.itemCompanyContentLl.setVisibility(View.VISIBLE);
+        }
         if (temp.getType() == 3) {//视频
             Url = temp.getShowImg();
             if (!Url.startsWith("http")) {
@@ -145,6 +153,30 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void updataView(int posi, ListView listView, int headNum, boolean ing) {
+        int num = headNum;
+        int visibleFirstPosi = listView.getFirstVisiblePosition();
+        int visibleLastPosi = listView.getLastVisiblePosition();
+        if (visibleFirstPosi != 0) {
+            visibleFirstPosi -= headNum;
+            visibleLastPosi -= headNum;
+            num = 0;
+        }
+        if (posi >= visibleFirstPosi && posi <= visibleLastPosi) {
+            View view = listView.getChildAt(posi - visibleFirstPosi+num);
+            ViewHolder holder = (ViewHolder) view.getTag();
+
+            if (holder==null) {
+                return;
+            }
+            if (ing) {
+                holder.itemCompanyAudioStartIv.setImageResource(R.mipmap.ic_vedio_stop);
+            } else {
+                holder.itemCompanyAudioStartIv.setImageResource(R.mipmap.ic_vedio_start);
+            }
+        }
+    }
+
     public void clearData() {
         dataList.clear();
         notifyDataSetChanged();
@@ -173,6 +205,8 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
         ImageView itemCompanyPictrueIv;
         @Bind(R.id.item_company_introduction_tx)
         TextView itemCompanyIntroductionTx;
+        @Bind(R.id.item_company_introduction_ll)
+        LinearLayout itemCompanyIntroductionLl;
         @Bind(R.id.item_company_content_ll)
         LinearLayout itemCompanyContentLl;
 

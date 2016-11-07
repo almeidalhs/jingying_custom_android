@@ -2,6 +2,7 @@ package com.atman.jixin.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,11 @@ public class StoreCommentAdapter extends BaseAdapter {
         }
         ImageLoader.getInstance().displayImage(url, holder.itemCommentHeadIv
                 , MyBaseApplication.getApplication().optionsHead);
-        holder.itemCommentNameTx.setText(temp.getUserName());
+        if (temp.getStoreId()==0) {
+            holder.itemCommentNameTx.setText(temp.getUserName());
+        } else {
+            holder.itemCommentNameTx.setText(Html.fromHtml("<font color=\"#10ccbe\">[商家]</font>" + temp.getUserName()));
+        }
         holder.itemCommentTimeTx.setText(MyTools.convertTimeS(temp.getAddTime()*1000));
         holder.itemCommentLikeTx.setText(temp.getLikeNum() + "  ");
         Drawable drawable = null;
@@ -132,6 +137,12 @@ public class StoreCommentAdapter extends BaseAdapter {
         }
 
         holder.itemCommentLikeTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterInterface.onItemClick(v, position);
+            }
+        });
+        holder.itemCommentHeadIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterInterface.onItemClick(v, position);

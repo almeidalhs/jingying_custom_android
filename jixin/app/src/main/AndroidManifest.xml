@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.MainActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".ui.PictureBrowsingActivity"/>
         <activity android:name=".ui.personal.LoginActivity" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.personal.ForgetPassWordActivity" android:windowSoftInputMode="stateHidden|adjustResize"/>

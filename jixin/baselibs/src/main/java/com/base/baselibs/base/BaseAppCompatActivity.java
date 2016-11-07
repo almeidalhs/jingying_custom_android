@@ -12,6 +12,7 @@ import com.base.baselibs.iimp.IInit;
 import com.base.baselibs.net.httpCallBack;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.WaitingDialog;
+import com.base.baselibs.widget.localalbum.AppManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 import okhttp3.Call;
@@ -33,12 +34,17 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     private boolean isFirstInto = true;//该标志位表示第一次进入先初始化init(包含基本数据和网络获取数据)
     public boolean isRefreshNetworkData = false;//是否返回界面时刷新数据 默认不刷新
     private static long lastClickTime = 0;
+    //应用是否销毁标志
+    protected boolean isDestroy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏bar
         super.onCreate(savedInstanceState);
+        isDestroy=false;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//设置竖屏
+        // 添加Activity到堆栈
+        AppManager.getAppManager().addActivity(this);
     }
 
     @Override
@@ -89,6 +95,9 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isDestroy=true;
+        // 结束Activity&从堆栈中移除
+        AppManager.getAppManager().finishActivity(this);
     }
 
     @Override
@@ -276,7 +285,7 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     public void onError(Call call, Exception e, int code, int id) {
         cancelLoading();
         LogUtils.e("返回码："+code+"，id:"+id);
-        if (id==13) {
+        if (id==13 || id==34) {
             return;
         }
         showToast(e.toString().replace("java.io.IOException: ",""));

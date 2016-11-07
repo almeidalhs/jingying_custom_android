@@ -299,12 +299,8 @@ public class P2PChatAdapter extends BaseAdapter {
                 break;
             case ADChatType.ADChatType_Image:
                 String url = temp.getContent();
-                if (!url.contains("http")) {
-                    url = Common.ImageUrl + temp.getContent();
-                }
-                File f = ImageLoader.getInstance().getDiskCache().get(url);
+                File f = new File(url);
                 if (f.exists()) {
-                    LogUtils.e("f:" + f);
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImageRightIv);
@@ -313,6 +309,7 @@ public class P2PChatAdapter extends BaseAdapter {
                         ImageLoader.getInstance().displayImage("file://" + f.getPath(), holderText.itemP2pchatImageLeftIv);
                     }
                 } else {
+                    url = Common.ImageUrl + url;
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv

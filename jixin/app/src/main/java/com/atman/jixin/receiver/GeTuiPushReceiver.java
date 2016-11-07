@@ -2,9 +2,11 @@ package com.atman.jixin.receiver;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.MessageEvent;
@@ -72,6 +74,9 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
                     LogUtils.e("data:"+data);
                     GetMessageModel mGetMessageModel = new Gson().fromJson(data, GetMessageModel.class);
                     LogUtils.e("mGetMessageModel.getContent().getChatId():"+mGetMessageModel.getContent().getChatId());
+                    if (MyBaseApplication.USERINFOR==null) {
+                        return;
+                    }
                     saveGetMessage(context, mGetMessageModel);
                 }
                 break;
@@ -252,11 +257,24 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         tempMessage.setSendStatus(0);
         tempMessage.setSelfSend(false);
         mChatMessageModelDao.save(tempMessage);
-        if (!isAppOnFreground(context)) {
+        if (!isScreenOn(context) || !isAppOnFreground(context)
+                || isApplicationBroughtToBackgroundByTask(context)) {
             ResidentNotificationHelper.sendResidentNoticeType0(context
                     , temp.getSendTime(), content, temp.getChatId());
         }
         EventBus.getDefault().post(new MessageEvent(mGetMessageModel,tempMessage));
+    }
+
+    public boolean isScreenOn(Context context){
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        //获取PowerManager.WakeLock对象，后面的参数|表示同时传入两个值，最后的是调试用的Tag
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+        if (!pm.isScreenOn()) {
+            //点亮屏幕
+            wl.acquire();
+        }
+        return pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
     }
 
     /**
@@ -274,6 +292,22 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         for (ActivityManager.RunningAppProcessInfo a : app) {
             if (a.processName.equals(curPackageName) &&
                     a.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断当前应用程序是否处于后台，通过getRunningTasks的方式
+     * @return true 在后台; false 在前台
+     */
+    public  boolean isApplicationBroughtToBackgroundByTask(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals("com.atman.jixin")) {
                 return true;
             }
         }

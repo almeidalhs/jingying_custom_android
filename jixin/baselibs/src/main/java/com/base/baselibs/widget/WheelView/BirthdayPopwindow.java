@@ -148,10 +148,10 @@ public class BirthdayPopwindow {
             public void onScrollingFinished(WheelView wheel) {
                 mYear = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
                 mYearId = wheel.getCurrentItem();
-                if (Integer.parseInt(mYear) > time.year) {
+                if (Integer.parseInt(mYear) >= time.year) {
                     mYearWheel.setCurrentItem(getNowYear(), true);
                     mMonthWheel.setCurrentItem(getNowMonth(), true);
-                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
+//                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
                 }
             }
         });

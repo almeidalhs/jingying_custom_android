@@ -19,12 +19,14 @@ import com.atman.jixin.model.response.AddCommentModel;
 import com.atman.jixin.model.response.StoreCommentModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.TAPersonalInformationActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -111,6 +113,12 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
         p2pchatLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isIMOpen() && view.getWindowToken()!=null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                }
+                llFacechoose.setVisibility(View.GONE);
+                blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
             }
         });
     }
@@ -247,6 +255,15 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
                         .build().execute(new MyStringCallback(mContext, "处理中...", StoreCommentActivity.this, false));
 
                     mAdapter.setLikeItemById(position);
+                }
+                break;
+            case R.id.item_comment_head_iv:
+                if (mAdapter.getItem(position).getStoreId()==0) {
+                    startActivity(TAPersonalInformationActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getUserId()));
+                } else {
+                    startActivity(StoreDetailActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getStoreId()));
                 }
                 break;
         }
