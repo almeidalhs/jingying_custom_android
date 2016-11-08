@@ -72,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_dp_5"
                 android:background="@drawable/item_message_left_bg"
-                android:maxWidth="@dimen/dimen_dp_50"
+                android:maxWidth="@dimen/dimen_dp_100"
+                android:minWidth="@dimen/dimen_dp_100"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -209,7 +210,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/item_message_right_bg"
-                    android:maxWidth="@dimen/dimen_dp_50"
+                    android:maxWidth="@dimen/dimen_dp_100"
+                    android:minWidth="@dimen/dimen_dp_100"
                     android:scaleType="centerInside"
                     android:visibility="gone" />
 

@@ -1,6 +1,7 @@
 package com.atman.jixin.ui;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
+import com.atman.jixin.model.iimp.ToAppType;
 import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
@@ -30,9 +32,11 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
+import com.atman.jixin.ui.personal.PersonalSettingActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.net.MyStringCallback;
@@ -115,13 +119,6 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
 
         messageEmptyTv.setText(Html.fromHtml(
                 "您还没有聊天记录<p>点击下方[<font color=\"#16c5ee\">一扫即应</font>]开始扫描二维码吧"));
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FaceConversionUtil.getInstace().getFileText(getApplication());
-            }
-        }).start();
 
         hideTitleBar();
 
@@ -214,11 +211,7 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
         if (id == Common.NET_QR_CODE_ID) {
             QRScanCodeModel mQRScanCodeModel = mGson.fromJson(data, QRScanCodeModel.class);
             if (mQRScanCodeModel.getResult().equals("1")) {
-                if (mQRScanCodeModel.getBody().getType() == 1) {
-                    startActivity(ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false));
-                } else {
-                    startActivity(QRScanCodeActivity.buildIntent(mContext, str));
-                }
+                startActivity(ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false));
             }
         } else if (id == Common.NET_UP_GETTUI_ID) {
 
@@ -259,6 +252,44 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
         }
     }
 
+    private void showWranning(final String content, final int to) {
+        PromptDialog.Builder builder = new PromptDialog.Builder(MainActivity.this);
+        builder.setTitle("提示");
+        builder.setMessage("可能存在风险,是否打开此链接?\n"+content);
+        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("打开", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (to == ToAppType.ToAppType_WEIXIN) {
+//                    Intent intent = new Intent();
+//                    ComponentName cmp = new ComponentName(" com.tencent.mm ","com.tencent.mm.ui.LauncherUI");
+//                    intent.setAction(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.setComponent(cmp);
+                    Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.mm");
+                    startActivity(intent);
+                } else if (to == ToAppType.ToAppType_QQ) {
+                    Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.mobileqq");
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(content);
+                    intent.setData(content_url);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -283,7 +314,21 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
         if (id == Common.NET_QR_CODE_ID) {
-            startActivity(QRScanCodeActivity.buildIntent(mContext, str));
+            int to = ToAppType.ToAppType_WEB;
+            if (str.startsWith("http://weixin.qq.com")) {
+                if (!MyTools.isPkgInstalled(mContext, "com.tencent.mm")) {
+                    showToast("尚未安装微信客户端");
+                    return;
+                }
+                to = ToAppType.ToAppType_WEIXIN;
+            } else if (str.startsWith("http://qm.qq.com")) {
+                if (!MyTools.isPkgInstalled(mContext, "com.tencent.mobileqq")) {
+                    showToast("尚未安装QQ客户端");
+                    return;
+                }
+                to = ToAppType.ToAppType_QQ;
+            }
+            showWranning(str, to);
         } else if (id == Common.NET_UP_GETTUI_ID) {
             clearData();
             showWraning("链接失败,请重新登录!");

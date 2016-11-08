@@ -16,6 +16,7 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.personal.LoginActivity;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.atman.jixin.widget.downfile.DownloadFile;
 import com.base.baselibs.iimp.TimeCountInterface;
 import com.base.baselibs.net.MyStringCallback;
@@ -67,6 +68,13 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
             timeCount = new TimeCount(loginTime, defalTime, this);
         }
         timeCount.start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FaceConversionUtil.getInstace().getFileText(getApplication());
+            }
+        }).start();
 
         getSomedate();
     }

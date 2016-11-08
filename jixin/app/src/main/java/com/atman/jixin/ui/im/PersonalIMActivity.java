@@ -606,7 +606,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                 }
                 break;
             case R.id.item_p2pchat_text_headleft_iv:
-                startActivity(TAPersonalInformationActivity.buildIntent(mContext, persionId));
+                startActivity(TAPersonalInformationActivity.buildIntent(mContext, persionId, true));
                 break;
             case R.id.item_p2pchat_image_left_iv:
             case R.id.item_p2pchat_image_right_iv:

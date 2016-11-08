@@ -80,7 +80,7 @@ public class TAPersonalInformationActivity extends MyBaseActivity {
         setBarTitleTx("TA的资料");
 
         persionId = getIntent().getLongExtra("persionId", -1);
-        isPersonalIM = getIntent().getBooleanExtra("persionId", false);
+        isPersonalIM = getIntent().getBooleanExtra("isPersonalIM", false);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(getmWidth(),
                 getmWidth() * 215 / 415);

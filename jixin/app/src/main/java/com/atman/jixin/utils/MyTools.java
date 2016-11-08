@@ -2,6 +2,8 @@ package com.atman.jixin.utils;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -21,6 +23,21 @@ import java.util.Random;
  * 电话 18578909061
  */
 public class MyTools {
+
+    public static boolean isPkgInstalled(Context context, String pkgName) {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(pkgName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            packageInfo = null;
+            e.printStackTrace();
+        }
+        if (packageInfo == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public static String getHttpUrl (String url) {
         if (!url.startsWith("http")) {
