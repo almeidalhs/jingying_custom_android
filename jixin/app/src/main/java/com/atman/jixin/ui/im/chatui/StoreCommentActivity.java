@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.StoreCommentAdapter;
@@ -67,6 +69,8 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
     FaceRelativeLayout FaceRelativeLayout;
     @Bind(R.id.item_p2pchat_root_ll)
     LinearLayout itemP2pchatRootLl;
+    private View mEmpty;
+    private TextView mEmptyTX;
 
     private Context mContext = StoreCommentActivity.this;
 
@@ -108,7 +112,12 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
     private void initListView() {
         initRefreshView(PullToRefreshBase.Mode.BOTH, p2pchatLv);
 
+        mEmpty = LayoutInflater.from(mContext).inflate(R.layout.part_empty_view, null);
+        mEmptyTX = (TextView) mEmpty.findViewById(R.id.part_empty_tx);
+        mEmptyTX.setText("暂无评论");
+
         mAdapter = new StoreCommentAdapter(mContext, this);
+        p2pchatLv.setEmptyView(mEmpty);
         p2pchatLv.setAdapter(mAdapter);
         p2pchatLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -259,6 +268,11 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
                 break;
             case R.id.item_comment_head_iv:
                 if (mAdapter.getItem(position).getStoreId()==0) {
+                    if (mAdapter.getItem(position).getUserId()
+                            == MyBaseApplication.USERINFOR.getBody().getAtmanUserId()) {
+                        showWraning("亲,这是您自己哦!");
+                        return;
+                    }
                     startActivity(TAPersonalInformationActivity.buildIntent(mContext
                             , mAdapter.getItem(position).getUserId()));
                 } else {

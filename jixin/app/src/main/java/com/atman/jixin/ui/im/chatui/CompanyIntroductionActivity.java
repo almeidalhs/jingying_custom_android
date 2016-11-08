@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.CompanyIntroductionAdapter;
-import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.CommentType;
 import com.atman.jixin.model.response.GetCompanyIntrodutionModel;
 import com.atman.jixin.ui.PictureBrowsingActivity;
@@ -318,26 +317,31 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                 cancelLoading();
                 try {
                     if (mMediaPlayer.isPlaying()) {
-                        mMediaPlayer.stop();
+//                        mMediaPlayer.stop();
+                        mMediaPlayer.pause();
+                        mAdapter.updataView(position, companyListView, 0, false, String.valueOf(displayTime*1000-n));
                         if (mAnimationDrawable!=null) {
                             mAnimationDrawable.stop();
                             mAnimationDrawable.selectDrawable(0);
-                            mAdapter.updataView(position, companyListView, 0, false, mAdapter.getItem(position).getLength());
                         }
                     } else {
                         mAnimationDrawable = animationDrawable;
-                        mAdapter.updataView(position, companyListView, 0, true, mAdapter.getItem(position).getLength());
+                        handler.postDelayed(runnable, 0);
                         mMediaPlayer.reset();
                         mMediaPlayer.setDataSource(path);
-                        handler.postDelayed(runnable, 1000);
                         mMediaPlayer.prepare();
                         mMediaPlayer.start();
+                        if ((displayTime*1000-n)>0) {
+                            LogUtils.e("(displayTime*1000-n):"+(displayTime*1000-n));
+                            mMediaPlayer.seekTo(n);
+                        }
                         mAnimationDrawable.start();
                         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             public void onCompletion(MediaPlayer mp) {
                                 if (!mp.isPlaying()) {
                                     mAnimationDrawable.stop();
                                     mAnimationDrawable.selectDrawable(0);
+                                    n = 0;
                                     mAdapter.updataView(position, companyListView, 0, false, mAdapter.getItem(position).getLength());
                                 }
                             }
@@ -370,20 +374,18 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     }
 
     private int n = 0;
+    private int displayTime = 0;
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
             if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-                if (n==0) {
-                    n = Integer.parseInt(mAdapter.getItem(positionAudio).getLength());
-                } else {
-                    n -= 1;
+                if (displayTime==0) {
+                    displayTime = Integer.parseInt(mAdapter.getItem(positionAudio).getLength());
                 }
-                if (n<=0) {
-                    n=0;
-                }
-                mAdapter.updataView(positionAudio, companyListView, 0, true, String.valueOf(n));
+                n = mMediaPlayer.getCurrentPosition();
+                LogUtils.e("mMediaPlayer.getCurrentPosition():"+mMediaPlayer.getCurrentPosition());
+                mAdapter.updataView(positionAudio, companyListView, 0, true, String.valueOf(displayTime*1000-n));
                 handler.postDelayed(runnable, 1000);
             }
         }

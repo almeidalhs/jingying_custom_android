@@ -87,7 +87,6 @@ public class PersonalSettingActivity extends MyBaseActivity {
             }
         });
         setSwitchButton();
-        settingOpenSb.setCheckedImmediately(false);
         settingOpenSb.setCanMoveChang(false);
         settingOpenSb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,12 +103,12 @@ public class PersonalSettingActivity extends MyBaseActivity {
     }
 
     private void setSwitchButton() {
-        if (MyBaseApplication.USERINFOR.getBody().getShowNear()==1) {
+        if (MyBaseApplication.USERINFOR.getBody().getShowNear()==0) {
             settingOpenSb.setCheckedImmediately(true);
-            setStatus = 0;
+            setStatus = 1;
         } else {
             settingOpenSb.setCheckedImmediately(false);
-            setStatus = 1;
+            setStatus = 0;
         }
     }
 

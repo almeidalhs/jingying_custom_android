@@ -175,7 +175,7 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
                 holder.itemCompanyAudioStartIv.setImageResource(R.mipmap.ic_vedio_start);
             }
             LogUtils.e("time:"+time);
-            holder.itemCompanyAudioTv.setText(MyTools.secToTime(Integer.parseInt(time)));
+            holder.itemCompanyAudioTv.setText(MyTools.secToTime(Integer.parseInt(time)/1000));
         }
 
     }
