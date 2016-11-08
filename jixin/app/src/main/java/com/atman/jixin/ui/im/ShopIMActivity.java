@@ -378,6 +378,10 @@ public class ShopIMActivity extends MyBaseActivity
 
                     if (mQRScanCodeModel.getBody().getMessageBean().getEventAction()!=null) {
                         tempMessage.setActionType(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType());
+                        tempMessage.setChatId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId());
+                        tempMessage.setEnterpriseId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getEnterpriseId());
+                        tempMessage.setGoodId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getGoodId());
+                        tempMessage.setStoreId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getStoreId());
                     }
 
                     if (mQRScanCodeModel.getBody().getMessageBean().getOperaterList()!=null
@@ -392,6 +396,26 @@ public class ShopIMActivity extends MyBaseActivity
                     tempMessage.setSelfSend(false);
                     mAdapter.addImMessageDao(tempMessage);
                     mChatMessageModelDao.save(tempMessage);
+
+                    if (mQRScanCodeModel.getBody().getMessageBean().getType() == ADChatType.ADChatType_ImageText) {
+                        if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_GoodList) {//菜单预览
+                            startActivity(MenuPreviewActivity.buildIntent(mContext
+                                    , mQRScanCodeModel.getBody().getMessageBean().getImageT_title()
+                                    , mQRScanCodeModel.getBody().getMessageBean().getTargetId()));
+                        } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_Enterprise) {//企业介绍
+                            startActivity(CompanyIntroductionActivity.buildIntent(mContext
+                                    , mQRScanCodeModel.getBody().getMessageBean().getImageT_title()
+                                    , mQRScanCodeModel.getBody().getMessageBean().getEventAction().getEnterpriseId()));
+                        } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
+                        } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_Good) {//商品
+                        } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_Coupon) {//优惠券
+                        }
+                    }
 
                     List<QRScanCodeModel.BodyBean.MessageBeanBean.OperaterListBean> tempList =
                             mQRScanCodeModel.getBody().getMessageBean().getOperaterList();
@@ -429,10 +453,10 @@ public class ShopIMActivity extends MyBaseActivity
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
             } else if (adChatTypeText == ADChatType.ADChatType_Image) {
-                files.remove(fileID);
-                //设置当前选中的图片数量
-                LocalImageHelper.getInstance().setCurrentSize(files.size());
-                seedMorePicMessage();
+//                files.remove(fileID);
+//                //设置当前选中的图片数量
+//                LocalImageHelper.getInstance().setCurrentSize(files.size());
+//                seedMorePicMessage();
             }
         } else if (id == Common.NET_UP_PIC_ID) {
 
@@ -589,12 +613,12 @@ public class ShopIMActivity extends MyBaseActivity
                         , "", false, null);
                 break;
             case R.id.p2pchat_add_picture_tv:
-//                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
-//                getAlbum.setType("image/*");
-//                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
-//                p2pchatAddLl.setVisibility(View.GONE);
-                Intent intent = new Intent(mContext, LocalAlbum.class);
-                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
+                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                getAlbum.setType("image/*");
+                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+                p2pchatAddLl.setVisibility(View.GONE);
+//                Intent intent = new Intent(mContext, LocalAlbum.class);
+//                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
                 break;
             case R.id.p2pchat_add_camera_tv:
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
@@ -862,8 +886,7 @@ public class ShopIMActivity extends MyBaseActivity
                         ==EventActionType.EventActionType_Enterprise) {//企业介绍
                     startActivity(CompanyIntroductionActivity.buildIntent(mContext
                             , mAdapter.getItem(position).getImageT_title()
-                            , mAdapter.getItem(position).getEnterpriseId()
-                            , mAdapter.getItem(position).getVideo_image_url()));
+                            , mAdapter.getItem(position).getEnterpriseId()));
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                 } else if (mAdapter.getItem(position).getActionType()

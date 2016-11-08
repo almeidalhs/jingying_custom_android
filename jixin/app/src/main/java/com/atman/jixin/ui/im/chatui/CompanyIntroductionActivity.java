@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -60,7 +61,6 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     private Context mContext = CompanyIntroductionActivity.this;
 
     private String title;
-    private String imgUrl;
     private String videoUrl;
     private long id;
 
@@ -82,11 +82,10 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String title, long id, String imgUrl) {
+    public static Intent buildIntent(Context context, String title, long id) {
         Intent intent = new Intent(context, CompanyIntroductionActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("id", id);
-        intent.putExtra("imgUrl", imgUrl);
         return intent;
     }
 
@@ -95,10 +94,9 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         super.initWidget(v);
 
         title = getIntent().getStringExtra("title");
-        imgUrl = getIntent().getStringExtra("imgUrl");
         id = getIntent().getLongExtra("id", -1);
 
-        LogUtils.e("id:" + id + ",title:" + title + ",imgUrl:" + imgUrl);
+        LogUtils.e("id:" + id + ",title:" + title);
 
         setBarTitleTx(title);
         setBarRightTx("评论").setOnClickListener(new View.OnClickListener() {
@@ -324,14 +322,14 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                         if (mAnimationDrawable!=null) {
                             mAnimationDrawable.stop();
                             mAnimationDrawable.selectDrawable(0);
-                            mAdapter.updataView(position, companyListView, 0, false);
+                            mAdapter.updataView(position, companyListView, 0, false, mAdapter.getItem(position).getLength());
                         }
                     } else {
                         mAnimationDrawable = animationDrawable;
-                        mAdapter.updataView(position, companyListView, 0, false);
-                        mAdapter.updataView(position, companyListView, 0, true);
+                        mAdapter.updataView(position, companyListView, 0, true, mAdapter.getItem(position).getLength());
                         mMediaPlayer.reset();
                         mMediaPlayer.setDataSource(path);
+                        handler.postDelayed(runnable, 1000);
                         mMediaPlayer.prepare();
                         mMediaPlayer.start();
                         mAnimationDrawable.start();
@@ -340,7 +338,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                                 if (!mp.isPlaying()) {
                                     mAnimationDrawable.stop();
                                     mAnimationDrawable.selectDrawable(0);
-                                    mAdapter.updataView(position, companyListView, 0, true);
+                                    mAdapter.updataView(position, companyListView, 0, false, mAdapter.getItem(position).getLength());
                                 }
                             }
                         });
@@ -370,4 +368,24 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     public void error() {
         showToast("播放失败");
     }
+
+    private int n = 0;
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
+                if (n==0) {
+                    n = Integer.parseInt(mAdapter.getItem(positionAudio).getLength());
+                } else {
+                    n -= 1;
+                }
+                if (n<=0) {
+                    n=0;
+                }
+                mAdapter.updataView(positionAudio, companyListView, 0, true, String.valueOf(n));
+                handler.postDelayed(runnable, 1000);
+            }
+        }
+    };
 }

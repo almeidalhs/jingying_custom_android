@@ -226,6 +226,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
         // 中间添加表情页
 
         faceAdapters = new ArrayList<FaceAdapter>();
+        LogUtils.e("emojis.size():"+emojis.size());
         for (int i = 0; i < emojis.size(); i++) {
             GridView view = new GridView(context);
             FaceAdapter adapter = new FaceAdapter(context, emojis.get(i));

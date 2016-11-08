@@ -73,7 +73,7 @@ public class ResidentNotificationHelper {
         }
 
         notification.contentView = remoteViews;
-        notification.visibility = Notification.VISIBILITY_PUBLIC;
+//        notification.visibility = Notification.VISIBILITY_PUBLIC;//低版本没有这个设置项
         notification.defaults = Notification.DEFAULT_ALL; // 使用默认设置，比如铃声、震动、闪灯
         notification.flags = Notification.FLAG_AUTO_CANCEL; // 但用户点击消息后，消息自动在通知栏自动消失
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

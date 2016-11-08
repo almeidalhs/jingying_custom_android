@@ -153,7 +153,7 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void updataView(int posi, ListView listView, int headNum, boolean ing) {
+    public void updataView(int posi, ListView listView, int headNum, boolean ing, String time) {
         int num = headNum;
         int visibleFirstPosi = listView.getFirstVisiblePosition();
         int visibleLastPosi = listView.getLastVisiblePosition();
@@ -174,7 +174,10 @@ public class CompanyIntroductionAdapter extends BaseAdapter {
             } else {
                 holder.itemCompanyAudioStartIv.setImageResource(R.mipmap.ic_vedio_start);
             }
+            LogUtils.e("time:"+time);
+            holder.itemCompanyAudioTv.setText(MyTools.secToTime(Integer.parseInt(time)));
         }
+
     }
 
     public void clearData() {

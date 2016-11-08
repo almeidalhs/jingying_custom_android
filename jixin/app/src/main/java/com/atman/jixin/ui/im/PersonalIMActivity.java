@@ -221,10 +221,10 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                     || adChatTypeText == ADChatType.ADChatType_ImageText) {
                 blogdetailAddcommentEt.setText("");
             } else if (adChatTypeText == ADChatType.ADChatType_Image) {
-                files.remove(fileID);
-                //设置当前选中的图片数量
-                LocalImageHelper.getInstance().setCurrentSize(files.size());
-                seedMorePicMessage();
+//                files.remove(fileID);
+//                //设置当前选中的图片数量
+//                LocalImageHelper.getInstance().setCurrentSize(files.size());
+//                seedMorePicMessage();
             }
         } else if (id == Common.NET_UP_PIC_ID) {
 
@@ -346,12 +346,12 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                         , false, null);
                 break;
             case R.id.p2pchat_add_picture_tv:
-//                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
-//                getAlbum.setType("image/*");
-//                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
-//                p2pchatAddLl.setVisibility(View.GONE);
-                Intent intent = new Intent(mContext, LocalAlbum.class);
-                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
+                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                getAlbum.setType("image/*");
+                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+                p2pchatAddLl.setVisibility(View.GONE);
+//                Intent intent = new Intent(mContext, LocalAlbum.class);
+//                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
                 break;
             case R.id.p2pchat_add_camera_tv:
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
@@ -596,8 +596,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                         == EventActionType.EventActionType_Enterprise) {//企业介绍
                     startActivity(CompanyIntroductionActivity.buildIntent(mContext
                             , mAdapter.getItem(position).getImageT_title()
-                            , mAdapter.getItem(position).getEnterpriseId()
-                            , mAdapter.getItem(position).getVideo_image_url()));
+                            , mAdapter.getItem(position).getEnterpriseId()));
                 } else if (mAdapter.getItem(position).getActionType()
                         == EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                 } else if (mAdapter.getItem(position).getActionType()

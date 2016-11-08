@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.MessageEvent;
@@ -15,9 +16,12 @@ import com.atman.jixin.model.bean.ChatMessageModel;
 import com.atman.jixin.model.greendao.gen.ChatListModelDao;
 import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatType;
+import com.atman.jixin.model.iimp.EventActionType;
 import com.atman.jixin.model.response.GetMessageModel;
 import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
+import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.util.LogUtils;
 import com.google.gson.Gson;
@@ -166,6 +170,25 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
     private void saveGetMessage(Context context, GetMessageModel mGetMessageModel) {
 
         GetMessageModel.ContentBean temp = mGetMessageModel.getContent();
+
+        if (temp.getType() == ADChatType.ADChatType_ImageText) {
+            if (temp.getEventAction().getActionType()
+                    == EventActionType.EventActionType_GoodList) {//菜单预览
+            } else if (temp.getEventAction().getActionType()
+                    ==EventActionType.EventActionType_Enterprise) {//企业介绍
+            } else if (temp.getEventAction().getActionType()
+                    ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
+                return;
+            } else if (temp.getEventAction().getActionType()
+                    ==EventActionType.EventActionType_Good) {//商品
+                return;
+            } else if (temp.getEventAction().getActionType()
+                    ==EventActionType.EventActionType_Coupon) {//优惠券
+                return;
+            }
+        }
+
+
         String content = temp.getTargetName()+" : ";
         String sessionContent = "";
         if (temp.getType() == ADChatType.ADChatType_Text) {
@@ -261,6 +284,13 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
                 || isApplicationBroughtToBackgroundByTask(context)) {
             ResidentNotificationHelper.sendResidentNoticeType0(context
                     , temp.getSendTime(), content, temp.getChatId());
+        } else {
+            /*
+         * 想设置震动大小可以通过改变pattern来设定，如果开启时间太短，震动效果可能感觉不到
+         * */
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            long [] pattern = {100,400,100,400};   // 停止 开启 停止 开启
+            vibrator.vibrate(pattern,-1);           //重复两次上面的pattern 如果只想震动一次，index设为-1
         }
         EventBus.getDefault().post(new MessageEvent(mGetMessageModel,tempMessage));
     }
