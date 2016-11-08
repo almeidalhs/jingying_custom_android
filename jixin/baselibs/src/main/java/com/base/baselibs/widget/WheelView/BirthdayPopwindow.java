@@ -151,7 +151,7 @@ public class BirthdayPopwindow {
                 if (Integer.parseInt(mYear) >= time.year) {
                     mYearWheel.setCurrentItem(getNowYear(), true);
                     mMonthWheel.setCurrentItem(getNowMonth(), true);
-//                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
+                    mDayWheel.setCurrentItem(getNowMonthDay(), true);
                 }
             }
         });

@@ -331,6 +331,7 @@ public class ShopIMActivity extends MyBaseActivity
             mGetChatServiceModel = mGson.fromJson(data, GetChatServiceModel.class);
 
             mGVAdapter.updateListView(mGetChatServiceModel.getBody().getMessageBean().getOperaterList());
+            AddWelcome();
             if (mGVAdapter.getCount()==0) {
                 setNotService();
             }
@@ -472,6 +473,36 @@ public class ShopIMActivity extends MyBaseActivity
             updateChatMessage(-1, str, -1);
 
             seedMessage(str);
+        }
+    }
+
+    private void AddWelcome() {
+        ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
+                , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+        if (mChatListModel==null) {
+            //添加欢迎语
+            ChatMessageModel tempMessage = new ChatMessageModel();
+            tempMessage.setId(null);
+            tempMessage.setTargetId(mGetChatServiceModel.getBody().getMessageBean().getTargetId());
+            tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
+            tempMessage.setType(mGetChatServiceModel.getBody().getMessageBean().getType());
+            tempMessage.setTargetType(mGetChatServiceModel.getBody().getMessageBean().getTargetType());
+            tempMessage.setTargetName(mGetChatServiceModel.getBody().getMessageBean().getTargetName());
+            tempMessage.setTargetAvatar(avatar);
+            tempMessage.setSendTime(mGetChatServiceModel.getBody().getMessageBean().getSendTime());
+            tempMessage.setContent(mGetChatServiceModel.getBody().getMessageBean().getContent());
+            tempMessage.setReaded(0);
+            tempMessage.setSendStatus(0);
+            tempMessage.setSelfSend(false);
+            mAdapter.addImMessageDao(tempMessage);
+            mChatMessageModelDao.save(tempMessage);
+
+            ChatListModel tempChat = new ChatListModel(null, mGetChatServiceModel.getBody().getMessageBean().getTargetId()
+                    , MyBaseApplication.USERINFOR.getBody().getAtmanUserId(), mGetChatServiceModel.getBody().getMessageBean().getTargetType()
+                    , mGetChatServiceModel.getBody().getMessageBean().getSendTime(), mGetChatServiceModel.getBody().getMessageBean().getContent()
+                    , 0, "", mGetChatServiceModel.getBody().getMessageBean().getTargetName(), avatar
+                    , mGetChatServiceModel.getBody().getMessageBean().getType(),-1);
+            mChatListModelDao.save(tempChat);
         }
     }
 
