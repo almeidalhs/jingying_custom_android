@@ -970,16 +970,13 @@ public class ShopIMActivity extends MyBaseActivity
                     mAnimationDrawable.start();
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         public void onCompletion(MediaPlayer mp) {
-                            if (!mp.isPlaying()) {
-                                mAnimationDrawable.stop();
-                                mAnimationDrawable.selectDrawable(0);
-                            }
+                            mAnimationDrawable.stop();
+                            mAnimationDrawable.selectDrawable(0);
                         }
                     });
                 }
 
             } catch (Exception e) {
-                showToast("播放失败");
                 e.printStackTrace();
             }
         } else {

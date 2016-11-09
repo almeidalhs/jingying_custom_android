@@ -39,7 +39,7 @@ public  class SoundMeter {
 		if (mRecorder == null) {
 			mRecorder = new MediaRecorder();
 			mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 			mRecorder.setOutputFile(f.getPath()+"/"+name);
 			try {
