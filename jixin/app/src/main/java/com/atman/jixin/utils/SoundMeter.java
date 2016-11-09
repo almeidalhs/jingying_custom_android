@@ -50,12 +50,15 @@ public  class SoundMeter {
 			} catch (IllegalStateException e) {
 				monRecordError.onFaild(onRecordError.mIllegalStateException);
 				System.out.print(e.getMessage());
+				LogUtils.e("IllegalStateException:"+e.getMessage());
 			}  catch (RuntimeException e) {
 				monRecordError.onFaild(onRecordError.mRuntimeException);
 				System.out.print(e.getMessage());
+				LogUtils.e("RuntimeException:"+e.getMessage());
 			} catch (IOException e) {
 				monRecordError.onFaild(onRecordError.mIOException);
 				System.out.print(e.getMessage());
+				LogUtils.e("IOException:"+e.getMessage());
 			}
 
 		}

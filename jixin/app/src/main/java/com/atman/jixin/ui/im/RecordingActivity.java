@@ -109,6 +109,10 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     public void backResuilt(File file) {
         isFinish = true;
         if (file.exists()) {
+            if (file.length()==0) {
+                showWraning("录音失败,请查看是否已开启麦克风权限");
+                return;
+            }
             Intent mIntent = new Intent();
             mIntent.putExtra("url", file.getPath());
             mIntent.putExtra("time", mTime);
@@ -254,6 +258,7 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                LogUtils.e("ACTION_DOWN");
                 if (flag == 1 && !isTouch) {
                     isFinish = false;
                     rcChatPopup.setVisibility(View.VISIBLE);
@@ -299,6 +304,15 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                         if (file.exists()) {
                             file.delete();
                         }
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                LogUtils.e("ACTION_CANCEL");
+                if (flag == 2) {
+                    File file = recordEnd();
+                    if (file.exists()) {
+                        file.delete();
                     }
                 }
                 break;
