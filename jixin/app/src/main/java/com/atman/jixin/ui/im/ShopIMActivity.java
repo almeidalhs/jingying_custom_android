@@ -40,6 +40,8 @@ import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.model.response.UpdateAudioResultModel;
+import com.atman.jixin.model.updateChatMessageServiceEvent;
+import com.atman.jixin.service.SeedMessageService;
 import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
@@ -242,6 +244,11 @@ public class ShopIMActivity extends MyBaseActivity
                 mGVAdapter.updateListView(mGetMessageModel.getContent().getOperaterList());
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
+    public void onUserEvent(updateChatMessageServiceEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
+        updateChatMessage(event.i, event.str, event.chatId, event.Id);
     }
 
     private void initListView() {
@@ -447,32 +454,6 @@ public class ShopIMActivity extends MyBaseActivity
                     mGVAdapter.updateListView(operaterList.getOperaterList());
                 }
             }
-        } else if (id == Common.NET_SEED_USERCHAT_ID) {
-            super.onStringResponse(data, response, id);
-            updateChatMessage(0, "", -1);
-            if (adChatTypeText == ADChatType.ADChatType_Text
-                    || adChatTypeText == ADChatType.ADChatType_ImageText) {
-                blogdetailAddcommentEt.setText("");
-            } else if (adChatTypeText == ADChatType.ADChatType_Image) {
-//                files.remove(fileID);
-//                //设置当前选中的图片数量
-//                LocalImageHelper.getInstance().setCurrentSize(files.size());
-//                seedMorePicMessage();
-            }
-        } else if (id == Common.NET_UP_PIC_ID) {
-
-            HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
-            String str = mHeadImgResultModel.getBody().get(0).getUrl();
-            updateChatMessage(-1, str, -1);
-
-            seedMessage(str);
-
-        } else if (id == Common.NET_UP_AUDIO_ID) {
-            UpdateAudioResultModel mUpdateAudioResultModel = mGson.fromJson(data, UpdateAudioResultModel.class);
-            String str = mUpdateAudioResultModel.getBody().get(0).getUrl();
-            updateChatMessage(-1, str, -1);
-
-            seedMessage(str);
         }
     }
 
@@ -512,41 +493,38 @@ public class ShopIMActivity extends MyBaseActivity
         p2pchatSendBt.setVisibility(View.VISIBLE);
     }
 
-    private void seedMessage(String str) {
-        temp.setContent(str);
-        OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
-                .id(Common.NET_SEED_USERCHAT_ID).content(mGson.toJson(temp)).mediaType(Common.JSON)
-                .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                .build().execute(new MyStringCallback(mContext, "发送中...", ShopIMActivity.this, false));
-    }
-
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
-        updateChatMessage(1, "", -1);
+        updateChatMessage(1, "", -1, -1);
     }
 
-    private void updateChatMessage(int i, String str, long chatId) {
+    private void updateChatMessage(int i, String str, long chatId, long Id) {
         if (i==-2) {//更新接收语音本地下载
             ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
                     ChatMessageModelDao.Properties.ChatId.eq(chatId)).build().unique();
             upMessage.setAudioLocationUrl(str);
             mAdapter.setImMessageAudio(upMessage.getId(), str);
         } else {
-            if (allMessage!=null) {
-                ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
-                        ChatMessageModelDao.Properties.Id.eq(allMessage.getId())).build().unique();
-                if (upMessage!=null) {
-                    if (i==-1) {//更新Content
-                        upMessage.setContent(str);
-                        mAdapter.setImMessageContent(upMessage.getId(), str);
-                    } else {//更新发送消息状态
-                        upMessage.setSendStatus(i);
-                        mAdapter.setImMessageStatus(upMessage.getId(), i);
-                    }
-                    mChatMessageModelDao.update(upMessage);
+            long xId = 0;
+            if (Id != -1) {
+                xId = Id;
+            } else {
+                if (allMessage!=null) {
+                    xId = allMessage.getId();
                 }
+            }
+            ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
+                    ChatMessageModelDao.Properties.Id.eq(xId)).build().unique();
+            if (upMessage!=null) {
+                if (i==-1) {//更新Content
+                    upMessage.setContent(str);
+                    mAdapter.setImMessageContent(upMessage.getId(), str);
+                } else {//更新发送消息状态
+                    upMessage.setSendStatus(i);
+                    mAdapter.setImMessageStatus(upMessage.getId(), i);
+                }
+                mChatMessageModelDao.update(upMessage);
             }
         }
     }
@@ -555,9 +533,6 @@ public class ShopIMActivity extends MyBaseActivity
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCHAT_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_SEED_USERCHAT_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_PIC_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_UP_AUDIO_ID);
         EventBus.getDefault().unregister(this);
     }
 
@@ -642,14 +617,15 @@ public class ShopIMActivity extends MyBaseActivity
                 }
                 buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim()
                         , "", false, null);
+                blogdetailAddcommentEt.setText("");
                 break;
             case R.id.p2pchat_add_picture_tv:
-                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
-                getAlbum.setType("image/*");
-                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
-                p2pchatAddLl.setVisibility(View.GONE);
-//                Intent intent = new Intent(mContext, LocalAlbum.class);
-//                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
+//                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+//                getAlbum.setType("image/*");
+//                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+//                p2pchatAddLl.setVisibility(View.GONE);
+                Intent intent = new Intent(mContext, LocalAlbum.class);
+                startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
                 break;
             case R.id.p2pchat_add_camera_tv:
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
@@ -682,11 +658,6 @@ public class ShopIMActivity extends MyBaseActivity
         temp.setContent(content);
         temp.setType(adChatType);
         if (adChatType == ADChatType.ADChatType_Image) {
-            OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatI)
-                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                    .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()), new File(content))
-                    .id(Common.NET_UP_PIC_ID).tag(Common.NET_UP_PIC_ID)
-                    .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, false));
         } else if (adChatType == ADChatType.ADChatType_Text) {
             if (isService) {//服务
                 List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> operaterList = new ArrayList<>();
@@ -702,18 +673,13 @@ public class ShopIMActivity extends MyBaseActivity
                 }
                 operaterList.add(tempOper);
                 temp.setOperaterList(operaterList);
-                seedMessage(bean.getOperaterName());
+                temp.setContent(bean.getOperaterName());
             } else {
-                seedMessage(content);
+                temp.setContent(content);
             }
         } else if (adChatType == ADChatType.ADChatType_ImageText) {
         } else if (adChatType == ADChatType.ADChatType_Audio) {
             temp.setAudio_duration(mTime);
-            OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatA)
-                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                    .addFile("files0_name", StringUtils.getFileName(audioURL), new File(content))
-                    .id(Common.NET_UP_AUDIO_ID).tag(Common.NET_UP_AUDIO_ID)
-                    .build().execute(new MyStringCallback(ShopIMActivity.this, "", this, false));
         } else if (adChatType == ADChatType.ADChatType_Video) {
         }
 
@@ -778,6 +744,12 @@ public class ShopIMActivity extends MyBaseActivity
         allMessage = tempMessage;
         mAdapter.addImMessageDao(allMessage);
         mChatMessageModelDao.save(tempMessage);
+
+        if (adChatType != ADChatType.ADChatType_Image) {
+            Intent intent = new Intent(mContext, SeedMessageService.class);
+            startService(intent);
+        }
+
     }
 
     @Override
@@ -787,7 +759,6 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     private List<LocalImageHelper.LocalFile> files = new ArrayList<>();
-    private int fileID = 0;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -833,6 +804,8 @@ public class ShopIMActivity extends MyBaseActivity
                         return;
                     }
                     buildMessage(ADChatType.ADChatType_Image, temp.getPath(), "",false, null);
+                    Intent intent = new Intent(mContext, SeedMessageService.class);
+                    startService(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -841,28 +814,23 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     private void seedMorePicMessage() {
-        fileID = files.size()-1;
-        if (fileID<0) {
-            fileID = 0;
-            return;
-        }
         for (int i = 0; i < files.size(); i++) {
-            if (i==fileID) {
-                LocalImageHelper.getInstance().setCurrentSize(files.size());
-                imageUri = Uri.parse(files.get(i).getOriginalUri());
-                LogUtils.e("imageUri:"+imageUri.toString());
-                try {
-                    File temp = BitmapTools.revitionImage(mContext, imageUri);
-                    if (temp==null) {
-                        showToast("发送失败");
-                        return;
-                    }
-                    buildMessage(ADChatType.ADChatType_Image, temp.getPath(), "",false, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            imageUri = Uri.parse(files.get(i).getOriginalUri());
+            LogUtils.e("imageUri:"+imageUri.toString());
+            try {
+                File temp = BitmapTools.revitionImage(mContext, imageUri);
+                if (temp==null) {
+                    showToast("发送失败");
+                    return;
                 }
+                buildMessage(ADChatType.ADChatType_Image, temp.getPath(), "",false, null);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+        LocalImageHelper.getInstance().setCurrentSize(0);
+        Intent intent = new Intent(mContext, SeedMessageService.class);
+        startService(intent);
     }
 
     Handler handler = new Handler();
@@ -985,6 +953,7 @@ public class ShopIMActivity extends MyBaseActivity
     private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
         if (mAdapter.getItem(position).getAudioLocationUrl()!=null
                 && (new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
+            LogUtils.e("mAdapter.getItem(position).getAudioLocationUrl():"+mAdapter.getItem(position).getAudioLocationUrl());
             try {
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
@@ -1023,7 +992,7 @@ public class ShopIMActivity extends MyBaseActivity
 
     @Override
     public void finish(String path) {
-        updateChatMessage(-2, path, mAdapter.getItem(positionAudio).getChatId());
+        updateChatMessage(-2, path, mAdapter.getItem(positionAudio).getChatId(), -1);
         playAudio(positionAudio, mAnimationDrawable, false);
 
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.adapter.ExchangeRecordAllAdapter;
@@ -34,9 +35,11 @@ import okhttp3.Response;
 
 public class ExchangeRecordActivity extends MyBaseActivity implements
         ExchangeRecordAllAdapter.IonSlidingViewClickListener {
-    
+
     @Bind(R.id.pull_refresh_recycler)
     PullToRefreshRecyclerView pullRefreshRecycler;
+    @Bind(R.id.exchange_empty_tx)
+    TextView exchangeEmptyTx;
 
     private Context mContext = ExchangeRecordActivity.this;
     private ExchangeRecordAllAdapter mAdapter;
@@ -78,6 +81,8 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
         mRecyclerView = pullRefreshRecycler.getRefreshableView();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));//这里用线性显示 类似于listview
         mRecyclerView.setAdapter(mAdapter);
+
+        checkEmpty();
     }
 
     @Override
@@ -146,6 +151,18 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
             }
         } else if (id == Common.NET_DELETE_EXHANGE_ID) {
             mAdapter.removeData(allPosition);
+        }
+
+        checkEmpty();
+    }
+
+    private void checkEmpty() {
+        if (mAdapter!=null && mAdapter.getItemCount()==0) {
+            exchangeEmptyTx.setVisibility(View.VISIBLE);
+            pullRefreshRecycler.setVisibility(View.GONE);
+        } else {
+            exchangeEmptyTx.setVisibility(View.GONE);
+            pullRefreshRecycler.setVisibility(View.VISIBLE);
         }
     }
 

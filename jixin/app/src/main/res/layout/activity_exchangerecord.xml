@@ -13,4 +13,17 @@
         android:background="#DCE0E3"
         ptr:ptrMode="both" />
 
+    <TextView
+        android:id="@+id/exchange_empty_tx"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="@dimen/dimen_sp_15"
+        android:textColor="@color/color_494949"
+        android:text="暂无兑换记录"/>
+
 </LinearLayout>

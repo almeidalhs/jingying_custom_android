@@ -27,6 +27,7 @@ import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ToAppType;
 import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
+import com.atman.jixin.service.SeedMessageService;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
@@ -214,7 +215,6 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                 startActivity(ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false));
             }
         } else if (id == Common.NET_UP_GETTUI_ID) {
-
         } else if (id == Common.NET_GET_VERSION_ID) {
             final CheckVersionModel mCheckVersionModel = mGson.fromJson(data, CheckVersionModel.class);
             if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody()!=null) {
@@ -293,6 +293,10 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        Intent stopIntent = new Intent(this, SeedMessageService.class);
+        stopService(stopIntent);
+
         OkHttpUtils.getInstance().cancelTag(Common.NET_QR_CODE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_UP_GETTUI_ID);
         EventBus.getDefault().unregister(this);

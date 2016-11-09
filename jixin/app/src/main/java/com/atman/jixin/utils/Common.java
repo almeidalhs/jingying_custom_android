@@ -18,11 +18,12 @@ public class Common {
 
 
     /**************************http基础访问路径*****************************/
-//    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
-//    public static String ImageUrl = "http://192.168.1.141:8000/by/";
+    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
+    public static String hostUrl_Up = "http://192.168.1.141:8089/";
+    public static String ImageUrl = "http://192.168.1.141:8000/by/";
 
-    public static String hostUrl = "http://www.jiplaza.net/";
-    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
+//    public static String hostUrl = "http://www.jiplaza.net/";
+//    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
     /**************************http基础访问路径*****************************/
 
 
@@ -70,7 +71,7 @@ public class Common {
     //发送信息
     public static final String Url_Seed_UserChat = hostUrl + "rest/chat/send";
     //上传图片
-    public static final String Url_Up_File = hostUrl + "upload?uploadType=";
+    public static final String Url_Up_File = hostUrl_Up + "upload?uploadType=";
     //上传个推用户id (1是商家, 0是买家)
     public static final String Url_Update_ClienId = hostUrl + "rest/user/getui/0/";
     //获取商家商品分类
