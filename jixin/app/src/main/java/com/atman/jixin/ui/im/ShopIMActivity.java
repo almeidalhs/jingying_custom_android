@@ -771,6 +771,7 @@ public class ShopIMActivity extends MyBaseActivity
             }
             //清空选中的图片
             LocalImageHelper.getInstance().getCheckedItems().clear();
+            files.clear();
         }
         if (resultCode != Activity.RESULT_OK) {
             return;
@@ -962,7 +963,9 @@ public class ShopIMActivity extends MyBaseActivity
                         mAnimationDrawable.selectDrawable(0);
                     }
                 } else {
-                    mAnimationDrawable = animationDrawable;
+                    if (mAnimationDrawable==null) {
+                        mAnimationDrawable = animationDrawable;
+                    }
                     mMediaPlayer.reset();
                     mMediaPlayer.setDataSource(mAdapter.getItem(position).getAudioLocationUrl());
                     mMediaPlayer.prepare();

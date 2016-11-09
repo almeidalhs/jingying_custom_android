@@ -38,11 +38,16 @@ public  class SoundMeter {
 
 		if (mRecorder == null) {
 			mRecorder = new MediaRecorder();
-			mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-			mRecorder.setOutputFile(f.getPath()+"/"+name);
 			try {
+				mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);//指定音频来源（麦克风）
+				if (android.os.Build.VERSION.RELEASE.equals("5.0.2")) {
+					LogUtils.e(">>>"+android.os.Build.VERSION.RELEASE);
+					mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);//指定音频输出格式
+				} else {
+					mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);//指定音频输出格式
+				}
+				mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);//指定音频编码方式
+				mRecorder.setOutputFile(f.getPath()+"/"+name);
 				mRecorder.prepare();
 				mRecorder.start();
 				

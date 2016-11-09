@@ -41,7 +41,6 @@ import okhttp3.Response;
 public class SeedMessageService extends Service implements httpCallBack {
 
     private ChatMessageModel allTemp = new ChatMessageModel();
-    private ChatMessageModelDao mChatMessageModelDao;
 
     @Nullable
     @Override
@@ -56,18 +55,19 @@ public class SeedMessageService extends Service implements httpCallBack {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
         checkSeedMessageList();
 
         return START_REDELIVER_INTENT;
     }
 
     private void checkSeedMessageList() {
+        ChatMessageModelDao mChatMessageModelDao = MyBaseApplication.getApplication().getDaoSession().getChatMessageModelDao();
         List<ChatMessageModel> messageList = mChatMessageModelDao.queryBuilder().where(
                 ChatMessageModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())
                 , ChatMessageModelDao.Properties.SendStatus.eq(2)).orderAsc(ChatMessageModelDao.Properties.SendTime).build().list();
         if (messageList!=null && messageList.size()>0) {
             allTemp = messageList.get(0);
+            LogUtils.e("allTemp.getId():"+allTemp.getId()+",allTemp.getSendStatus():"+allTemp.getSendStatus());
             if (messageList.get(0).getType() == ADChatType.ADChatType_Audio) {
                 OkHttpUtils.post().url(Common.Url_Up_File + UpChatFileType.ChatA)
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
@@ -124,8 +124,6 @@ public class SeedMessageService extends Service implements httpCallBack {
             seedMessage(str);
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
             EventBus.getDefault().post(new updateChatMessageServiceEvent(0, "", -1, allTemp.getId()));
-            allTemp.setSendStatus(0);
-            mChatMessageModelDao.update(allTemp);
             checkSeedMessageList();
         } else if (id == Common.NET_UP_PIC_ID) {
             HeadImgResultModel mHeadImgResultModel = new Gson().fromJson(data, HeadImgResultModel.class);

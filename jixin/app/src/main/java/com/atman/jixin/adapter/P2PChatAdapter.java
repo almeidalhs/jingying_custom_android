@@ -300,6 +300,9 @@ public class P2PChatAdapter extends BaseAdapter {
             case ADChatType.ADChatType_Image:
                 String url = temp.getContent();
                 File f = new File(url);
+                holderText.itemP2pchatImageRightIv.getLayoutParams().width = DensityUtil.dp2px(context, 100);
+                holderText.itemP2pchatImageRightIv.getLayoutParams().height = DensityUtil.dp2px(context, 120);
+                holderText.itemP2pchatImageRightIv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 if (f.exists()) {
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
@@ -336,6 +339,13 @@ public class P2PChatAdapter extends BaseAdapter {
                 }
                 break;
         }
+
+        AnimationDrawable  animationDrawableRight = (AnimationDrawable) holderText.itemP2pchatAudioRightIv.getDrawable();
+        animationDrawableRight.stop();
+        animationDrawableRight.selectDrawable(0);
+        AnimationDrawable  animationDrawable = (AnimationDrawable) holderText.itemP2pchatAudioLeftIv.getDrawable();
+        animationDrawable.stop();
+        animationDrawable.selectDrawable(0);
 
         final ViewHolder finalHolderText = holderText;
         holderText.itemP2pchatAudioRightLl.setOnClickListener(new View.OnClickListener() {

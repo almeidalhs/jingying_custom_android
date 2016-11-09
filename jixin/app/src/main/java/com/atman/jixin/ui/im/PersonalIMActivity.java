@@ -445,7 +445,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     }
 
     private List<LocalImageHelper.LocalFile> files = new ArrayList<>();
-    private int fileID = 0;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -458,6 +457,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
             }
             //清空选中的图片
             LocalImageHelper.getInstance().getCheckedItems().clear();
+            files.clear();
         }
         if (resultCode != Activity.RESULT_OK) {
             return;

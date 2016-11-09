@@ -124,8 +124,6 @@ public class SeedPersonalMessageService extends Service implements httpCallBack 
             seedMessage(str);
         } else if (id == Common.NET_SEED_USERCHAT_ID) {
             EventBus.getDefault().post(new updateChatMessageServiceEvent(0, "", -1, allTemp.getId()));
-            allTemp.setSendStatus(0);
-            mChatMessageModelDao.update(allTemp);
             checkSeedMessageList();
         } else if (id == Common.NET_UP_PIC_ID) {
             HeadImgResultModel mHeadImgResultModel = new Gson().fromJson(data, HeadImgResultModel.class);
