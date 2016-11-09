@@ -197,7 +197,7 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
             AddCommentModel mAddCommentModel = mGson.fromJson(data, AddCommentModel.class);
             StoreCommentModel.BodyBean temp = new StoreCommentModel.BodyBean();
             temp.setId(mAddCommentModel.getBody().getId());
-            temp.setAddTime(System.currentTimeMillis());
+            temp.setAddTime(System.currentTimeMillis()/1000);
             temp.setContent(mAddCommentModel.getBody().getContent());
             temp.setUserAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
             temp.setUserName(MyBaseApplication.USERINFOR.getBody().getMemberName());

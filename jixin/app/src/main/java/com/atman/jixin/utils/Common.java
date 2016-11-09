@@ -18,83 +18,83 @@ public class Common {
 
 
     /**************************http基础访问路径*****************************/
-    public static String hostUrl = "http://192.168.1.141:8089/";
-    public static String ImageUrl = "http://192.168.1.141:8000/by/";
+//    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
+//    public static String ImageUrl = "http://192.168.1.141:8000/by/";
 
-//    public static String hostUrl = "http://www.jiplaza.net/";
-//    public static String ImageUrl = "http://www.jiplaza.net:8000/by";
+    public static String hostUrl = "http://www.jiplaza.net/";
+    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
     /**************************http基础访问路径*****************************/
 
 
 
     /**************************http访问路径*****************************/
     //登录
-    public static String Url_Login = hostUrl + "baiye/login";
+    public static String Url_Login = hostUrl + "login";
     //个人
-    public static String Url_Personal = hostUrl + "baiye/rest/custom/index/";
+    public static String Url_Personal = hostUrl + "rest/custom/index/";
     //退出
-    public static String Url_Logout = hostUrl + "baiye/rest/user/logout";
+    public static String Url_Logout = hostUrl + "rest/user/logout";
     //个人信息维护
-    public static String Url_Manage = hostUrl + "baiye/rest/custom/manage";
+    public static String Url_Manage = hostUrl + "rest/custom/manage";
     //发送验证码
-    public static final String Url_FORGOT = hostUrl + "baiye/rest/checkcode/mobile/";
+    public static final String Url_FORGOT = hostUrl + "rest/checkcode/mobile/";
     public static final String SEED_MEESAGE_AFTER_FORGOT = "?type=";
     //重置密码
-    public static String Url_ResetPWD = hostUrl + "baiye/rest/user/forgotpwd/";
+    public static String Url_ResetPWD = hostUrl + "rest/user/forgotpwd/";
     //注册
-    public static String Url_Register = hostUrl + "baiye/rest/user";
+    public static String Url_Register = hostUrl + "rest/user";
     //意见反馈
-    public static String Url_Feedback = hostUrl + "baiye/rest/ad/feedback";
+    public static String Url_Feedback = hostUrl + "rest/ad/feedback";
     //修改密码
-    public static String Url_Reset_PassWord = hostUrl + "baiye/rest/user/password/";
+    public static String Url_Reset_PassWord = hostUrl + "rest/user/password/";
     //上传头像
     public static final String Url_HeadImg = hostUrl + "upload?uploadType=avatar";
     //更新头像
-    public static final String Url_Modify_HeadImg = hostUrl + "baiye/rest/user/avatar";
+    public static final String Url_Modify_HeadImg = hostUrl + "rest/user/avatar";
     //扫描二维码
-    public static final String Url_QRCode = hostUrl + "baiye/rest/custom/qrcode";
+    public static final String Url_QRCode = hostUrl + "rest/custom/qrcode";
     //获取关注列表
-    public static final String Url_GetLike_List = hostUrl + "baiye/rest/favor/likelist";
+    public static final String Url_GetLike_List = hostUrl + "rest/favor/likelist";
     //获取会员中心
-    public static final String Url_MemberCenter = hostUrl + "baiye/rest/custom/memcenter/";
+    public static final String Url_MemberCenter = hostUrl + "rest/custom/memcenter/";
     //获取积分兑换商品
-    public static final String Url_Integral_Exchange = hostUrl + "baiye/rest/integral/";
+    public static final String Url_Integral_Exchange = hostUrl + "rest/integral/";
     //积分兑换商品
-    public static final String Url_Exchange = hostUrl + "baiye/rest/integral/exchange";
+    public static final String Url_Exchange = hostUrl + "rest/integral/exchange";
     //获取商品详情
-    public static final String Url_Get_GoodsDetail = hostUrl + "baiye/rest/goods/";
+    public static final String Url_Get_GoodsDetail = hostUrl + "rest/goods/";
     //获取商品兑换记录
-    public static final String Url_Get_ExchangeRecord = hostUrl + "baiye/rest/integral/exchangelog/";
+    public static final String Url_Get_ExchangeRecord = hostUrl + "rest/integral/exchangelog/";
     //获取商家聊天服务信息
-    public static final String Url_Get_UserChat = hostUrl + "baiye/rest/store/userchat/";
+    public static final String Url_Get_UserChat = hostUrl + "rest/store/userchat/";
     //发送信息
-    public static final String Url_Seed_UserChat = hostUrl + "baiye/rest/chat/send";
+    public static final String Url_Seed_UserChat = hostUrl + "rest/chat/send";
     //上传图片
     public static final String Url_Up_File = hostUrl + "upload?uploadType=";
     //上传个推用户id (1是商家, 0是买家)
-    public static final String Url_Update_ClienId = hostUrl + "baiye/rest/user/getui/0/";
+    public static final String Url_Update_ClienId = hostUrl + "rest/user/getui/0/";
     //获取商家商品分类
-    public static final String Url_Get_Store_GoodsClass = hostUrl + "baiye/rest/store/goodsclass/";
+    public static final String Url_Get_Store_GoodsClass = hostUrl + "rest/store/goodsclass/";
     //获取商家商品分类下的商品
-    public static final String Url_Get_Store_Goods_By_Id = hostUrl + "baiye/rest/goods/store/";
+    public static final String Url_Get_Store_Goods_By_Id = hostUrl + "rest/goods/store/";
     //获取商家介绍
-    public static final String Url_Get_Store_Introduction = hostUrl + "baiye/rest/business/detail/";
+    public static final String Url_Get_Store_Introduction = hostUrl + "rest/business/detail/";
     //获取评论
-    public static final String Url_Get_Comment = hostUrl + "baiye/rest/comment/getcomments/";
+    public static final String Url_Get_Comment = hostUrl + "rest/comment/getcomments/";
     //评论点赞
-    public static final String Url_Comment_Like = hostUrl + "baiye/rest/comment/like/";
+    public static final String Url_Comment_Like = hostUrl + "rest/comment/like/";
     //添加评论
-    public static final String Url_Add_Comment = hostUrl + "baiye/rest/comment";
+    public static final String Url_Add_Comment = hostUrl + "rest/comment";
     //获取店铺信息
-    public static final String Url_Get_StoreDetail = hostUrl + "baiye/rest/store/userchat/";
+    public static final String Url_Get_StoreDetail = hostUrl + "rest/store/userchat/";
     //获取所有兑换记录
-    public static final String Url_Get_All_ExchangeRecord = hostUrl + "baiye/rest/integral/allexchangelog/";
+    public static final String Url_Get_All_ExchangeRecord = hostUrl + "rest/integral/allexchangelog/";
     //删除兑换记录
-    public static final String Url_Delete_ExchangeRecord = hostUrl + "baiye/rest/integral/manage";
+    public static final String Url_Delete_ExchangeRecord = hostUrl + "rest/integral/manage";
     //删除关注
-    public static final String Url_Delete_Attention = hostUrl + "baiye/rest/favor/cancel/";
+    public static final String Url_Delete_Attention = hostUrl + "rest/favor/cancel/";
     //检查版本更新
-    public static String Url_Get_Version = hostUrl + "baiye/rest/common/androidjyneedUpdate";
+    public static String Url_Get_Version = hostUrl + "rest/common/androidjyneedUpdate";
     /**************************http访问路径*****************************/
 
 
