@@ -38,7 +38,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/11/8.
  */
 
-public class SeedMessageService extends Service implements httpCallBack {
+public class SeedPersonalMessageService extends Service implements httpCallBack {
 
     private ChatMessageModel allTemp = new ChatMessageModel();
     private ChatMessageModelDao mChatMessageModelDao;
@@ -144,39 +144,8 @@ public class SeedMessageService extends Service implements httpCallBack {
     private void seedMessage(String str) {
         allTemp.setContent(str);
         LogUtils.e("new Gson().toJson(allTemp):"+new Gson().toJson(allTemp));
-        MessageModel seed = new MessageModel();
-        seed.setTargetType(ADChatTargetType.ADChatTargetType_Shop);
-        seed.setTargetId(allTemp.getTargetId());
-        seed.setTargetName(allTemp.getTargetName());
-        if (allTemp.getIdentifyStr()!=null) {
-            seed.setIdentifyStr(allTemp.getIdentifyStr());
-        }
-        seed.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
-        seed.setSendTime(System.currentTimeMillis());
-        seed.setContent(allTemp.getContent());
-        seed.setType(allTemp.getType());
-        if (allTemp.getType() == ADChatType.ADChatType_Image) {
-        } else if (allTemp.getType() == ADChatType.ADChatType_Text) {
-            if (allTemp.getOperaterId()!=0) {//服务
-                List<GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean> operaterList = new ArrayList<>();
-                GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean tempOper = new GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean();
-                tempOper.setOperaterId(allTemp.getOperaterId());
-                tempOper.setOperaterType(allTemp.getOperaterType());
-                tempOper.setOperaterName(allTemp.getOperaterName());
-                operaterList.add(tempOper);
-                seed.setOperaterList(operaterList);
-                seed.setContent(allTemp.getOperaterName());
-            } else {
-                seed.setContent(allTemp.getContent());
-            }
-        } else if (allTemp.getType() == ADChatType.ADChatType_ImageText) {
-        } else if (allTemp.getType() == ADChatType.ADChatType_Audio) {
-            seed.setAudio_duration(allTemp.getAudio_duration());
-        } else if (allTemp.getType() == ADChatType.ADChatType_Video) {
-        }
-        LogUtils.e("new Gson().toJson(seed):"+new Gson().toJson(seed));
         OkHttpUtils.postString().url(Common.Url_Seed_UserChat).tag(Common.NET_SEED_USERCHAT_ID)
-                .id(Common.NET_SEED_USERCHAT_ID).content(new Gson().toJson(seed)).mediaType(Common.JSON)
+                .id(Common.NET_SEED_USERCHAT_ID).content(new Gson().toJson(allTemp)).mediaType(Common.JSON)
                 .headers(MyBaseApplication.getApplication().getHeaderSeting())
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .build().execute(new MyStringCallback(this, "发送中...", this, false));

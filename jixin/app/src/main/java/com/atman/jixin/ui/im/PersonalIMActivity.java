@@ -27,15 +27,12 @@ import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.EventActionType;
-import com.atman.jixin.model.iimp.UpChatFileType;
 import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.GetMessageModel;
-import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
-import com.atman.jixin.model.response.UpdateAudioResultModel;
 import com.atman.jixin.model.updateChatMessageServiceEvent;
-import com.atman.jixin.service.SeedMessageService;
+import com.atman.jixin.service.SeedPersonalMessageService;
 import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
@@ -47,16 +44,13 @@ import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.UiHelper;
 import com.atman.jixin.widget.downfile.DownloadAudioFile;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
-import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.localalbum.common.ImageUtils;
 import com.base.baselibs.widget.localalbum.common.LocalImageHelper;
 import com.base.baselibs.widget.localalbum.ui.LocalAlbum;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.tbl.okhttputils.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -318,6 +312,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                 }
                 buildMessage(ADChatType.ADChatType_Text, blogdetailAddcommentEt.getText().toString().trim()
                         , false, null);
+                blogdetailAddcommentEt.setText("");
                 break;
             case R.id.p2pchat_add_picture_tv:
 //                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
@@ -438,7 +433,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
         mChatMessageModelDao.save(tempMessage);
 
         if (adChatType != ADChatType.ADChatType_Image) {
-            Intent intent = new Intent(mContext, SeedMessageService.class);
+            Intent intent = new Intent(mContext, SeedPersonalMessageService.class);
             startService(intent);
         }
     }
@@ -496,7 +491,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                         return;
                     }
                     buildMessage(ADChatType.ADChatType_Image, temp.getPath(), false, null);
-                    Intent intent = new Intent(mContext, SeedMessageService.class);
+                    Intent intent = new Intent(mContext, SeedPersonalMessageService.class);
                     startService(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -521,7 +516,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
             }
         }
         LocalImageHelper.getInstance().setCurrentSize(0);
-        Intent intent = new Intent(mContext, SeedMessageService.class);
+        Intent intent = new Intent(mContext, SeedPersonalMessageService.class);
         startService(intent);
     }
 

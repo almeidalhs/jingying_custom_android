@@ -28,6 +28,7 @@ import com.atman.jixin.model.iimp.ToAppType;
 import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
 import com.atman.jixin.service.SeedMessageService;
+import com.atman.jixin.service.SeedPersonalMessageService;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
@@ -296,6 +297,8 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
 
         Intent stopIntent = new Intent(this, SeedMessageService.class);
         stopService(stopIntent);
+        Intent stopPersonalIntent = new Intent(this, SeedPersonalMessageService.class);
+        stopService(stopPersonalIntent);
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_QR_CODE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_UP_GETTUI_ID);

@@ -51,6 +51,7 @@
         <activity android:name=".ui.shop.ExchangeRecordActivity" />
 
         <service android:name=".service.SeedMessageService"/>
+        <service android:name=".service.SeedPersonalMessageService"/>
 
         <!--Umeng-->
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
