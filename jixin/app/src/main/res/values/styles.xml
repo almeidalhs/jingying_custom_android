@@ -21,7 +21,7 @@
         <item name="colorPrimaryDark">@color/color_black</item>
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
         <item name="android:windowBackground">@color/activity_default_bg</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
 
     <style name="edittextDialog" parent="@android:style/Theme.Dialog">

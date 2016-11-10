@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -966,7 +967,13 @@ public class ShopIMActivity extends MyBaseActivity
                     if (mAnimationDrawable==null) {
                         mAnimationDrawable = animationDrawable;
                     }
+                    AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                    //听筒模式下设置为false
+                    am.setSpeakerphoneOn(true);
+                    //设置成听筒模式
+//                    am.setMode(AudioManager.MODE_IN_CALL);
                     mMediaPlayer.reset();
+                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mMediaPlayer.setDataSource(mAdapter.getItem(position).getAudioLocationUrl());
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();

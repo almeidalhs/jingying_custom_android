@@ -1,33 +1,36 @@
 package com.atman.jixin.ui.im;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atman.jixin.R;
-import com.atman.jixin.ui.base.MyBaseActivity;
-import com.atman.jixin.utils.SoundMeter;
+import com.atman.jixin.ui.base.MyBaseApplication;
 import com.base.baselibs.util.LogUtils;
+import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.audiorecord.aac.AAC;
 
 import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Response;
 
 /**
  * Created by tangbingliang on 16/10/26.
  */
 
-public class RecordingActivity extends MyBaseActivity implements View.OnTouchListener, SoundMeter.onRecordError {
+public class RecordingActivity extends Activity implements View.OnTouchListener, AAC.AACListener {
 
     @Bind(R.id.recording_tip_tx)
     TextView recordingTipTx;
@@ -43,28 +46,25 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     LinearLayout rcChatPopup;
 
     private Context mContext = RecordingActivity.this;
-
-    private LinearLayout ll;
-    private int flag = 1;
-    private boolean isShosrt = false;
-    private String voiceName;
-    private long startVoiceT, endVoiceT;
-    private Handler mHandler = new Handler();
-    private Handler mTimeHandler = new Handler();
-
-    private SoundMeter mSensor;
-    private boolean isTouch = false;
-    private boolean isCancel = false;
-    private boolean isFinish = false;
+    private String path = Environment.getExternalStorageDirectory()+"/jiying/audio";
+    private AAC aac;
+    private int sampleRateInHz = 16000;
     private int mTime;
-    private boolean isFail = false;
+    private long startTime;
+    private long endTime;
+    private static final int MAX_TIME = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSwipeBackEnable(false);
+        //不显示程序的标题栏
+        requestWindowFeature( Window.FEATURE_NO_TITLE );
         setContentView(R.layout.activity_recording);
         ButterKnife.bind(this);
+
+        recordingIv.setOnTouchListener(this);
+        recordingTipTx.setText("按住说话");
+        recordingTipTx.setTextColor(getResources().getColor(R.color.color_757575));
     }
 
     public static Intent buildIntent(Context context, long id) {
@@ -74,53 +74,8 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     }
 
     @Override
-    public void initWidget(View... v) {
-        super.initWidget(v);
-        hideTitleBar();
-        ll = getRootContentLl();
-        ll.setBackgroundColor(getResources().getColor(R.color.color_00000000));
-
-        mSensor = new SoundMeter(this);
-
-        recordingIv.setOnTouchListener(this);
-        recordingIv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                LogUtils.e("hasFocus:"+hasFocus);
-            }
-        });
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public void doInitBaseHttp() {
-        super.doInitBaseHttp();
-    }
-
-    @Override
-    public void onStringResponse(String data, Response response, int id) {
-        super.onStringResponse(data, response, id);
-    }
-
-    public void backResuilt(File file) {
-        isFinish = true;
-        if (file.exists()) {
-            if (file.length()==0) {
-                showWraning("录音失败,请查看是否已开启麦克风权限");
-                return;
-            }
-            Intent mIntent = new Intent();
-            mIntent.putExtra("url", file.getPath());
-            mIntent.putExtra("time", mTime);
-            setResult(RESULT_OK, mIntent);
-            finish();
-        } else {
-            showToast("文件不存在");
-        }
     }
 
     @Override
@@ -139,109 +94,51 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.recording_top_ll:
-                if (!isTouch) {
+                if (aac==null || aac.getStatus()!= AAC.AACStatus.Type_Ing) {
                     finish();
                 }
                 break;
         }
     }
 
-    private static final int POLL_INTERVAL = 50;
-    private static final int TIME_INTERVAL = 1000;
-    private static final int MAX_TIME = 60;
-
-    private Runnable mSleepTask = new Runnable() {
-        public void run() {
-            stop();
-        }
-    };
-
-    private Runnable mPollTask = new Runnable() {
-        public void run() {
-            double amp = mSensor.getAmplitude();
-            updateDisplay(amp);
-            mHandler.postDelayed(mPollTask, POLL_INTERVAL);
-        }
-    };
-
-    private Runnable mTimeTask = new Runnable() {
-        public void run() {
-            endVoiceT = System.currentTimeMillis();
-            int time = (int) ((endVoiceT - startVoiceT) / 1000);
-            if (!isCancel) {
-                recordingTipTx.setText("录音中.."+time+"s");
-                if (time >= MAX_TIME) {
-                    mTime = MAX_TIME;
-                    File file = recordEnd();
-                    backResuilt(file);
-                } else {
-                    if (isFail) {
-                        File file = recordEnd();
-                        if (file.exists()) {
-                            file.delete();
-                        }
-                        showWraning(mContext, "录音失败,请查看是否已开启麦克风权限", false);
-                        return;
-                    }
-                    mTimeHandler.postDelayed(mTimeTask, TIME_INTERVAL);
-                }
-            }
-        }
-    };
-
     @Override
     protected void onPause() {
         super.onPause();
-        File file = recordEnd();
-        if (file.exists() && !isFinish) {
-            file.delete();
-        }
     }
 
     private void updateDisplay(double signalEMA) {
+        int n = (int) signalEMA;
+        if (n<=28) {
+            volume.setImageResource(R.mipmap.amp1);
+        } else if (n>28 && n<=34) {
 
-        switch ((int) signalEMA) {
-            case 0:
-            case 1:
-                volume.setImageResource(R.mipmap.amp1);
-                break;
-            case 2:
-            case 3:
-                volume.setImageResource(R.mipmap.amp2);
-
-                break;
-            case 4:
-            case 5:
-                volume.setImageResource(R.mipmap.amp3);
-                break;
-            case 6:
-            case 7:
-                volume.setImageResource(R.mipmap.amp4);
-                break;
-            case 8:
-            case 9:
-                volume.setImageResource(R.mipmap.amp5);
-                break;
-            case 10:
-            case 11:
-                volume.setImageResource(R.mipmap.amp6);
-                break;
-            default:
-                volume.setImageResource(R.mipmap.amp7);
-                break;
+            switch ((int) signalEMA) {
+                case 29:
+                case 30:
+                    volume.setImageResource(R.mipmap.amp2);
+                    break;
+                case 31:
+                    volume.setImageResource(R.mipmap.amp3);
+                    break;
+                case 32:
+                    volume.setImageResource(R.mipmap.amp4);
+                    break;
+                case 33:
+                    volume.setImageResource(R.mipmap.amp5);
+                    break;
+                case 34:
+                    volume.setImageResource(R.mipmap.amp6);
+                    break;
+                default:
+                    volume.setImageResource(R.mipmap.amp1);
+                    break;
+            }
+        } else if (n>=35) {
+            volume.setImageResource(R.mipmap.amp7);
+        } else {
+            volume.setImageResource(R.mipmap.amp1);
         }
-    }
 
-    private void start(String name) {
-        mSensor.start(name);
-        mHandler.postDelayed(mPollTask, POLL_INTERVAL);
-    }
-
-    private void stop() {
-        mHandler.removeCallbacks(mSleepTask);
-        mHandler.removeCallbacks(mPollTask);
-        mSensor.stop();
-        volume.setImageResource(R.mipmap.amp1);
     }
 
     @Override
@@ -249,6 +146,10 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
         if (!Environment.getExternalStorageDirectory().exists()) {
             showToast("SDCard不存在");
             return true;
+        }
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
         }
 
         int[] location = new int[2];
@@ -258,89 +159,117 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                LogUtils.e("ACTION_DOWN");
-                if (flag == 1 && !isTouch) {
-                    isFinish = false;
-                    rcChatPopup.setVisibility(View.VISIBLE);
-                    voiceRcdHintRcding.setVisibility(View.GONE);
-                    mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            if (!isShosrt) {
-                                voiceRcdHintRcding.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }, 0);
-                    recordingTipTx.setText("录音中..0s");
-                    recordingTipTx.setTextColor(getResources().getColor(R.color.color_ec5b4b));
-                    mTimeHandler.postDelayed(mTimeTask, 0);
-                    startVoiceT = System.currentTimeMillis();
-                    voiceName = startVoiceT + ".aac";
-                    start(voiceName);
-                    flag = 2;
-                    isTouch = true;
-                    isCancel = false;
-                }
+                LogUtils.e("ACTION_DOWN"+android.os.Build.MODEL);
+                recordingTipTx.setText("录音中..0s");
+                recordingTipTx.setTextColor(getResources().getColor(R.color.color_ec5b4b));
+                aac = new AAC(path + System.currentTimeMillis() +".aac", android.os.Build.MODEL, RecordingActivity.this);
+                aac.sampleRateInHz(sampleRateInHz);
+                aac.start();
                 break;
             case MotionEvent.ACTION_UP:
                 LogUtils.e("ACTION_UP");
-                if (flag == 2) {
-                    File file = recordEnd();
-
-                    if (event.getRawY() >= recordingIv_Y
-                            && event.getRawY() <= recordingIv_Y + recordingIv.getHeight()
-                            && event.getRawX() >= recordingIv_X
-                            && event.getRawX() <= recordingIv_X + recordingIv.getWidth()) {
-                        endVoiceT = System.currentTimeMillis();
-                        int time = (int) ((endVoiceT - startVoiceT) / 1000);
-                        mTime = time;
-                        if (time < 1) {
-                            voiceRcdHintRcding.setVisibility(View.GONE);
-                            showToast("时间太短");
-                            return false;
-                        } else {
-                            backResuilt(file);
-                        }
-                    } else {
-                        if (file.exists()) {
-                            file.delete();
-                        }
-                    }
+                if (event.getRawY() >= recordingIv_Y
+                        && event.getRawY() <= recordingIv_Y + recordingIv.getHeight()
+                        && event.getRawX() >= recordingIv_X
+                        && event.getRawX() <= recordingIv_X + recordingIv.getWidth()) {
+                    aac.end();
+                } else {
+                    aac.cancel();
                 }
+                recordingTipTx.setText("按住说话");
                 break;
             case MotionEvent.ACTION_CANCEL:
                 LogUtils.e("ACTION_CANCEL");
-                if (flag == 2) {
-                    File file = recordEnd();
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                }
+                aac.cancel();
                 break;
         }
         return true;
     }
 
-    private File recordEnd() {
-        recordingTipTx.setText("按住说话");
-        recordingTipTx.setTextColor(getResources().getColor(R.color.color_757575));
-        isTouch = false;
-        isCancel = true;
-        rcChatPopup.setVisibility(View.GONE);
-        flag = 1;
-        stop();
-        File file = new File(mSensor.getPath()+"/"+ voiceName);
-        return file;
+    private PromptDialog.Builder builder;
+    public void showWraning(String str) {
+        if (builder==null) {
+            builder = new PromptDialog.Builder(this);
+            builder.setMessage(str);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    builder=null;
+                }
+            });
+            builder.show();
+        }
+    }
+
+    private Toast mToast;
+    public void showToast(String text) {
+        if(mToast == null) {
+            mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
     }
 
     @Override
-    public void onFaild(int ExceptionId) {
-        isFail = true;
-        if (ExceptionId == SoundMeter.onRecordError.mRuntimeException) {
-//            showWraning("录音失败,请查看是否已开启麦克风权限");
-        } else if (ExceptionId == SoundMeter.onRecordError.mIOException) {
-//            showWraning("录音失败,请查看内存卡是否存在");
-        } else if (ExceptionId == SoundMeter.onRecordError.mIllegalStateException) {
-//            showWraning("录音失败");
+    public void onRecordStart() {
+        startTime = System.currentTimeMillis();
+        rcChatPopup.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onRecording(double volume) {
+        updateDisplay(volume);
+        int time = (int) ((System.currentTimeMillis() - startTime) / 1000);
+        if (time>=MAX_TIME) {
+            aac.end();
+        } else {
+            recordingTipTx.setText("录音中.."+time+"s");
         }
     }
+
+    @Override
+    public void onRecordEnd(String filePath) {
+        endTime = System.currentTimeMillis();
+        recordingTipTx.setText("按住说话");
+        recordingTipTx.setTextColor(getResources().getColor(R.color.color_757575));
+        rcChatPopup.setVisibility(View.GONE);
+        mTime = (int) (endTime - startTime);
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.length()==0) {
+                return;
+            }
+            Intent mIntent = new Intent();
+            mIntent.putExtra("url", file.getPath());
+            mIntent.putExtra("time", mTime/1000);
+            setResult(RESULT_OK, mIntent);
+            finish();
+        } else {
+            showToast("文件不存在");
+        }
+    }
+
+    @Override
+    public void onRecordCancel(String filePath) {
+        rcChatPopup.setVisibility(View.GONE);
+        recordingTipTx.setText("按住说话");
+        recordingTipTx.setTextColor(getResources().getColor(R.color.color_757575));
+        File f = new File(filePath);
+        if (f.exists()) {
+            f.delete();
+        }
+        showToast("取消录音");
+    }
+
+    @Override
+    public void onRecordFaild(String str) {
+        recordingTipTx.setText("按住说话");
+        rcChatPopup.setVisibility(View.GONE);
+        recordingTipTx.setTextColor(getResources().getColor(R.color.color_757575));
+        showWraning(str);
+    }
+
 }
