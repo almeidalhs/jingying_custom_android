@@ -652,6 +652,7 @@ public class ShopIMActivity extends MyBaseActivity
         temp.setTargetId(storeId);
         temp.setTargetName(name);
         if (mNumberModel!=null) {
+            LogUtils.e("mNumberModel.getLocation():"+mNumberModel.getLocation());
             temp.setIdentifyStr(mNumberModel.getLocation());
         }
         temp.setTargetAvatar(MyBaseApplication.USERINFOR.getBody().getMemberAvatar());
@@ -705,6 +706,7 @@ public class ShopIMActivity extends MyBaseActivity
         //添加聊天记录
         ChatMessageModel tempMessage = new ChatMessageModel();
         tempMessage.setId(null);
+        tempMessage.setIdentifyStr(temp.getIdentifyStr());
         tempMessage.setTargetId(temp.getTargetId());
         tempMessage.setLoginId(MyBaseApplication.USERINFOR.getBody().getAtmanUserId());
         tempMessage.setType(temp.getType());
