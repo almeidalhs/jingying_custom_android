@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -604,8 +605,20 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
         switch (v.getId()) {
             case R.id.item_p2pchat_audio_right_ll:
             case R.id.item_p2pchat_audio_left_ll:
-                positionAudio = position;
-                playAudio(position, animationDrawable, true);
+                if (position == positionAudio) {
+                    if (mMediaPlayer.isPlaying()) {
+                        stopAnim();
+                    } else {
+                        mAnimationDrawable = animationDrawable;
+                        positionAudio = position;
+                        playAudio(position, animationDrawable, true);
+                    }
+                } else {
+                    stopAnim();
+                    mAnimationDrawable = animationDrawable;
+                    positionAudio = position;
+                    playAudio(position, animationDrawable, true);
+                }
                 break;
         }
     }
@@ -613,6 +626,10 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     @Override
     protected void onPause() {
         super.onPause();
+        stopAnim();
+    }
+
+    private void stopAnim() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
             if (mAnimationDrawable!=null) {
@@ -626,15 +643,9 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
         if (mAdapter.getItem(position).getAudioLocationUrl() != null
                 && (new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
             try {
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.stop();
-                    if (mAnimationDrawable != null) {
-                        mAnimationDrawable.stop();
-                        mAnimationDrawable.selectDrawable(0);
-                    }
-                } else {
-                    mAnimationDrawable = animationDrawable;
+                if (!mMediaPlayer.isPlaying()) {
                     mMediaPlayer.reset();
+                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mMediaPlayer.setDataSource(mAdapter.getItem(position).getAudioLocationUrl());
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
@@ -646,7 +657,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                         }
                     });
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

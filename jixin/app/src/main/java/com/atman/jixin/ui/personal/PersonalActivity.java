@@ -134,7 +134,7 @@ public class PersonalActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, AboutAndHelpActivity.class));
                 break;
             case R.id.personal_exchange_ll:
-                startActivity(ExchangeRecordActivity.buildIntent(mContext, -1));
+                startActivity(ExchangeRecordActivity.buildIntent(mContext, -1, "积分兑换记录"));
                 break;
         }
     }

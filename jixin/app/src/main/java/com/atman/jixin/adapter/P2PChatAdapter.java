@@ -3,6 +3,8 @@ package com.atman.jixin.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -316,11 +318,11 @@ public class P2PChatAdapter extends BaseAdapter {
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv
-                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                                , MyBaseApplication.getApplication().optionsHead, mListenerPic);
                     } else {
                         holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageLeftIv
-                                , MyBaseApplication.getApplication().optionsHead, mListener);
+                                , MyBaseApplication.getApplication().optionsHead, mListenerPic);
                     }
                 }
                 break;
@@ -347,18 +349,19 @@ public class P2PChatAdapter extends BaseAdapter {
         animationDrawable.stop();
         animationDrawable.selectDrawable(0);
 
-        final ViewHolder finalHolderText = holderText;
+        final ViewHolder finalHolderRightText = holderText;
         holderText.itemP2pchatAudioRightLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioRightIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderRightText.itemP2pchatAudioRightIv.getDrawable());
             }
         });
 
+        final ViewHolder finalHolderLeftText = holderText;
         holderText.itemP2pchatAudioLeftLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioLeftIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderLeftText.itemP2pchatAudioLeftIv.getDrawable());
             }
         });
 
@@ -412,6 +415,34 @@ public class P2PChatAdapter extends BaseAdapter {
 
         @Override
         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+            if (!isBottom) {
+                isBottom = true;
+                handler.postDelayed(runnable, 500);
+            }
+        }
+
+        @Override
+        public void onLoadingCancelled(String s, View view) {
+
+        }
+    };
+
+    private ImageLoadingListener mListenerPic = new ImageLoadingListener() {
+        @Override
+        public void onLoadingStarted(String s, View view) {
+
+        }
+
+        @Override
+        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+        }
+
+        @Override
+        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+            ImageView im = (ImageView) view;
+            im.getLayoutParams().height = bitmap.getHeight();
+            im.getLayoutParams().width = bitmap.getWidth();
             if (!isBottom) {
                 isBottom = true;
                 handler.postDelayed(runnable, 500);

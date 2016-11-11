@@ -34,13 +34,10 @@ import com.atman.jixin.model.greendao.gen.LocationNumberModelDao;
 import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.EventActionType;
-import com.atman.jixin.model.iimp.UpChatFileType;
 import com.atman.jixin.model.response.GetChatServiceModel;
 import com.atman.jixin.model.response.GetMessageModel;
-import com.atman.jixin.model.response.HeadImgResultModel;
 import com.atman.jixin.model.response.MessageModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
-import com.atman.jixin.model.response.UpdateAudioResultModel;
 import com.atman.jixin.model.updateChatMessageServiceEvent;
 import com.atman.jixin.service.SeedMessageService;
 import com.atman.jixin.ui.PictureBrowsingActivity;
@@ -62,7 +59,6 @@ import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
-import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.localalbum.common.ImageUtils;
 import com.base.baselibs.widget.localalbum.common.LocalImageHelper;
@@ -936,8 +932,20 @@ public class ShopIMActivity extends MyBaseActivity
         switch (v.getId()) {
             case R.id.item_p2pchat_audio_right_ll:
             case R.id.item_p2pchat_audio_left_ll:
-                positionAudio = position;
-                playAudio(position, animationDrawable, true);
+                if (position == positionAudio) {
+                    if (mMediaPlayer.isPlaying()) {
+                        stopAnim();
+                    } else {
+                        mAnimationDrawable = animationDrawable;
+                        positionAudio = position;
+                        playAudio(position, animationDrawable, true);
+                    }
+                } else {
+                    stopAnim();
+                    mAnimationDrawable = animationDrawable;
+                    positionAudio = position;
+                    playAudio(position, animationDrawable, true);
+                }
                 break;
         }
     }
@@ -945,6 +953,10 @@ public class ShopIMActivity extends MyBaseActivity
     @Override
     protected void onPause() {
         super.onPause();
+        stopAnim();
+    }
+
+    private void stopAnim() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
             if (mAnimationDrawable!=null) {
@@ -957,23 +969,10 @@ public class ShopIMActivity extends MyBaseActivity
     private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
         if (mAdapter.getItem(position).getAudioLocationUrl()!=null
                 && (new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
+            LogUtils.e("position:"+position);
             LogUtils.e("mAdapter.getItem(position).getAudioLocationUrl():"+mAdapter.getItem(position).getAudioLocationUrl());
             try {
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.stop();
-                    if (mAnimationDrawable!=null) {
-                        mAnimationDrawable.stop();
-                        mAnimationDrawable.selectDrawable(0);
-                    }
-                } else {
-                    if (mAnimationDrawable==null) {
-                        mAnimationDrawable = animationDrawable;
-                    }
-                    AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    //听筒模式下设置为false
-                    am.setSpeakerphoneOn(true);
-                    //设置成听筒模式
-//                    am.setMode(AudioManager.MODE_IN_CALL);
+                if (!mMediaPlayer.isPlaying()) {
                     mMediaPlayer.reset();
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mMediaPlayer.setDataSource(mAdapter.getItem(position).getAudioLocationUrl());
@@ -987,7 +986,6 @@ public class ShopIMActivity extends MyBaseActivity
                         }
                     });
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

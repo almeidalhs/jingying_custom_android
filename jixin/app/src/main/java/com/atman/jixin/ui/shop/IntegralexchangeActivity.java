@@ -91,7 +91,7 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
         setBarRightIv(R.mipmap.exchangerecode_ic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ExchangeRecordActivity.buildIntent(mContext, storeId));
+                startActivity(ExchangeRecordActivity.buildIntent(mContext, storeId, "兑换记录"));
             }
         });
 

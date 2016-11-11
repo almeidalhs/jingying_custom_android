@@ -49,6 +49,7 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
     private int mPage = 1;
     private int mSize = 20;
     private long storeId;
+    private String title;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -58,8 +59,9 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, long storeId) {
+    public static Intent buildIntent(Context context, long storeId, String title) {
         Intent intent = new Intent(context, ExchangeRecordActivity.class);
+        intent.putExtra("title", title);
         intent.putExtra("storeId", storeId);
         return intent;
     }
@@ -67,7 +69,8 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        setBarTitleTx("兑换记录");
+        title = getIntent().getStringExtra("title");
+        setBarTitleTx(title);
 
         storeId = getIntent().getLongExtra("storeId", -1);
         initListView();
