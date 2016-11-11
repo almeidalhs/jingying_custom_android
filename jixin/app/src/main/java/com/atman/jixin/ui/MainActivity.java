@@ -99,12 +99,17 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
         if (isLogin()) {
             PushManager.getInstance().initialize(this.getApplicationContext());
             String CliendId = PushManager.getInstance().getClientid(mContext);
+            while (CliendId ==null || CliendId.isEmpty()) {
+                showLoading("链接中...");
+                PushManager.getInstance().initialize(this.getApplicationContext());
+                CliendId = PushManager.getInstance().getClientid(mContext);
+            }
 
             OkHttpUtils.postString().url(Common.Url_Update_ClienId + CliendId).content("{}")
                     .headers(MyBaseApplication.getApplication().getHeaderSeting())
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .mediaType(Common.JSON).id(Common.NET_UP_GETTUI_ID).tag(Common.NET_UP_GETTUI_ID)
-                    .build().execute(new MyStringCallback(mContext, "链接中...", this, true, false));
+                    .build().execute(new MyStringCallback(mContext, "链接中...", this, false, false));
             EventBus.getDefault().register(this);
         }
     }
