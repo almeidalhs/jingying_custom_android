@@ -280,17 +280,20 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         tempMessage.setSendStatus(0);
         tempMessage.setSelfSend(false);
         mChatMessageModelDao.save(tempMessage);
-        if (!isScreenOn(context) || !isAppOnFreground(context)
-                || isApplicationBroughtToBackgroundByTask(context)) {
+        if (isScreenOn(context)) {//屏幕亮的
+            if (!isAppOnFreground(context)
+                    || isApplicationBroughtToBackgroundByTask(context)) {//在后台
+                ResidentNotificationHelper.sendResidentNoticeType0(context
+                        , temp.getSendTime(), content, temp.getChatId());
+            } else {//不在后台
+                /** 想设置震动大小可以通过改变pattern来设定，如果开启时间太短，震动效果可能感觉不到**/
+                Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                long [] pattern = {100,400,100,400};   // 停止 开启 停止 开启
+                vibrator.vibrate(pattern,-1);           //重复两次上面的pattern 如果只想震动一次，index设为-1
+            }
+        } else {//屏幕不亮
             ResidentNotificationHelper.sendResidentNoticeType0(context
                     , temp.getSendTime(), content, temp.getChatId());
-        } else {
-            /*
-         * 想设置震动大小可以通过改变pattern来设定，如果开启时间太短，震动效果可能感觉不到
-         * */
-            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            long [] pattern = {100,400,100,400};   // 停止 开启 停止 开启
-            vibrator.vibrate(pattern,-1);           //重复两次上面的pattern 如果只想震动一次，index设为-1
         }
         EventBus.getDefault().post(new MessageEvent(mGetMessageModel,tempMessage));
     }
@@ -309,7 +312,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 
     /**
      * 是否在后台
-     *
+     * @return false 在后台; true 在前台
      * @return
      */
     public boolean isAppOnFreground(Context context) {

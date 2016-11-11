@@ -42,6 +42,7 @@ import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.ShapeImageView;
@@ -59,6 +60,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -268,23 +271,26 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 if (to == ToAppType.ToAppType_WEIXIN) {
-//                    Intent intent = new Intent();
-//                    ComponentName cmp = new ComponentName(" com.tencent.mm ","com.tencent.mm.ui.LauncherUI");
-//                    intent.setAction(Intent.ACTION_MAIN);
-//                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    intent.setComponent(cmp);
                     Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.mm");
                     startActivity(intent);
                 } else if (to == ToAppType.ToAppType_QQ) {
                     Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.mobileqq");
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent();
-                    intent.setAction("android.intent.action.VIEW");
-                    Uri content_url = Uri.parse(content);
-                    intent.setData(content_url);
-                    startActivity(intent);
+                    String str = content;
+                    if (!str.startsWith("http")) {
+                        str = "http://" + content;
+                    }
+                    try {
+                        Intent intent = new Intent();
+                        intent.setAction("android.intent.action.VIEW");
+                        Uri content_url = Uri.parse(str);
+                        intent.setData(content_url);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        LogUtils.e(">>>:"+e.toString());
+                        startActivity(QRScanCodeActivity.buildIntent(mContext, content));
+                    }
                 }
             }
         });

@@ -441,8 +441,10 @@ public class P2PChatAdapter extends BaseAdapter {
         @Override
         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
             ImageView im = (ImageView) view;
-            im.getLayoutParams().height = bitmap.getHeight();
-            im.getLayoutParams().width = bitmap.getWidth();
+            int w = DensityUtil.dp2px(context, 100) - DensityUtil.dp2px(context, 10);
+            int h = w * bitmap.getHeight()/bitmap.getWidth();
+            im.getLayoutParams().height = h;
+            im.getLayoutParams().width = w;
             if (!isBottom) {
                 isBottom = true;
                 handler.postDelayed(runnable, 500);

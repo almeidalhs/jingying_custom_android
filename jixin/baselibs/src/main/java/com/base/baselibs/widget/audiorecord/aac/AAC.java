@@ -172,7 +172,7 @@ public class AAC implements Runnable {
 
 				volume = 10*Math.log10(mean);//转换公式
 				LogUtils.e("volume分贝值："+volume);
-				if (num>0 && mean<=0) {
+				if (num>5 && mean<=0) {
 					isStart = false;
 					Message message = Message.obtain();
 					message.what = 0x123;

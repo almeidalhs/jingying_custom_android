@@ -1,6 +1,8 @@
 package com.atman.jixin.ui.im;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,10 +12,12 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atman.jixin.R;
-import com.atman.jixin.ui.base.MyBaseActivity;
+import com.atman.jixin.ui.base.MyBaseApplication;
 import com.base.baselibs.util.LogUtils;
+import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.audiorecord.aac.AAC;
 
 import java.io.File;
@@ -26,7 +30,7 @@ import butterknife.OnClick;
  * Created by tangbingliang on 16/10/26.
  */
 
-public class RecordingActivity extends MyBaseActivity implements View.OnTouchListener, AAC.AACListener {
+public class RecordingActivity extends Activity implements View.OnTouchListener, AAC.AACListener {
 
     @Bind(R.id.recording_tip_tx)
     TextView recordingTipTx;
@@ -52,9 +56,9 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         //不显示程序的标题栏
         requestWindowFeature( Window.FEATURE_NO_TITLE );
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording);
         ButterKnife.bind(this);
 
@@ -184,6 +188,33 @@ public class RecordingActivity extends MyBaseActivity implements View.OnTouchLis
                 break;
         }
         return true;
+    }
+
+    private PromptDialog.Builder builder;
+    public void showWraning(String str) {
+        if (builder==null) {
+            builder = new PromptDialog.Builder(this);
+            builder.setMessage(str);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    builder=null;
+                }
+            });
+            builder.show();
+        }
+    }
+
+    private Toast mToast;
+    public void showToast(String text) {
+        if(mToast == null) {
+            mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
     }
 
     @Override
