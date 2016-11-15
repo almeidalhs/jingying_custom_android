@@ -49,6 +49,7 @@ android {
     productFlavors {
 
         atman {}
+        appstore_360 {}
         baidu {}
         yingyongbao {}
         wandoujia {}
