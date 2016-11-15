@@ -483,14 +483,7 @@ public class P2PChatAdapter extends BaseAdapter {
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(output);
 
-        if (bitmapimg.getHeight() < height) {
-            srcmapimg = bigImage(bitmapimg, (float) (height*bitmapimg.getWidth()/bitmapimg.getHeight())
-                    , (float) height);
-        }
-        if (srcmapimg.getWidth() < width){
-            srcmapimg = bigImage(srcmapimg, (float) width
-                    , (float) (width*srcmapimg.getHeight() / srcmapimg.getWidth()));
-        }
+        srcmapimg = bigImage(srcmapimg, (float) width, (float) height);
 
         int center = (srcmapimg.getWidth()-width)/2;
 
@@ -519,13 +512,24 @@ public class P2PChatAdapter extends BaseAdapter {
 
     //把传进来的bitmap对象转换为宽度为x,长度为y的bitmap对象
     public Bitmap bigImage(Bitmap b,float x,float y) {
-        int w=b.getWidth();
-        int h=b.getHeight();
-        float sx=(float)x/w;//要强制转换，不转换我的在这总是死掉。
-        float sy=(float)y/h;
-        Matrix matrix = new Matrix();
-        matrix.postScale(sx, sy); // 长和宽放大缩小的比例
-        Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, w, h, matrix, true);
+
+        float scale;
+        float dx = 0, dy = 0;
+
+        if (b.getWidth() * y > x * b.getHeight()) {
+            scale = (float) y / (float) b.getHeight();
+            dx = (x - b.getWidth() * scale) * 0.5f;
+        } else {
+            scale = (float) x / (float) b.getWidth();
+            dy = (y - b.getHeight() * scale) * 0.5f;
+        }
+
+        Matrix mDrawMatrix = new Matrix();
+        mDrawMatrix.setScale(scale, scale);
+        mDrawMatrix.postTranslate((int) (dx + 0.5f), (int) (dy + 0.5f));
+        Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), mDrawMatrix, true);
+        int n = (resizeBmp.getWidth() - (int) x)/2;
+        resizeBmp = Bitmap.createBitmap(resizeBmp, n, 0, (int) x, resizeBmp.getHeight());
         return resizeBmp;
     }
 
