@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_dp_5"
-                android:background="@drawable/item_message_left_bg"
+                android:background="@mipmap/im_imageview_left_bg"
                 android:maxWidth="@dimen/dimen_dp_100"
                 android:minWidth="@dimen/dimen_dp_100"
                 android:visibility="gone" />
@@ -80,23 +80,25 @@
                 android:id="@+id/item_p2pchat_imagetext_left_rl"
                 android:layout_width="@dimen/dimen_dp_150"
                 android:layout_height="@dimen/dimen_dp_100"
-                android:background="@drawable/item_message_left_bg"
+                android:background="@drawable/item_imagetext_left_bg"
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <ImageView
+                <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/item_p2pchat_imagetext_left_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+                    android:src="@mipmap/img_sign_logo"
+                    img:shape_round_radius="@dimen/dimen_dp_5"
+                    img:shape="rect" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:gravity="center_vertical"
-                    android:background="@color/color_10a065"
+                    android:background="@drawable/green_redius_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/dimen_dp_5">
 
@@ -209,7 +211,6 @@
                     android:id="@+id/item_p2pchat_image_right_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/item_message_right_bg"
                     android:maxWidth="@dimen/dimen_dp_100"
                     android:minWidth="@dimen/dimen_dp_100"
                     android:scaleType="centerInside"

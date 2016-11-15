@@ -2,6 +2,14 @@ package com.atman.jixin.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -318,11 +326,11 @@ public class P2PChatAdapter extends BaseAdapter {
                     if (temp.getSelfSend()) {
                         holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageRightIv
-                                , MyBaseApplication.getApplication().optionsHead, mListenerPic);
+                                , MyBaseApplication.getApplication().optionsHead, new picImage(0));
                     } else {
                         holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
                         ImageLoader.getInstance().displayImage(url, holderText.itemP2pchatImageLeftIv
-                                , MyBaseApplication.getApplication().optionsHead, mListenerPic);
+                                , MyBaseApplication.getApplication().optionsHead, new picImage(1));
                     }
                 }
                 break;
@@ -427,7 +435,13 @@ public class P2PChatAdapter extends BaseAdapter {
         }
     };
 
-    private ImageLoadingListener mListenerPic = new ImageLoadingListener() {
+    class picImage implements ImageLoadingListener{
+        private int direct;
+
+        public picImage (int direct) {
+            this.direct = direct;
+        }
+
         @Override
         public void onLoadingStarted(String s, View view) {
 
@@ -441,10 +455,11 @@ public class P2PChatAdapter extends BaseAdapter {
         @Override
         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
             ImageView im = (ImageView) view;
-            int w = DensityUtil.dp2px(context, 100) - DensityUtil.dp2px(context, 10);
-            int h = w * bitmap.getHeight()/bitmap.getWidth();
+            int w = DensityUtil.dp2px(context, 90);
+            int h = DensityUtil.dp2px(context, 122);
             im.getLayoutParams().height = h;
             im.getLayoutParams().width = w;
+            im.setImageBitmap(canvasTriangle(bitmap, direct, w, h));
             if (!isBottom) {
                 isBottom = true;
                 handler.postDelayed(runnable, 500);
@@ -456,6 +471,63 @@ public class P2PChatAdapter extends BaseAdapter {
 
         }
     };
+
+    /**
+     * 绘制成微信聊天效果
+     * @param bitmapimg
+     * @param direct
+     * @return
+     */
+    public Bitmap canvasTriangle(Bitmap bitmapimg, int direct, int width, int height) {
+        Bitmap srcmapimg = bitmapimg;
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(output);
+
+        if (bitmapimg.getHeight() < height) {
+            srcmapimg = bigImage(bitmapimg, (float) (height*bitmapimg.getWidth()/bitmapimg.getHeight())
+                    , (float) height);
+        }
+        if (srcmapimg.getWidth() < width){
+            srcmapimg = bigImage(srcmapimg, (float) width
+                    , (float) (width*srcmapimg.getHeight() / srcmapimg.getWidth()));
+        }
+
+        int center = (srcmapimg.getWidth()-width)/2;
+
+        //设置默认背景颜色
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, srcmapimg.getWidth(), srcmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        if (direct == 0) {//右边
+            Bitmap bpRight = BitmapFactory.decodeResource(context.getResources(),R.mipmap.im_imageview_right_bg);
+            Rect rectRight = new Rect(0, 0, bpRight.getWidth(), bpRight.getHeight());
+            canvas.drawBitmap(bpRight, rectRight, rectRight, paint);
+        } else if (direct == 1) {//左边
+            Bitmap bpLeft = BitmapFactory.decodeResource(context.getResources(),R.mipmap.im_imageview_left_bg);
+            Rect rectLeft = new Rect(0, 0, bpLeft.getWidth(), bpLeft.getHeight());
+            canvas.drawBitmap(bpLeft, rectLeft, rectLeft, paint);
+        }
+        //两层绘制交集。显示上层
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(srcmapimg, rect, rect, paint);
+        return output;
+    }
+
+    //把传进来的bitmap对象转换为宽度为x,长度为y的bitmap对象
+    public Bitmap bigImage(Bitmap b,float x,float y) {
+        int w=b.getWidth();
+        int h=b.getHeight();
+        float sx=(float)x/w;//要强制转换，不转换我的在这总是死掉。
+        float sy=(float)y/h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(sx, sy); // 长和宽放大缩小的比例
+        Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, w, h, matrix, true);
+        return resizeBmp;
+    }
 
     public interface P2PAdapterInter {
         void onItem(View v, int position);
@@ -475,7 +547,7 @@ public class P2PChatAdapter extends BaseAdapter {
         @Bind(R.id.item_p2pchat_image_left_iv)
         ImageView itemP2pchatImageLeftIv;
         @Bind(R.id.item_p2pchat_imagetext_left_iv)
-        ImageView itemP2pchatImagetextLeftIv;
+        ShapeImageView itemP2pchatImagetextLeftIv;
         @Bind(R.id.item_p2pchat_imagetext_left_ic_iv)
         ImageView itemP2pchatImagetextLeftIcIv;
         @Bind(R.id.item_p2pchat_imagetext_left_title_tx)

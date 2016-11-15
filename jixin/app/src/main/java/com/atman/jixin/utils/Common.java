@@ -18,13 +18,13 @@ public class Common {
 
 
     /**************************http基础访问路径*****************************/
-//    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
-//    public static String hostUrl_Up = "http://192.168.1.141:8089/";
-//    public static String ImageUrl = "http://192.168.1.141:8000/by/";
+    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
+    public static String hostUrl_Up = "http://192.168.1.141:8089/";
+    public static String ImageUrl = "http://192.168.1.141:8000/by/";
 
-    public static String hostUrl = "http://www.jiplaza.net/";
-    public static String hostUrl_Up = "http://www.jiplaza.net/";
-    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
+//    public static String hostUrl = "http://www.jiplaza.net/";
+//    public static String hostUrl_Up = "http://www.jiplaza.net/";
+//    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
     /**************************http基础访问路径*****************************/
 
 
