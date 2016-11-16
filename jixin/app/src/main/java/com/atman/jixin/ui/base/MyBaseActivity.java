@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 import com.atman.jixin.R;
 import com.atman.jixin.ui.MainActivity;
+import com.atman.jixin.ui.im.PersonalIMActivity;
+import com.atman.jixin.ui.im.ShopIMActivity;
+import com.atman.jixin.ui.im.chatui.StoreCommentActivity;
 import com.atman.jixin.ui.personal.LoginActivity;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
@@ -327,7 +330,10 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (isFastDoubleClick()) {
+            if (isFastDoubleClick()
+                    && !(mAty instanceof StoreCommentActivity)
+                    && !(mAty instanceof ShopIMActivity)
+                    && !(mAty instanceof PersonalIMActivity)) {
                 return true;
             }
         }
