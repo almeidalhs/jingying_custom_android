@@ -497,15 +497,13 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         boolean bCheckResult = false;
         if (MyBaseApplication.USERINFOR!=null) {
             try {
-                Long dCheckValue = Long.parseLong(MyBaseApplication.USERINFOR.getBody().getMemberName());
+                Long dCheckValue = Long.parseLong(MyBaseApplication.USERINFOR.getBody().getMemberMobile());
                 if (dCheckValue instanceof Long == false) {
                     bCheckResult = true;
                 }
             } catch(NumberFormatException e) {
                 bCheckResult = true;
             }
-        } else {
-            clearData();
         }
         return bCheckResult;
     }

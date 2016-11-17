@@ -22,7 +22,6 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dimen_dp_10"
-            android:layout_below="@+id/login_register_tx"
             android:src="@mipmap/img_sign_logo"
             img:shape="circle" />
     </RelativeLayout>
