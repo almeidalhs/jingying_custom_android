@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.atman.jixin.R;
 import com.atman.jixin.model.request.LoginRequestModel;
+import com.atman.jixin.model.response.GetVisitorsModel;
 import com.atman.jixin.model.response.LoginResultModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
@@ -20,11 +21,15 @@ import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.atman.jixin.widget.downfile.DownloadFile;
 import com.base.baselibs.iimp.TimeCountInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.DeviceUuidFactory;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.TimeCount;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,6 +55,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     private int unLoginTime = 5000;
     private int loginTime = 500;
     private int defalTime = 1000;
+    private String mUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,8 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
             jumpTx.setVisibility(View.GONE);
             timeCount = new TimeCount(loginTime, defalTime, this);
         }
+        mUUID = DeviceUuidFactory.getUniquePsuedoID();
+        LogUtils.e("UUID:"+ mUUID);
         timeCount.start();
 
         new Thread(new Runnable() {
@@ -76,7 +84,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
             }
         }).start();
 
-        getSomedate();
+//        getSomedate();
     }
 
     private void getSomedate() {
@@ -142,17 +150,23 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
-        super.onStringResponse(data, response, id);
         if (id == Common.NET_LOGIN_ID) {
+            super.onStringResponse(data, response, id);
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
-//            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW
-//                    , MD5Util.getMD5(mLoginResultModel.getBody().getMemberPasswd()));
-//            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID
-//                    , mLoginResultModel.getBody().getAtmanUserId()+"");
-//            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG
-//                    , mLoginResultModel.getBody().getMemberAvatar());
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID
+                    , mLoginResultModel.getBody().getAtmanUserId()+"");
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG
+                    , mLoginResultModel.getBody().getMemberAvatar());
             MyBaseApplication.USERINFOR = mLoginResultModel;
             toMainActivity();
+        } else if (id == Common.NET_GET_VISITORS_ID) {
+            GetVisitorsModel mGetVisitorsModel = mGson.fromJson(data, GetVisitorsModel.class);
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_US
+                    , mGetVisitorsModel.getBody().getUserName());
+            PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW
+                    , mGetVisitorsModel.getBody().getPassword());
+            MyBaseApplication.getApplication().initLoginInformation();
+            toLogin(false);
         }
     }
 
@@ -166,25 +180,41 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_LOGIN_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_VISITORS_ID);
     }
 
     @Override
     public void onTimeOut() {
         if (MyBaseApplication.PASSWORD.isEmpty()) {
-            toMainActivity();
+            if (!mUUID.equals("error")) {
+                Map<String, String> p = new HashMap<>();
+                p.put("mobileSign", mUUID);
+                OkHttpUtils.postString()
+                        .url(Common.Url_Get_Visitors).tag(Common.NET_GET_VISITORS_ID).id(Common.NET_GET_VISITORS_ID)
+                        .content(mGson.toJson(p)).addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                        .mediaType(Common.JSON).headers(MyBaseApplication.getApplication().getHeaderSeting())
+                        .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                        .execute(new MyStringCallback(mContext, "玩命登录中", this, true, false));
+            } else {
+                toMainActivity();
+            }
         } else {
-            LoginRequestModel mLoginRequestModel = new LoginRequestModel(MyBaseApplication.USERNAME
-                    , MyBaseApplication.PASSWORD, MyBaseApplication.USERTOKEN
-                    , MyBaseApplication.VERSION, MyBaseApplication.PLATFORM
-                    , MyBaseApplication.DEVICETYPE, MyBaseApplication.CHANNEL);
-            LogUtils.e("mGson.toJson(mLoginRequestModel):"+mGson.toJson(mLoginRequestModel));
-            OkHttpUtils.postString()
-                    .url(Common.Url_Login).tag(Common.NET_LOGIN_ID).id(Common.NET_LOGIN_ID)
-                    .content(mGson.toJson(mLoginRequestModel))
-                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                    .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
-                    .execute(new MyStringCallback(mContext, "玩命登录中", this, true, false));
+            toLogin(true);
         }
+    }
+
+    private void toLogin(boolean b) {
+        LoginRequestModel mLoginRequestModel = new LoginRequestModel(MyBaseApplication.USERNAME
+                , MyBaseApplication.PASSWORD, MyBaseApplication.USERTOKEN
+                , MyBaseApplication.VERSION, MyBaseApplication.PLATFORM
+                , MyBaseApplication.DEVICETYPE, MyBaseApplication.CHANNEL);
+        LogUtils.e("mGson.toJson(mLoginRequestModel):"+mGson.toJson(mLoginRequestModel));
+        OkHttpUtils.postString()
+                .url(Common.Url_Login).tag(Common.NET_LOGIN_ID).id(Common.NET_LOGIN_ID)
+                .content(mGson.toJson(mLoginRequestModel))
+                .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                .execute(new MyStringCallback(mContext, "玩命登录中", this, b, false));
     }
 
     @Override

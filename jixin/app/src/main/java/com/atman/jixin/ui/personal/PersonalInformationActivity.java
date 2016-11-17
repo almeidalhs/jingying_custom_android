@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
@@ -66,6 +67,10 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
     TextView personalinforHobbyTx;
     @Bind(R.id.personalinfor_headimg_iv)
     ShapeImageView personalinforHeadimgIv;
+    @Bind(R.id.personalinfor_resetpwd_tx)
+    TextView personalinforResetpwdTx;
+    @Bind(R.id.personalinfor_resetpwd_iv)
+    ImageView personalinforResetpwdIv;
 
     private Context mContext = PersonalInformationActivity.this;
     private String allStr;
@@ -82,54 +87,64 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("个人信息");
+
+        if (isVisitors()) {
+            personalinforResetpwdIv.setVisibility(View.INVISIBLE);
+            personalinforResetpwdTx.setText("绑定手机注册为正式帐号");
+            personalinforResetpwdTx.setTextColor(getResources().getColor(R.color.color_16c5ee));
+        }
     }
 
     private void updataView() {
-        if (MyBaseApplication.USERINFOR!=null) {
-            personalinforAountTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberMobile());
+        if (MyBaseApplication.USERINFOR != null) {
+            if (isVisitors()) {
+                personalinforAountTx.setText("游客"+MyBaseApplication.USERINFOR.getBody().getMemberMobile());
+            } else {
+                personalinforAountTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberMobile());
+            }
             personalinforNickTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
             ImageLoader.getInstance().displayImage(Common.ImageUrl
-                    + MyBaseApplication.USERINFOR.getBody().getMemberAvatar(), personalinforHeadimgIv
+                            + MyBaseApplication.USERINFOR.getBody().getMemberAvatar(), personalinforHeadimgIv
                     , MyBaseApplication.getApplication().optionsHead);
-            if (MyBaseApplication.USERINFOR.getBody().getMemberSex()==0) {
+            if (MyBaseApplication.USERINFOR.getBody().getMemberSex() == 0) {
                 personalinforGanderTx.setText("女");
             } else {
                 personalinforGanderTx.setText("男");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getMemberBirthday()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getMemberBirthday() != null) {
                 if (MyBaseApplication.USERINFOR.getBody().getMemberBirthday().contains("-")) {
                     personalinforBirthdayTx.setText(MyBaseApplication.USERINFOR.getBody()
-                            .getMemberBirthday().substring(0,10));
+                            .getMemberBirthday().substring(0, 10));
                 } else {
-                    LogUtils.e(">>:"+Long.parseLong(MyBaseApplication.USERINFOR.getBody()
-                            .getMemberBirthday())/1000);
+                    LogUtils.e(">>:" + Long.parseLong(MyBaseApplication.USERINFOR.getBody()
+                            .getMemberBirthday()) / 1000);
                     personalinforBirthdayTx.setText(MyTools.convertTime(Long.parseLong(MyBaseApplication.USERINFOR.getBody()
                             .getMemberBirthday()), "yyyy-MM-dd"));
                 }
             } else {
                 personalinforBirthdayTx.setText("");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getAroundSite()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getAroundSite() != null) {
                 personalinforDisplayTx.setText(MyBaseApplication.USERINFOR.getBody().getAroundSite());
             } else {
                 personalinforDisplayTx.setText("");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getMemberSign()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getMemberSign() != null) {
                 personalinforSignatrueTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberSign());
             } else {
                 personalinforSignatrueTx.setText("这家伙很忙,还未来得及设置签名!");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getMaritalStatus()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getMaritalStatus() != null) {
                 personalinforEmotionstatusTx.setText(MyBaseApplication.USERINFOR.getBody().getMaritalStatus());
             } else {
                 personalinforEmotionstatusTx.setText("");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getJob()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getJob() != null) {
                 personalinforOccupationTx.setText(MyBaseApplication.USERINFOR.getBody().getJob());
             } else {
                 personalinforOccupationTx.setText("");
             }
-            if (MyBaseApplication.USERINFOR.getBody().getInterest()!=null) {
+            if (MyBaseApplication.USERINFOR.getBody().getInterest() != null) {
                 personalinforHobbyTx.setText(MyBaseApplication.USERINFOR.getBody().getInterest());
             } else {
                 personalinforHobbyTx.setText("");
@@ -155,13 +170,13 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             if (mLoginResultModel.getResult().equals("1")) {
                 MyBaseApplication.USERINFOR = mLoginResultModel;
-                PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW, mLoginResultModel.getBody().getMemberPasswd());
-                PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID, mLoginResultModel.getBody().getAtmanUserId()+"");
-                PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USER_IMG, mLoginResultModel.getBody().getMemberAvatar());
-                showToast(allStr+"修改成功");
+                PreferenceUtil.savePreference(mContext, PreferenceUtil.PARM_PW, mLoginResultModel.getBody().getMemberPasswd());
+                PreferenceUtil.savePreference(mContext, PreferenceUtil.PARM_USERID, mLoginResultModel.getBody().getAtmanUserId() + "");
+                PreferenceUtil.savePreference(mContext, PreferenceUtil.PARM_USER_IMG, mLoginResultModel.getBody().getMemberAvatar());
+                showToast(allStr + "修改成功");
                 updataView();
             } else {
-                showToast(allStr+"修改失败");
+                showToast(allStr + "修改失败");
             }
         } else if (id == Common.NET_HEADIMG_ID) {
             HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
@@ -195,7 +210,11 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.personalinfor_resetpwd_ll:
-                startActivity(new Intent(mContext, ResetPassWordActivity.class));
+                if (isVisitors()) {
+                    startActivity(new Intent(mContext, RegisterActivity.class));
+                } else {
+                    startActivity(new Intent(mContext, ResetPassWordActivity.class));
+                }
                 break;
             case R.id.personalinfor_nick_ll:
                 startActivity(new Intent(mContext, ModifyNickActivity.class));
@@ -344,7 +363,7 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
         } else if (requestCode == CROP_BIG_PICTURE) {
             if (imageUri != null) {
                 OkHttpUtils.post().url(Common.Url_HeadImg)
-                        .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                        .addParams("uploadType", "img").addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()), new File(imageUri.getPath()))
                         .id(Common.NET_HEADIMG_ID).tag(Common.NET_HEADIMG_ID)
                         .build().execute(new MyStringCallback(PersonalInformationActivity.this, "修改中...", this, true));
@@ -357,7 +376,7 @@ public class PersonalInformationActivity extends MyBaseActivity implements Birth
         if (uri == null) {
             return;
         }
-        LogUtils.e("outputX:"+outputX+",outputY:"+outputY);
+        LogUtils.e("outputX:" + outputX + ",outputY:" + outputY);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");

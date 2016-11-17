@@ -492,4 +492,21 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         }
         return updateFile;
     }
+
+    public boolean isVisitors(){
+        boolean bCheckResult = false;
+        if (MyBaseApplication.USERINFOR!=null) {
+            try {
+                Long dCheckValue = Long.parseLong(MyBaseApplication.USERINFOR.getBody().getMemberName());
+                if (dCheckValue instanceof Long == false) {
+                    bCheckResult = true;
+                }
+            } catch(NumberFormatException e) {
+                bCheckResult = true;
+            }
+        } else {
+            clearData();
+        }
+        return bCheckResult;
+    }
 }

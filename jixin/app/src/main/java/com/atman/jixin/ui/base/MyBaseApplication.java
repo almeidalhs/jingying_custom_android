@@ -128,7 +128,7 @@ public class MyBaseApplication extends BaseApplication {
                 !USERKEY.isEmpty() && !USERTOKEN.isEmpty() && !USERID.isEmpty();
     }
 
-    private void initLoginInformation() {
+    public void initLoginInformation() {
         USERNAME = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_US);
         PASSWORD = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_PW);
         USERKEY = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY);

@@ -73,7 +73,12 @@ public class RegisterActivity extends MyBaseActivity {
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        hideTitleBar();
+        if (isVisitors()) {
+            setBarTitleTx("绑定手机号");
+            registerBackIv.setVisibility(View.GONE);
+        } else {
+            hideTitleBar();
+        }
 
         timeCount = new TimeCount(registerCodeTv, 60 * 1000, 1000);
 
@@ -141,24 +146,34 @@ public class RegisterActivity extends MyBaseActivity {
         } else if (id == Common.NET_CHECKCODE_ID) {
             BaseNormalModel base = mGson.fromJson(data, BaseNormalModel.class);
             if (base.getResult().equals("1")) {
-                Map<String, Object> p = new HashMap<>();
-                p.put("deviceToken", PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
-                p.put("idfa", "");
-                p.put("isTestToken", false);
-                p.put("language", "zh_CN");
-                p.put("platform", "android");
-                p.put("version", MyBaseApplication.VERSION);
-                p.put("userName", aount);
-                p.put("password", MD5Util.getMD5(password));
-                p.put("login_terminal", 0);
-                String str = mGson.toJson(p);
-                LogUtils.e("Common.Url_Register:"+Common.Url_Register);
-                LogUtils.e("str:"+str);
-                OkHttpUtils.postString().url(Common.Url_Register).content(str).mediaType(Common.JSON)
-                        .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                        .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_REGISTER_ID).id(Common.NET_REGISTER_ID).build()
-                        .execute(new MyStringCallback(mContext, "注册中...", this, true));
+                if (isVisitors()) {
+                    Map<String, Object> p = new HashMap<>();
+                    p.put("userName", aount);
+                    p.put("password", MD5Util.getMD5(password));
+                    OkHttpUtils.postString()
+                            .url(Common.Url_Bind_Phone).tag(Common.NET_BING_PHONE_ID).id(Common.NET_BING_PHONE_ID)
+                            .content(mGson.toJson(p)).addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                            .mediaType(Common.JSON).headers(MyBaseApplication.getApplication().getHeaderSeting())
+                            .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                            .execute(new MyStringCallback(mContext, "绑定中...", this, true, false));
+                } else {
+                    Map<String, Object> p = new HashMap<>();
+                    p.put("deviceToken", PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
+                    p.put("idfa", "");
+                    p.put("isTestToken", false);
+                    p.put("language", "zh_CN");
+                    p.put("platform", "android");
+                    p.put("version", MyBaseApplication.VERSION);
+                    p.put("userName", aount);
+                    p.put("password", MD5Util.getMD5(password));
+                    p.put("login_terminal", 0);
+                    String str = mGson.toJson(p);
+                    OkHttpUtils.postString().url(Common.Url_Register).content(str).mediaType(Common.JSON)
+                            .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                            .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_REGISTER_ID).id(Common.NET_REGISTER_ID).build()
+                            .execute(new MyStringCallback(mContext, "注册中...", this, true));
+                }
             } else {
                 BaseErrorTwoModel errorTwoModel = mGson.fromJson(data, BaseErrorTwoModel.class);
                 showToast(errorTwoModel.getBody().getMessage());
@@ -173,6 +188,10 @@ public class RegisterActivity extends MyBaseActivity {
                 mIntent.putExtra("password", password);
                 finish();
             }
+        } else if (id == Common.NET_BING_PHONE_ID) {
+            showToast("绑定成功,请重新登录！");
+            clearData();
+            finish();
         }
     }
 
@@ -183,6 +202,7 @@ public class RegisterActivity extends MyBaseActivity {
         OkHttpUtils.getInstance().cancelTag(Common.NET_SMS_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CHECKCODE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_REGISTER_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_BING_PHONE_ID);
     }
 
     @OnClick({R.id.register_back_iv, R.id.register_bt, R.id.register_agreement_tx, R.id.register_code_tv})

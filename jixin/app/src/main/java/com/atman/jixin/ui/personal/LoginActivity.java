@@ -83,8 +83,14 @@ public class LoginActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
         hideTitleBar();
-
-        loginUsernameEt.setText(PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_US));
+        String acount = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_US);
+        try {
+            Long dCheckValue = Long.parseLong(acount);
+            if (dCheckValue instanceof Long == true) {
+                loginUsernameEt.setText(acount);
+            }
+        } catch(NumberFormatException e) {
+        }
         headImge = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_IMG);
         if (!headImge.isEmpty()) {
             ImageLoader.getInstance().displayImage(Common.ImageUrl+headImge, partStorePreviewHeadImg
