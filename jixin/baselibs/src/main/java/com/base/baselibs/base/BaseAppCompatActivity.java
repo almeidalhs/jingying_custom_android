@@ -12,7 +12,6 @@ import com.base.baselibs.iimp.IInit;
 import com.base.baselibs.net.httpCallBack;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.WaitingDialog;
-import com.base.baselibs.widget.localalbum.AppManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 import okhttp3.Call;
@@ -104,6 +103,10 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+    }
+
+    public void exitApp(){
+        AppManager.getAppManager().AppExit(this);
     }
 
     /**

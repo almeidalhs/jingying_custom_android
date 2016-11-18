@@ -1,4 +1,4 @@
-package com.base.baselibs.widget.localalbum;
+package com.base.baselibs.base;
 
 import android.app.Activity;
 import android.content.Context;

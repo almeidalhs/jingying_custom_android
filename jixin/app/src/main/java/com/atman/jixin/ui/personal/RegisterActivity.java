@@ -191,7 +191,6 @@ public class RegisterActivity extends MyBaseActivity {
         } else if (id == Common.NET_BING_PHONE_ID) {
             showToast("绑定成功,请重新登录！");
             clearData();
-            finish();
         }
     }
 

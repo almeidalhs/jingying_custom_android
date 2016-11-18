@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.base.baselibs.R;
 import com.base.baselibs.base.BaseAppCompatActivity;
-import com.base.baselibs.widget.localalbum.AppManager;
+import com.base.baselibs.base.AppManager;
 import com.base.baselibs.widget.localalbum.common.ExtraKey;
 import com.base.baselibs.widget.localalbum.common.LocalImageHelper;
 import com.base.baselibs.widget.localalbum.widget.AlbumViewPager;

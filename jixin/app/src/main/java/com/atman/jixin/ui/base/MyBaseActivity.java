@@ -29,6 +29,7 @@ import com.atman.jixin.ui.im.chatui.StoreCommentActivity;
 import com.atman.jixin.ui.personal.LoginActivity;
 import com.atman.jixin.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.PromptDialog;
 import com.google.gson.Gson;
 
@@ -283,11 +284,11 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        LogUtils.e("Activity>>>>>:"+this.getClass().getName());
         if (mShouldLogin) {
             if (!isLogin()) {
                 //需要登陆状态，跳转到登陆界面
                 startActivity(LoginActivity.createIntent(this, getIntent()));
-//                startActivityForResult(LoginActivity.createIntent(this, getIntent()), Common.TO_LOGIN);
                 finish();
             }
         }
@@ -400,6 +401,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
             }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
 
         } else {
+//            exitApp();
             finish();
             System.exit(0);
         }

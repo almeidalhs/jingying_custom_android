@@ -129,8 +129,6 @@ public class PersonalSettingActivity extends MyBaseActivity {
         if (id == Common.NET_LOGOUT_ID) {
             showToast("已退出登录");
             clearData();
-            startActivity(new Intent(mContext, MainActivity.class));
-            finish();
         } else if (id == Common.NET_MANAGE_ID) {
             LoginResultModel mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             MyBaseApplication.USERINFOR = mLoginResultModel;
