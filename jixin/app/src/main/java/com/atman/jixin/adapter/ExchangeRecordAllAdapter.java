@@ -93,7 +93,7 @@ public class ExchangeRecordAllAdapter extends RecyclerView.Adapter<ExchangeRecor
             }
         });
 
-        holder.itemExchangerecordExchangeLl.setOnClickListener(new View.OnClickListener() {
+        holder.itemExchangerecordShopTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //判断是否有删除菜单打开

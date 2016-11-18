@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_default_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/dimen_dp_250"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_default_bg"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入兑换商品数量"
+            android:layout_marginLeft="@dimen/dimen_dp_25"
+            android:textColor="@color/color_757575"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <com.base.baselibs.widget.MyCleanEditText
+            android:id="@+id/exchangeedittext_dialog_num_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_35"
+            android:layout_marginBottom="@dimen/dimen_dp_20"
+            android:layout_marginLeft="@dimen/dimen_dp_20"
+            android:layout_marginRight="@dimen/dimen_dp_20"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:background="@drawable/et_addcomment_bg_selector"
+            android:hint="请输入"
+            android:imeOptions="actionSend"
+            android:maxLength="10"
+            android:padding="@dimen/dimen_dp_5"
+            android:singleLine="true"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入您的桌号或区域编号"
+            android:layout_marginLeft="@dimen/dimen_dp_25"
+            android:textColor="@color/color_757575"
+            android:textSize="@dimen/dimen_sp_15" />
+
+        <com.base.baselibs.widget.MyCleanEditText
+            android:id="@+id/exchangeedittext_dialog_location_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_35"
+            android:layout_marginBottom="@dimen/dimen_dp_20"
+            android:layout_marginLeft="@dimen/dimen_dp_20"
+            android:layout_marginRight="@dimen/dimen_dp_20"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:background="@drawable/et_addcomment_bg_selector"
+            android:hint="可选填"
+            android:maxLength="10"
+            android:padding="@dimen/dimen_dp_5"
+            android:singleLine="true"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_15" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:paddingLeft="@dimen/dimen_dp_20"
+        android:paddingRight="@dimen/dimen_dp_20"
+        android:layout_marginBottom="@dimen/dimen_dp_20"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/exchangeedittext_dialog_cancel_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_cancel_selector"
+            android:gravity="center"
+            android:text="取  消"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dimen_sp_14" />
+
+        <TextView
+            android:id="@+id/exchangeedittext_dialog_ok_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_ok_selector"
+            android:gravity="center"
+            android:text="确  定"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dimen_sp_14" />
+    </LinearLayout>
+
+
+</LinearLayout>

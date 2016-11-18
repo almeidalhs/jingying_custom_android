@@ -13,6 +13,7 @@ import com.atman.jixin.R;
 import com.atman.jixin.model.response.StoreInformationModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
@@ -52,6 +53,7 @@ public class StoreDetailActivity extends MyBaseActivity {
 
     private Context mContext = StoreDetailActivity.this;
     private long storeId;
+    private int formId;
     private StoreInformationModel mStoreInformationModel;
 
     @Override
@@ -61,9 +63,10 @@ public class StoreDetailActivity extends MyBaseActivity {
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, long storeId) {
+    public static Intent buildIntent(Context context, long storeId, int formId) {
         Intent intent = new Intent(context, StoreDetailActivity.class);
         intent.putExtra("storeId", storeId);
+        intent.putExtra("formId", formId);
         return intent;
     }
 
@@ -72,6 +75,7 @@ public class StoreDetailActivity extends MyBaseActivity {
         super.initWidget(v);
 
         storeId = getIntent().getLongExtra("storeId", -1);
+        formId = getIntent().getIntExtra("formId", 1);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(getmWidth(),
                 getmWidth() * 215 / 415);
@@ -131,11 +135,22 @@ public class StoreDetailActivity extends MyBaseActivity {
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_STOREDETAIL_ID);
     }
 
-    @OnClick({R.id.storedetail_member_ll})
+    @OnClick({R.id.storedetail_member_ll, R.id.storedetail_tochat_bt})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.storedetail_member_ll:
                 startActivity(MemberCenterActivity.buildIntent(mContext, storeId));
+                break;
+            case R.id.storedetail_tochat_bt:
+                if (formId == 1) {
+                    finish();
+                } else {
+                    if (mStoreInformationModel!=null) {
+                        startActivity(ShopIMActivity.buildIntent(mContext, storeId
+                                , mStoreInformationModel.getBody().getStoreName()
+                                , mStoreInformationModel.getBody().getStoreAvatar(), true));
+                    }
+                }
                 break;
         }
     }

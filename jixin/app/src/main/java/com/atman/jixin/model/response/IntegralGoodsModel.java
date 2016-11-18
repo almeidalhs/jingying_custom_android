@@ -1,12 +1,13 @@
 package com.atman.jixin.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by tangbingliang on 16/10/24.
  */
 
-public class IntegralGoodsModel {
+public class IntegralGoodsModel implements Serializable{
     /**
      * result : 1
      * body : [{"id":104,"storeId":24,"goodsId":407,"integral":1,"state":1,"storeLimit":30,"userLimit":20,"goodsImage":"Goods/d5/c1/d5c1658a2c8611e6abe874d02ba07f83.png","goodsPrice":5,"goodsName":"哦吼","exchangeNum":0},{"id":105,"storeId":24,"goodsId":406,"integral":2,"state":1,"storeLimit":10,"userLimit":1,"goodsImage":"Goods/b5/44/b54470e42c8611e6abe874d02ba07f83.jpg","goodsPrice":469,"goodsName":"2773","exchangeNum":0},{"id":106,"storeId":24,"goodsId":369,"integral":3,"state":1,"storeLimit":4,"userLimit":4,"goodsImage":"Goods/5e/68/5e68d37d21c911e698c274d02ba07f83.jpg","goodsPrice":4548,"goodsName":"破哦亲移民","exchangeNum":0},{"id":107,"storeId":24,"goodsId":340,"integral":1,"state":1,"storeLimit":5,"userLimit":3,"goodsImage":"Goods/76/e5/76e5ffde182511e6836574d02ba07f83.gif","goodsPrice":7492476,"goodsName":"呀show","exchangeNum":0}]
@@ -45,7 +46,7 @@ public class IntegralGoodsModel {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable {
         private long id;
         private long storeId;
         private long goodsId;

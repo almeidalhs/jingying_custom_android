@@ -179,13 +179,21 @@ public class ExchangeRecordActivity extends MyBaseActivity implements
     @Override
     public void onItemClick(View view, int position) {
         allPosition = position;
-        if (storeId == -1) {
-            startActivity(StoreDetailActivity.buildIntent(mContext
-                    , mAdapter.getItemById(position).getStoreId()));
-        } else {
-            startActivity(GoodsDetailActivity.buildIntent(mContext
-                    , mAdapter.getItemById(position).getGoodsId()
-                    , mAdapter.getItemById(position).getGoodsName()));
+        switch (view.getId()) {
+            case R.id.item_exchangerecord_shop_tx:
+                startActivity(StoreDetailActivity.buildIntent(mContext
+                        , mAdapter.getItemById(position).getStoreId(), 2));
+                break;
+            case R.id.item_fullcut_root_rl:
+                if (storeId == -1) {
+                    startActivity(StoreDetailActivity.buildIntent(mContext
+                            , mAdapter.getItemById(position).getStoreId(), 2));
+                } else {
+                    startActivity(GoodsDetailActivity.buildIntent(mContext
+                            , mAdapter.getItemById(position).getGoodsId()
+                            , mAdapter.getItemById(position).getGoodsName(), 0, 0, null));
+                }
+                break;
         }
     }
 

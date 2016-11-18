@@ -78,7 +78,7 @@ public class MenuPreviewFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(GoodsDetailActivity.buildIntent(getActivity()
                         , mAdapter.getItem(position).getId()
-                        , mAdapter.getItem(position).getGoodsName()));
+                        , mAdapter.getItem(position).getGoodsName(), 0, 0, null));
             }
         });
     }

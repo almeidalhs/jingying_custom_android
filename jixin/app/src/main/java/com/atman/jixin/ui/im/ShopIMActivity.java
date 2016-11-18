@@ -895,7 +895,7 @@ public class ShopIMActivity extends MyBaseActivity
                 }
                 break;
             case R.id.item_p2pchat_text_headleft_iv:
-                startActivity(StoreDetailActivity.buildIntent(mContext, storeId));
+                startActivity(StoreDetailActivity.buildIntent(mContext, storeId, 1));
                 break;
             case R.id.item_p2pchat_image_left_iv:
             case R.id.item_p2pchat_image_right_iv:

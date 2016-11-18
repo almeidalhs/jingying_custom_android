@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -88,5 +89,33 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/goodsdetail_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:visibility="gone"
+        android:background="@color/color_line" />
+
+    <LinearLayout
+        android:id="@+id/goodsdetail_bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_48"
+        android:background="@drawable/white_no_radius_bt_selector"
+        android:gravity="center"
+        android:visibility="gone"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/integral_ic"
+            android:textColor="@color/color_37ba8d"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_15"
+            android:text="    立即兑换"/>
+
+    </LinearLayout>
 
 </LinearLayout>

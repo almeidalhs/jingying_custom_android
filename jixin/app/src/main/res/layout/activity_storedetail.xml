@@ -245,4 +245,19 @@
         android:layout_height="1px"
         android:background="@color/color_line"/>
 
+    <Button
+        android:id="@+id/storedetail_tochat_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:layout_below="@+id/login_password_et"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/dimen_dp_40"
+        android:layout_marginRight="@dimen/dimen_dp_40"
+        android:layout_marginTop="@dimen/dimen_dp_20"
+        android:background="@drawable/green_redius_bt_selector"
+        android:hint="进入聊天"
+        android:textColor="@color/color_ffffff"
+        android:textColorHint="@color/color_ffffff"
+        android:textSize="@dimen/dimen_sp_15" />
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.atman.jixin.ui.shop;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,9 +19,10 @@ import com.atman.jixin.model.greendao.gen.LocationNumberModelDao;
 import com.atman.jixin.model.response.IntegralGoodsModel;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
-import com.atman.jixin.ui.im.ShopIMActivity;
+import com.atman.jixin.ui.personal.RegisterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.widget.EditTextDialog;
+import com.atman.jixin.widget.ExchangeEditTextDialog;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.BaseNormalModel;
 import com.base.baselibs.net.MyStringCallback;
@@ -43,7 +45,7 @@ import okhttp3.Response;
  */
 
 public class IntegralexchangeActivity extends MyBaseActivity implements AdapterInterface
-        ,EditTextDialog.ETOnClick {
+        ,ExchangeEditTextDialog.ETOnClick {
 
     @Bind(R.id.pullToRefreshListView)
     PullToRefreshListView pullToRefreshListView;
@@ -53,7 +55,7 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     private TextView mEmptyTX;
     private IntegralExchangeAdapter mAdapter;
     private IntegralGoodsModel mIntegralGoodsModel;
-    private EditTextDialog dialog;
+    private ExchangeEditTextDialog dialog;
 
     private long storeId;
     private int myIntegral;
@@ -117,11 +119,31 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
         pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(GoodsDetailActivity.buildIntent(mContext
+                startActivityForResult(GoodsDetailActivity.buildIntent(mContext
                         , mAdapter.getItem(position-1).getGoodsId()
-                        , mAdapter.getItem(position-1).getGoodsName()));
+                        , mAdapter.getItem(position-1).getGoodsName()
+                        , 1, myIntegral, mAdapter.getItem(position-1)), Common.TO_GOODSDETAIL);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == Common.TO_GOODSDETAIL) {
+            myIntegral = data.getIntExtra("myIntegral", 0);
+            LogUtils.e("myIntegral:"+myIntegral);
+            if (myIntegral<0) {
+                myIntegral = 0;
+            }
+            setBarTitleTx("积分商城("+myIntegral+")");
+            mPage = 1;
+            mAdapter.clearData();
+            dohttp(false);
+        }
     }
 
     @Override
@@ -211,6 +233,10 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     public void onItemClick(View view, int position) {
         switch (view.getId()) {
             case R.id.item_integralgoods_exchange_ll:
+                if (isVisitors()) {
+                    showToBindPhone();
+                    return;
+                }
                 if (mAdapter.getItem(position).getIntegral()>myIntegral) {
                     showWraning("对不起,您的积分不够兑换此商品!");
                 } else {
@@ -227,7 +253,17 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
                         }
                         cion = mAdapter.getItem(position).getIntegral();
                         id = mAdapter.getItem(position).getId();
-                        dialog = new EditTextDialog(mContext, "", str, "1", true, tagNumId, this);
+                        //获取桌号
+                        LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
+                                .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
+                                        , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
+
+                        String content = "";
+                        if (locationNumberModel!=null && locationNumberModel.getLocation()!=null) {
+                            content = locationNumberModel.getLocation();
+                        }
+
+                        dialog = new ExchangeEditTextDialog(mContext, str, content, this);
                         dialog.show();
                     } else {
                         showWraning("此商品已兑换完,看看其他商品吧");
@@ -238,40 +274,27 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
     }
 
     @Override
-    public void onItemClick(View view, String str, int tagId) {
+    public void onItemClick(View view, String str1, String str2) {
         switch (view.getId()) {
-            case R.id.edittext_dialog_cancel_tx:
+            case R.id.exchangeedittext_dialog_cancel_tx:
                 dialog.dismiss();
                 break;
-            case R.id.edittext_dialog_ok_tx:
-                if (tagId == tagNumId) {
-                    if (str.isEmpty()) {
-                        showToast("请输入兑换数量");
-                        return;
-                    }
-                    if (Integer.parseInt(str) > displayNum) {
-                        showToast("超过最大兑换数量");
-                        return;
-                    }
-                    dialog.dismiss();
-                    showAgain(cion, Integer.parseInt(str));
-                } else if (tagId == tagLocationId) {
-                    Map<String, String> p = new HashMap<String, String>();
-                    p.put("id", id+"");
-                    p.put("amount", totalNum+"");
-                    p.put("addressDetail", str);
-                    OkHttpUtils.postString().url(Common.Url_Exchange).tag(Common.NET_EXCHANGE_ID)
-                            .id(Common.NET_EXCHANGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
-                            .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                            .build().execute(new MyStringCallback(mContext, "兑换中..."
-                            , IntegralexchangeActivity.this, true));
+            case R.id.exchangeedittext_dialog_ok_tx:
+                if (str1.isEmpty()) {
+                    showToast("请输入兑换数量");
+                    return;
                 }
+                if (Integer.parseInt(str1) > displayNum) {
+                    showToast("超过最大兑换数量");
+                    return;
+                }
+                dialog.dismiss();
+                showAgain(cion, Integer.parseInt(str1), str2);
                 break;
         }
     }
 
-    private void showAgain(int cion, final int num) {
+    private void showAgain(int cion, final int num, final String location) {
         totalNum = num;
         PromptDialog.Builder builder = new PromptDialog.Builder(IntegralexchangeActivity.this);
         builder.setMessage("你确定要花"+(cion*num)+"积分\n兑换该商品x"+num);
@@ -285,27 +308,38 @@ public class IntegralexchangeActivity extends MyBaseActivity implements AdapterI
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                LocationNumberModel locationNumberModel = mLocationNumberModelDao.queryBuilder()
-                        .where(LocationNumberModelDao.Properties.TargetId.eq(storeId)
-                                , LocationNumberModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
-
-                String content = "";
-                if (locationNumberModel!=null && locationNumberModel.getLocation()!=null) {
-                    content = locationNumberModel.getLocation();
-                }
-                showLactionDialog(0, content);
+                Map<String, String> p = new HashMap<String, String>();
+                p.put("id", id+"");
+                p.put("amount", totalNum+"");
+                p.put("addressDetail", location);
+                OkHttpUtils.postString().url(Common.Url_Exchange).tag(Common.NET_EXCHANGE_ID)
+                        .id(Common.NET_EXCHANGE_ID).content(mGson.toJson(p)).mediaType(Common.JSON)
+                        .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .build().execute(new MyStringCallback(mContext, "兑换中..."
+                        , IntegralexchangeActivity.this, true));
             }
         });
         builder.show();
     }
 
-    private void showLactionDialog(int position, String content) {
-        dialog = new EditTextDialog(mContext
-                , "请输入您的桌号或区域编号", "", content
-                , false, tagLocationId, IntegralexchangeActivity.this);
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
+    private void showToBindPhone() {
+        PromptDialog.Builder builder = new PromptDialog.Builder(IntegralexchangeActivity.this);
+        builder.setMessage("对不起,您需要绑定手机注册为正式帐号之后才能兑换商品!");
+        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("去绑定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startActivity(new Intent(mContext, RegisterActivity.class));
+            }
+        });
+        builder.show();
     }
 
     @Override

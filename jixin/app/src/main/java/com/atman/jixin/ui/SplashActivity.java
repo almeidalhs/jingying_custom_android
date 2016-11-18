@@ -139,7 +139,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     @OnClick(R.id.jump_tx)
     public void onClick() {
         timeCount.cancel();
-        toMainActivity();
+        isToLogin();
     }
 
     private void toMainActivity() {
@@ -185,6 +185,10 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
 
     @Override
     public void onTimeOut() {
+        isToLogin();
+    }
+
+    private void isToLogin() {
         if (MyBaseApplication.PASSWORD.isEmpty()) {
             if (!mUUID.equals("error")) {
                 Map<String, String> p = new HashMap<>();

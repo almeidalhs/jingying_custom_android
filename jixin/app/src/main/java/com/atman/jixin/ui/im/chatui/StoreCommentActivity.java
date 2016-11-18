@@ -277,7 +277,7 @@ public class StoreCommentActivity extends MyBaseActivity implements AdapterInter
                             , mAdapter.getItem(position).getUserId()));
                 } else {
                     startActivity(StoreDetailActivity.buildIntent(mContext
-                            , mAdapter.getItem(position).getStoreId()));
+                            , mAdapter.getItem(position).getStoreId(), 2));
                 }
                 break;
         }

@@ -189,5 +189,6 @@ public class Common {
     public static int TO_PERSONALINFOR = 10004;
     public static int TO_CODESCAN = 10005;
     public static int TO_RECORDE = 10006;
+    public static int TO_GOODSDETAIL = 10007;
     /**************************跳转码*****************************/
 }
