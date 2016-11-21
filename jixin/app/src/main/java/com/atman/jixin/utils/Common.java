@@ -103,6 +103,8 @@ public class Common {
     public static String Url_Bind_Phone = hostUrl + "rest/custom/mobile";
     //获取消费记录
     public static String Url_Get_Consumes = hostUrl + "rest/smconsume/getConsumes/";
+    //获取我的卡券
+    public static String Url_Get_Coupons = hostUrl + "rest/coupon/getMyCoupons/";
     /**************************http访问路径*****************************/
 
 
@@ -182,6 +184,8 @@ public class Common {
     public static int NET_BING_PHONE_ID = 36;
     //获取消费记录
     public static int NET_GET_CONSUMES_ID = 37;
+    //获取我的卡券
+    public static int NET_GET_COUPONS_ID = 38;
     /**************************http访问回应识别码*****************************/
 
 

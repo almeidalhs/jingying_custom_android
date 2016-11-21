@@ -62,7 +62,7 @@ public class MyConsumptionRecordActivity extends MyBaseActivity implements Adapt
         initRefreshView(PullToRefreshBase.Mode.BOTH, pullToRefreshListView);
         mEmpty = LayoutInflater.from(mContext).inflate(R.layout.part_empty_view, null);
         mEmptyTX = (TextView) mEmpty.findViewById(R.id.part_empty_tx);
-        mEmptyTX.setText("暂无商品可兑换");
+        mEmptyTX.setText("暂无消费记录");
 
         mAdapter = new MyConsumptionRecordAdapter(mContext, this);
         pullToRefreshListView.setEmptyView(mEmpty);
