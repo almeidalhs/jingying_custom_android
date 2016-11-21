@@ -101,6 +101,8 @@ public class Common {
     public static String Url_Get_Visitors = hostUrl + "rest/custom";
     //游客绑定手机号
     public static String Url_Bind_Phone = hostUrl + "rest/custom/mobile";
+    //获取消费记录
+    public static String Url_Get_Consumes = hostUrl + "rest/smconsume/getConsumes/";
     /**************************http访问路径*****************************/
 
 
@@ -178,6 +180,8 @@ public class Common {
     public static int NET_GET_VISITORS_ID = 35;
     //游客绑定手机号
     public static int NET_BING_PHONE_ID = 36;
+    //获取消费记录
+    public static int NET_GET_CONSUMES_ID = 37;
     /**************************http访问回应识别码*****************************/
 
 

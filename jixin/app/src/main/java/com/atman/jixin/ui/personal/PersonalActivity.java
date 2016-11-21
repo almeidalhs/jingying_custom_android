@@ -54,6 +54,10 @@ public class PersonalActivity extends MyBaseActivity {
     LinearLayout personalSettingLl;
     @Bind(R.id.personal_about_and_help_ll)
     LinearLayout personalAboutAndHelpLl;
+    @Bind(R.id.personal_consumption_tx)
+    TextView personalConsumptionTx;
+    @Bind(R.id.personal_card_tx)
+    TextView personalCardTx;
 
     private Context mContext = PersonalActivity.this;
     private String headImge = "";
@@ -108,6 +112,8 @@ public class PersonalActivity extends MyBaseActivity {
         if (id == Common.NET_PERSONAL_ID) {
             mGetPersonalInformationModel = mGson.fromJson(data, GetPersonalInformationModel.class);
             personalAttentionNumTx.setText(mGetPersonalInformationModel.getBody().getLikeNum() + "");
+            personalConsumptionTx.setText(mGetPersonalInformationModel.getBody().getConsumeNum() + "");
+            personalCardTx.setText(mGetPersonalInformationModel.getBody().getCouponNum() + "");
         }
     }
 
@@ -118,9 +124,16 @@ public class PersonalActivity extends MyBaseActivity {
     }
 
     @OnClick({R.id.personal_information_ll, R.id.personal_attention_ll, R.id.personal_setting_ll
-            , R.id.personal_about_and_help_ll, R.id.personal_exchange_ll})
+            , R.id.personal_about_and_help_ll, R.id.personal_exchange_ll, R.id.personal_consumption_ll
+            , R.id.personal_card_ll})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.personal_card_ll:
+                startActivity(new Intent(mContext, MyCardActivity.class));
+                break;
+            case R.id.personal_consumption_ll:
+                startActivity(new Intent(mContext, MyConsumptionRecordActivity.class));
+                break;
             case R.id.personal_information_ll:
                 startActivity(new Intent(mContext, PersonalInformationActivity.class));
                 break;

@@ -102,7 +102,7 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+//        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
     }
 
     public void exitApp(){

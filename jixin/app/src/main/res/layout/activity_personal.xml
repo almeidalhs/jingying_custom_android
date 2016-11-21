@@ -1,55 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/personal_head_ll"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="220dp"
         android:background="@color/color_cccccc"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/personal_head_bg"
-            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/personal_head_befor_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#88000000"/>
+            android:background="#88000000" />
 
         <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
             android:id="@+id/personal_head_img_iv"
             android:layout_width="@dimen/dimen_dp_60"
             android:layout_height="@dimen/dimen_dp_60"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/dimen_dp_40"
+            android:layout_centerHorizontal="true"
             android:src="@mipmap/img_sign_logo"
             img:shape="circle" />
 
         <TextView
             android:id="@+id/personal_head_name_tx"
-            android:layout_below="@+id/personal_head_img_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:layout_below="@+id/personal_head_img_iv"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_dp_5"
             android:text="即客"
+            android:textColor="@color/color_ffffff"
             android:textSize="@dimen/dimen_sp_15"
-            android:textStyle="bold"
-            android:textColor="@color/color_ffffff"/>
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_70"
+            android:background="#aa000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/personal_attention_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/personal_attention_ic"
+                    android:text=" 我的关注"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/personal_attention_num_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="0"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="25sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimen_dp_10"
+                android:layout_marginTop="@dimen/dimen_dp_10"
+                android:background="@color/color_ffffff" />
+
+            <LinearLayout
+                android:id="@+id/personal_consumption_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/personal_consumption_ic"
+                    android:text=" 我的消费"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/personal_consumption_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="0"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="25sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimen_dp_10"
+                android:layout_marginTop="@dimen/dimen_dp_10"
+                android:background="@color/color_ffffff" />
+
+            <LinearLayout
+                android:id="@+id/personal_card_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/personal_card_ic"
+                    android:text=" 我的卡券"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/personal_card_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="0"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="25sp" />
+            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="@dimen/dimen_dp_15"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
 
     <LinearLayout
         android:id="@+id/personal_information_ll"
@@ -91,61 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:background="@color/color_line"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/personal_attention_ll"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_dp_40"
-        android:background="@drawable/white_no_radius_bt_selector"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dimen_dp_15"
-        android:paddingRight="@dimen/dimen_dp_15">
-
-        <ImageView
-            android:layout_width="@dimen/dimen_dp_25"
-            android:layout_height="@dimen/dimen_dp_25"
-            android:src="@mipmap/person_setting_icon_costlist" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:layout_weight="1"
-            android:text="我的关注"
-            android:textColor="@color/color_494949"
-            android:textSize="@dimen/dimen_sp_15" />
-
-        <TextView
-            android:id="@+id/personal_attention_num_tx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimen_dp_10"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="0"
-            android:textColor="@color/color_494949"
-            android:textSize="@dimen/dimen_sp_15" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_ffffff">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:background="@color/color_line"/>
+            android:background="@color/color_line" />
     </LinearLayout>
 
     <LinearLayout
@@ -191,13 +242,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="@dimen/dimen_dp_15"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
 
     <LinearLayout
         android:id="@+id/personal_setting_ll"
@@ -239,7 +290,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:background="@color/color_line"/>
+            android:background="@color/color_line" />
     </LinearLayout>
 
     <LinearLayout
@@ -276,6 +327,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
 
 </LinearLayout>

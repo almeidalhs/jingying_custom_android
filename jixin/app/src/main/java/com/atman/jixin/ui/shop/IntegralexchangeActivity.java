@@ -21,7 +21,6 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.personal.RegisterActivity;
 import com.atman.jixin.utils.Common;
-import com.atman.jixin.widget.EditTextDialog;
 import com.atman.jixin.widget.ExchangeEditTextDialog;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.BaseNormalModel;
