@@ -184,7 +184,6 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
                 return;
             } else if (temp.getEventAction().getActionType()
                     ==EventActionType.EventActionType_Coupon) {//优惠券
-                return;
             }
         }
 
@@ -257,7 +256,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 //
         if (temp.getEventAction()!=null) {
             tempMessage.setActionType(temp.getEventAction().getActionType());
-            tempMessage.setChatId(temp.getEventAction().getCouponId());
+            tempMessage.setCouponId(temp.getEventAction().getCouponId());
             tempMessage.setEnterpriseId(temp.getEventAction().getEnterpriseId());
             tempMessage.setGoodId(temp.getEventAction().getGoodId());
             tempMessage.setStoreId(temp.getEventAction().getStoreId());

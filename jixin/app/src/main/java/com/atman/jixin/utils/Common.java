@@ -105,6 +105,10 @@ public class Common {
     public static String Url_Get_Consumes = hostUrl + "rest/smconsume/getConsumes/";
     //获取我的卡券
     public static String Url_Get_Coupons = hostUrl + "rest/coupon/getMyCoupons/";
+    //获取优惠券
+    public static String Url_Coupon_Detail = hostUrl + "rest/coupon/getCouponById/";
+    //领取优惠券
+    public static String Url_Coupon_Detail_Get = hostUrl + "rest/coupon/couponReceive/";
     /**************************http访问路径*****************************/
 
 
@@ -186,6 +190,10 @@ public class Common {
     public static int NET_GET_CONSUMES_ID = 37;
     //获取我的卡券
     public static int NET_GET_COUPONS_ID = 38;
+    //获取优惠券
+    public static int NET_COUPON_DETAIL_ID = 39;
+    //领取优惠券
+    public static int NET_COUPON_DETAIL_GET_ID = 40;
     /**************************http访问回应识别码*****************************/
 
 

@@ -44,6 +44,7 @@ import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
+import com.atman.jixin.ui.im.chatui.GetCouponActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
@@ -892,6 +893,8 @@ public class ShopIMActivity extends MyBaseActivity
                         ==EventActionType.EventActionType_Good) {//商品
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Coupon) {//优惠券
+                    startActivity(GetCouponActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getCouponId()));
                 }
                 break;
             case R.id.item_p2pchat_text_headleft_iv:
