@@ -47,6 +47,7 @@ import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
 import com.atman.jixin.ui.im.chatui.GetCouponActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.ui.im.chatui.StoreDetailActivity;
+import com.atman.jixin.ui.shop.GoodsDetailActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.BitmapTools;
 import com.atman.jixin.utils.Common;
@@ -384,7 +385,7 @@ public class ShopIMActivity extends MyBaseActivity
 
                     if (mQRScanCodeModel.getBody().getMessageBean().getEventAction()!=null) {
                         tempMessage.setActionType(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType());
-                        tempMessage.setChatId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId());
+                        tempMessage.setCouponId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId());
                         tempMessage.setEnterpriseId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getEnterpriseId());
                         tempMessage.setGoodId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getGoodId());
                         tempMessage.setStoreId(mQRScanCodeModel.getBody().getMessageBean().getEventAction().getStoreId());
@@ -418,8 +419,13 @@ public class ShopIMActivity extends MyBaseActivity
                                 ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                         } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
                                 ==EventActionType.EventActionType_Good) {//商品
+                            startActivity(GoodsDetailActivity.buildIntent(mContext
+                                    , mQRScanCodeModel.getBody().getMessageBean().getEventAction().getGoodId()
+                                    , mQRScanCodeModel.getBody().getMessageBean().getImageT_title(), 0, 0, null));
                         } else if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
                                 ==EventActionType.EventActionType_Coupon) {//优惠券
+                            startActivity(GetCouponActivity.buildIntent(mContext
+                                    , mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId()));
                         }
                     }
 
@@ -891,6 +897,9 @@ public class ShopIMActivity extends MyBaseActivity
                         ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Good) {//商品
+                    startActivity(GoodsDetailActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getGoodId()
+                            , mAdapter.getItem(position).getImageT_title(), 0, 0, null));
                 } else if (mAdapter.getItem(position).getActionType()
                         ==EventActionType.EventActionType_Coupon) {//优惠券
                     startActivity(GetCouponActivity.buildIntent(mContext

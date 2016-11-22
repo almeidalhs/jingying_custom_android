@@ -259,6 +259,8 @@ public class P2PChatAdapter extends BaseAdapter {
                         holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
                     } else if (temp.getActionType() == EventActionType.EventActionType_GoodList) {
                         holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_three);
+                    } else if (temp.getActionType() == EventActionType.EventActionType_Good) {
+                        holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_four);
                     } else {
                         holderText.itemP2pchatImagetextLeftIcIv.setImageResource(R.mipmap.ic_chat_one);
                     }

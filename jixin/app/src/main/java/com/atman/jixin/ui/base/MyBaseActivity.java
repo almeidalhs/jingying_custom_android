@@ -284,7 +284,6 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        LogUtils.e("Activity>>>>>:"+this.getClass().getName());
         if (mShouldLogin) {
             if (!isLogin()) {
                 //需要登陆状态，跳转到登陆界面

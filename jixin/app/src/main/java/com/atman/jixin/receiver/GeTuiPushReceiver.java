@@ -173,17 +173,8 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
 
         if (temp.getType() == ADChatType.ADChatType_ImageText) {
             if (temp.getEventAction().getActionType()
-                    == EventActionType.EventActionType_GoodList) {//菜单预览
-            } else if (temp.getEventAction().getActionType()
-                    ==EventActionType.EventActionType_Enterprise) {//企业介绍
-            } else if (temp.getEventAction().getActionType()
                     ==EventActionType.EventActionType_Menu) {//商品列表  (菜单,点菜)
                 return;
-            } else if (temp.getEventAction().getActionType()
-                    ==EventActionType.EventActionType_Good) {//商品
-                return;
-            } else if (temp.getEventAction().getActionType()
-                    ==EventActionType.EventActionType_Coupon) {//优惠券
             }
         }
 
@@ -242,18 +233,18 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
         if (temp.getImageT_back()!=null) {
             tempMessage.setVideo_image_url(temp.getImageT_back());
         }
-//
+
         if (temp.getAudio_duration()>0) {
             tempMessage.setAudio_duration(temp.getAudio_duration());
 //            tempMessage.setAudioLocationUrl(audioURL);
         }
-//
+
         if (temp.getImageT_back()!=null) {
             tempMessage.setImageT_back(temp.getImageT_back());
             tempMessage.setImageT_icon(temp.getImageT_icon());
             tempMessage.setImageT_title(temp.getImageT_title());
         }
-//
+
         if (temp.getEventAction()!=null) {
             tempMessage.setActionType(temp.getEventAction().getActionType());
             tempMessage.setCouponId(temp.getEventAction().getCouponId());
@@ -261,7 +252,7 @@ public class GeTuiPushReceiver extends BroadcastReceiver {
             tempMessage.setGoodId(temp.getEventAction().getGoodId());
             tempMessage.setStoreId(temp.getEventAction().getStoreId());
         }
-//
+
         if (temp.getOperaterList()!=null && temp.getOperaterList().size()>=1) {
             if (temp.getOperaterList().get(1).getOperaterExtra()!=null) {
                 tempMessage.setOperaterExtra(temp.getOperaterList().get(1).getOperaterExtra());
