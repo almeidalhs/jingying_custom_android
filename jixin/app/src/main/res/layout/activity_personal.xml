@@ -63,14 +63,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/personal_attention_ic"
-                    android:text=" 我的关注"
-                    android:textColor="@color/color_ffffff"
-                    android:textSize="12sp" />
-
-                <TextView
                     android:id="@+id/personal_attention_num_tx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,6 +70,13 @@
                     android:text="0"
                     android:textColor="@color/color_ffffff"
                     android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的关注"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <ImageView
@@ -97,14 +96,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/personal_consumption_ic"
-                    android:text=" 我的消费"
-                    android:textColor="@color/color_ffffff"
-                    android:textSize="12sp" />
-
-                <TextView
                     android:id="@+id/personal_consumption_tx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,6 +103,13 @@
                     android:text="0"
                     android:textColor="@color/color_ffffff"
                     android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的消费"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <ImageView
@@ -131,14 +129,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/personal_card_ic"
-                    android:text=" 我的卡券"
-                    android:textColor="@color/color_ffffff"
-                    android:textSize="12sp" />
-
-                <TextView
                     android:id="@+id/personal_card_tx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -146,6 +136,13 @@
                     android:text="0"
                     android:textColor="@color/color_ffffff"
                     android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 我的卡券"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

@@ -542,7 +542,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
                 }
-                p2pchatSendBt.setVisibility(View.GONE);
+                p2pchatSendBt.setVisibility(View.VISIBLE);
                 blogdetailAddcommentEt.setVisibility(View.VISIBLE);
                 llFacechoose.setVisibility(View.GONE);
                 p2pchatAddLl.setVisibility(View.GONE);

@@ -84,7 +84,7 @@ public class LocalAlbum extends BaseAppCompatActivity {
                             progress.clearAnimation();
                             ((View) progress.getParent()).setVisibility(View.GONE);
                             listView.setVisibility(View.VISIBLE);
-                            camera.setVisibility(View.VISIBLE);
+//                            camera.setVisibility(View.VISIBLE);
                         }
                     }
                 });

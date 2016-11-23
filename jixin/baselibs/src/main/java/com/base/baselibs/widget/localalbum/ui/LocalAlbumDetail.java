@@ -209,6 +209,10 @@ public class LocalAlbumDetail extends BaseAppCompatActivity implements MatrixIma
             hideViewPager();
 
         } else if (i == R.id.album_finish || i == R.id.header_finish) {
+            if (LocalImageHelper.getInstance().getCheckedItems().size() == 0) {
+                showToast("请选择图片");
+                return;
+            }
             AppManager.getAppManager().finishActivity(LocalAlbum.class);
             LocalImageHelper.getInstance().setResultOk(true);
             finish();

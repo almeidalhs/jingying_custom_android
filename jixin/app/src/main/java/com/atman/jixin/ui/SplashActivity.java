@@ -56,6 +56,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     private int loginTime = 500;
     private int defalTime = 1000;
     private String mUUID;
+    private boolean isGuests = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +174,11 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
-        toMainActivity();
+        if (isGuests) {
+            clearData();
+        } else {
+            toMainActivity();
+        }
     }
 
     @Override
@@ -191,6 +196,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
     private void isToLogin() {
         if (MyBaseApplication.PASSWORD.isEmpty()) {
             if (!mUUID.equals("error")) {
+                isGuests = true;
                 Map<String, String> p = new HashMap<>();
                 p.put("mobileSign", mUUID);
                 OkHttpUtils.postString()

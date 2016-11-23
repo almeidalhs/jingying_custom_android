@@ -352,18 +352,11 @@ public class P2PChatAdapter extends BaseAdapter {
                 break;
         }
 
-        AnimationDrawable  animationDrawableRight = (AnimationDrawable) holderText.itemP2pchatAudioRightIv.getDrawable();
-        animationDrawableRight.stop();
-        animationDrawableRight.selectDrawable(0);
-        AnimationDrawable  animationDrawable = (AnimationDrawable) holderText.itemP2pchatAudioLeftIv.getDrawable();
-        animationDrawable.stop();
-        animationDrawable.selectDrawable(0);
-
         final ViewHolder finalHolderRightText = holderText;
         holderText.itemP2pchatAudioRightLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderRightText.itemP2pchatAudioRightIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderRightText.itemP2pchatAudioRightIv.getBackground());
             }
         });
 
@@ -371,7 +364,7 @@ public class P2PChatAdapter extends BaseAdapter {
         holderText.itemP2pchatAudioLeftLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderLeftText.itemP2pchatAudioLeftIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderLeftText.itemP2pchatAudioLeftIv.getBackground());
             }
         });
 

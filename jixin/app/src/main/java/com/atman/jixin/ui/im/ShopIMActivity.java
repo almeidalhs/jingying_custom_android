@@ -950,13 +950,13 @@ public class ShopIMActivity extends MyBaseActivity
                     } else {
                         mAnimationDrawable = animationDrawable;
                         positionAudio = position;
-                        playAudio(position, animationDrawable, true);
+                        playAudio(position, true);
                     }
                 } else {
                     stopAnim();
                     mAnimationDrawable = animationDrawable;
                     positionAudio = position;
-                    playAudio(position, animationDrawable, true);
+                    playAudio(position, true);
                 }
                 break;
         }
@@ -978,11 +978,9 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    private void playAudio(int position, AnimationDrawable animationDrawable, boolean b) {
+    private void playAudio(int position, boolean b) {
         if (mAdapter.getItem(position).getAudioLocationUrl()!=null
                 && (new File(mAdapter.getItem(position).getAudioLocationUrl()).exists())) {
-            LogUtils.e("position:"+position);
-            LogUtils.e("mAdapter.getItem(position).getAudioLocationUrl():"+mAdapter.getItem(position).getAudioLocationUrl());
             try {
                 if (!mMediaPlayer.isPlaying()) {
                     mMediaPlayer.reset();
@@ -1002,8 +1000,8 @@ public class ShopIMActivity extends MyBaseActivity
                 e.printStackTrace();
             }
         } else {
-            String downUrl = Common.ImageUrl + mAdapter.getItem(position).getContent();
             if (b) {
+                String downUrl = Common.ImageUrl + mAdapter.getItem(position).getContent();
                 new DownloadAudioFile(ShopIMActivity.this, this).execute(downUrl);
             }
         }
@@ -1012,7 +1010,7 @@ public class ShopIMActivity extends MyBaseActivity
     @Override
     public void finish(String path) {
         updateChatMessage(-2, path, mAdapter.getItem(positionAudio).getChatId(), -1);
-        playAudio(positionAudio, mAnimationDrawable, false);
+        playAudio(positionAudio, false);
 
     }
 

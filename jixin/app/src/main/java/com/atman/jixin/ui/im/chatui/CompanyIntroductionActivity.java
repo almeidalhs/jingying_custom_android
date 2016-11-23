@@ -219,6 +219,10 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                 mAnimationDrawable.selectDrawable(0);
             }
         }
+        if (videoView!=null) {
+            videoLayout.setVisibility(View.GONE);
+            videoView.closePlayer();
+        }
     }
 
     @Override

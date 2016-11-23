@@ -53,6 +53,8 @@ public class ExchangeEditTextDialog extends Dialog {
             exchangeEdittextDialogNumEt.setHint(content);
         }
 
+        exchangeEdittextDialogNumEt.setText("1");
+
         if (!location.isEmpty()) {
             exchangeEdittextDialogLocationEt.setText(location);
         }

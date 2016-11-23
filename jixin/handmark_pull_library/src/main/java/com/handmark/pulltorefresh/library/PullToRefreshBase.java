@@ -330,6 +330,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 if (mIsBeingDragged) {
                     mLastMotionY = event.getY();
                     mLastMotionX = event.getX();
+                    if (event.getY()>=700) {
+                        mLastMotionY = 700;
+                    } else if (event.getY()<=-80) {
+                        mLastMotionY = -80;
+                    }
+                    Log.e(">>>>>>>>>>>>>>>>>>>>","mLastMotionY:"+mLastMotionY);
                     if (onScrollListener != null) {
                         onScrollListener.onScrollPosition(mLastMotionX, mLastMotionY);
                         onScrollListener.onDistance(mLastMotionX - mInitialMotionX, mLastMotionY - mInitialMotionY);
