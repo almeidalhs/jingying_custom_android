@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.jixin.R;
@@ -27,6 +28,7 @@ import com.atman.jixin.utils.MyTools;
 import com.atman.jixin.widget.downfile.DownloadAudioFile;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.universalvideoview.UniversalMediaController;
@@ -72,6 +74,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     private int mSeekPosition;
     private int cachedHeight;
     private boolean isFullscreen;
+    private int videoPosition = 0;
     private static final String SEEK_POSITION_KEY = "SEEK_POSITION_KEY";
 
     @Override
@@ -112,9 +115,9 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         companyListView.setAdapter(mAdapter);
     }
 
-    private void initVideo() {
+    private void initVideo(View view, int position) {
         videoView.setMediaController(mediaController);
-        setVideoAreaSize();
+        setVideoAreaSize(view, position);
         videoView.setVideoViewCallback(callback);
     }
 
@@ -123,18 +126,18 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         public void onScaleChange(boolean b) {
             isFullscreen = b;
             if (isFullscreen) {
-                ViewGroup.LayoutParams layoutParams = videoLayout.getLayoutParams();
-                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                layoutParams.height = getmHight();
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, getmHight());
+                layoutParams.setMargins(0, 0, 0, 0);
                 videoLayout.setLayoutParams(layoutParams);
                 //设置全屏时,无关的View消失,以便为视频控件和控制器控件留出最大化的位置
                 companyListView.setVisibility(View.GONE);
                 companyVideoCloseIv.setVisibility(View.GONE);
                 hideTitleBar();
             } else {
-                ViewGroup.LayoutParams layoutParams = videoLayout.getLayoutParams();
-                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                layoutParams.height = cachedHeight;
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, cachedHeight);
+                layoutParams.setMargins(0, videoPosition, 0, 0);
                 videoLayout.setLayoutParams(layoutParams);
                 companyListView.setVisibility(View.VISIBLE);
                 companyVideoCloseIv.setVisibility(View.VISIBLE);
@@ -167,21 +170,75 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
     /**
      * 置视频区域大小
      */
-    private void setVideoAreaSize() {
+    private void setVideoAreaSize(final View view, final int position) {
         LogUtils.e("videoUrl:" + videoUrl);
         videoLayout.post(new Runnable() {
             @Override
             public void run() {
                 int width = videoLayout.getWidth();
+                LogUtils.e("getScrollY():" + getScrollY());
+                LogUtils.e("companyListView.getFirstVisiblePosition():" + companyListView.getFirstVisiblePosition());
+                int locationX = getTopTotalHeight(view, position) - getScrollY();
+                LogUtils.e("locationX:" + locationX);
                 cachedHeight = (int) (width * 405f / 720f);
-                ViewGroup.LayoutParams videoLayoutParams = videoLayout.getLayoutParams();
-                videoLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                videoLayoutParams.height = cachedHeight;
+                LogUtils.e("cachedHeight:" + cachedHeight);
+                if (getTopTotalHeight(view, position)<=0 || locationX<=0) {
+                    videoPosition = 0;
+                } else if ((getmHight()-locationX - getTopBar()) <= cachedHeight) {
+                    videoPosition = getmHight()-cachedHeight - getTopBar();
+                } else {
+                    videoPosition = locationX;
+                }
+                LogUtils.e("videoPosition:" + videoPosition);
+                RelativeLayout.LayoutParams videoLayoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, cachedHeight);
+                videoLayoutParams.setMargins(0, videoPosition, 0, 0);
                 videoLayout.setLayoutParams(videoLayoutParams);
                 videoView.setVideoPath(videoUrl);
                 videoView.requestFocus();
             }
         });
+    }
+
+    public int getScrollY() {
+        View c = companyListView.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        int firstVisiblePosition = companyListView.getFirstVisiblePosition();
+        int top = c.getTop();
+        return -top + firstVisiblePosition * c.getHeight() ;
+    }
+
+    public int getTopTotalHeight(View view, int p){
+        int mTotal = 0;
+        LogUtils.e("p:"+p);
+        LogUtils.e("companyListView.getFirstVisiblePosition():"+companyListView.getFirstVisiblePosition());
+        for (int i=0;i<p;i++) {
+            View c = companyListView.getChildAt(i);
+            if (c != null) {
+                LogUtils.e("111>>>>:"+i+",c.getHeight():"+c.getHeight());
+                mTotal += c.getHeight();
+            } else {
+                LogUtils.e("222>>>>:"+i+",((View) view.getParent()).getHeight():"+((View) view.getParent()).getHeight());
+                mTotal += ((View) view.getParent()).getHeight();
+            }
+        }
+        return mTotal;
+    }
+
+    public int getTopBar() {
+        /**
+         * 获取状态栏高度——方法1
+         * */
+        int statusBarHeight1 = -1;
+        //获取status_bar_height资源的ID
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+        }
+        return statusBarHeight1 + DensityUtil.dp2px(mContext, 48);
     }
 
     @Override
@@ -264,7 +321,7 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                     videoUrl = Common.ImageUrl + videoUrl;
                 }
                 videoLayout.setVisibility(View.VISIBLE);
-                initVideo();
+                initVideo(view, position);
                 videoView.start();
                 break;
             case R.id.item_company_pictrue_iv:
