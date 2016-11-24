@@ -192,7 +192,7 @@ public class ShopIMActivity extends MyBaseActivity
             name = getIntent().getStringExtra("name");
             avatar = getIntent().getStringExtra("avatar");
             storeId = getIntent().getLongExtra("id", -1);
-        } else {
+        } else {//扫描跳转的
             mQRScanCodeModel = (QRScanCodeModel) getIntent().getSerializableExtra("bean");
             if (mQRScanCodeModel != null) {
                 storeId = mQRScanCodeModel.getBody().getStoreBean().getId();
@@ -223,8 +223,9 @@ public class ShopIMActivity extends MyBaseActivity
         initListView();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
-    public void onUserEvent(MessageEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserEvent(MessageEvent event) {
+        //收到消息
         GetMessageModel mGetMessageModel = event.mGetMessageModel;
         ChatMessageModel mChatMessageModel = event.mChatMessageModel;
         if (mChatMessageModel.getTargetId() == storeId) {
@@ -245,8 +246,9 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
-    public void onUserEvent(updateChatMessageServiceEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserEvent(updateChatMessageServiceEvent event) {
+        //发送完毕事件接收
         updateChatMessage(event.i, event.str, event.chatId, event.Id);
     }
 
@@ -304,6 +306,7 @@ public class ShopIMActivity extends MyBaseActivity
         });
     }
 
+    //设置桌号
     private void showLactionDialog(int position, String content) {
         dialog = new EditTextDialog(mContext
                 , mGVAdapter.getItem(position).getIdentifyChangeNotice(), "", content
@@ -461,6 +464,7 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
+    //添加欢迎语
     private void AddWelcome() {
         ChatListModel mChatListModel= mChatListModelDao.queryBuilder().where(ChatListModelDao.Properties.TargetId.eq(storeId)
                 , ChatListModelDao.Properties.LoginId.eq(MyBaseApplication.USERINFOR.getBody().getAtmanUserId())).build().unique();
@@ -491,6 +495,7 @@ public class ShopIMActivity extends MyBaseActivity
         }
     }
 
+    //没有返回服务时的设置
     private void setNotService() {
         p2pchatServiceLl.setVisibility(View.GONE);
         p2pchatServiceOrKeyboardIv.setVisibility(View.GONE);
@@ -503,6 +508,7 @@ public class ShopIMActivity extends MyBaseActivity
         updateChatMessage(1, "", -1, -1);
     }
 
+    //更新本地聊天记录
     private void updateChatMessage(int i, String str, long chatId, long Id) {
         if (i==-2) {//更新接收语音本地下载
             ChatMessageModel upMessage = mChatMessageModelDao.queryBuilder().where(
@@ -544,7 +550,7 @@ public class ShopIMActivity extends MyBaseActivity
             , R.id.p2pchat_add_picture_tv, R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv, R.id.item_p2pchat_root_ll})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.item_p2pchat_root_ll:
+            case R.id.item_p2pchat_root_ll://聊天记录item点击
                 if (isIMOpen()) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
@@ -556,7 +562,7 @@ public class ShopIMActivity extends MyBaseActivity
                 p2pchatAddLl.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;
-            case R.id.p2pchat_add_iv:
+            case R.id.p2pchat_add_iv://其他
                 if (p2pchatAddLl.getVisibility() == View.VISIBLE) {
                     p2pchatAddLl.setVisibility(View.GONE);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -574,7 +580,7 @@ public class ShopIMActivity extends MyBaseActivity
                 llFacechoose.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;
-            case R.id.blogdetail_addemol_iv:
+            case R.id.blogdetail_addemol_iv://表情
                 if (llFacechoose.getVisibility() == View.GONE) {
                     if (isIMOpen()) {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -593,7 +599,7 @@ public class ShopIMActivity extends MyBaseActivity
                 p2pchatAddLl.setVisibility(View.GONE);
                 handler.postDelayed(runnable, 200);
                 break;
-            case R.id.p2pchat_service_or_keyboard_iv:
+            case R.id.p2pchat_service_or_keyboard_iv://切换
                 if (p2pchatServiceLl.getVisibility() == View.VISIBLE) {
                     p2pchatServiceLl.setVisibility(View.GONE);
                     p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
@@ -615,7 +621,7 @@ public class ShopIMActivity extends MyBaseActivity
                 blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
                 handler.postDelayed(runnable, 200);
                 break;
-            case R.id.p2pchat_send_bt:
+            case R.id.p2pchat_send_bt://发送按钮
                 if (blogdetailAddcommentEt.getText().toString().trim().isEmpty()) {
                     return;
                 }
@@ -623,7 +629,7 @@ public class ShopIMActivity extends MyBaseActivity
                         , "", false, null);
                 blogdetailAddcommentEt.setText("");
                 break;
-            case R.id.p2pchat_add_picture_tv:
+            case R.id.p2pchat_add_picture_tv://其他--图片
 //                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
 //                getAlbum.setType("image/*");
 //                startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
@@ -631,17 +637,18 @@ public class ShopIMActivity extends MyBaseActivity
                 Intent intent = new Intent(mContext, LocalAlbum.class);
                 startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
                 break;
-            case R.id.p2pchat_add_camera_tv:
+            case R.id.p2pchat_add_camera_tv://其他--相机
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
                 p2pchatAddLl.setVisibility(View.GONE);
                 break;
-            case R.id.p2pchat_add_record_tv:
+            case R.id.p2pchat_add_record_tv://其他--语音
                 p2pchatAddLl.setVisibility(View.GONE);
                 startActivityForResult(RecordingActivity.buildIntent(mContext, storeId), Common.TO_RECORDE);
                 break;
         }
     }
 
+    //构建消息数据
     private void buildMessage(int adChatType, String content, String loactionNum, boolean isService
             , GetChatServiceModel.BodyBean.MessageBeanBean.OperaterListBean bean) {
 
