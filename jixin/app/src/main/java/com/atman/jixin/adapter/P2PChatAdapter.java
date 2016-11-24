@@ -480,8 +480,6 @@ public class P2PChatAdapter extends BaseAdapter {
 
         srcmapimg = bigImage(srcmapimg, (float) width, (float) height);
 
-        int center = (srcmapimg.getWidth()-width)/2;
-
         //设置默认背景颜色
         final int color = 0xff424242;
         final Paint paint = new Paint();

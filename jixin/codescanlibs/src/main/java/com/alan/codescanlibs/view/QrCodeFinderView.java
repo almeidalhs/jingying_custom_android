@@ -15,11 +15,18 @@ package com.alan.codescanlibs.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -40,13 +47,21 @@ public final class QrCodeFinderView extends RelativeLayout {
     private Paint mPaint;
     private int mScannerAlpha;
     private int mMaskColor;
+    private int mTransColor;
     private int mFrameColor;
     private int mLaserColor;
     private int mTextColor;
+    private int mArcColor;
     private Rect mFrameRect;
     private int mFocusThick;
     private int mAngleThick;
     private int mAngleLength;
+    private int mDistanceOne;
+    private int mLineWidth;
+    private int mLineWidthOne;
+    private int mTextWidth;
+    private int mAngleOne;
+    private int mAngleTwo;
 
     public QrCodeFinderView(Context context) {
         this(context, null);
@@ -58,14 +73,29 @@ public final class QrCodeFinderView extends RelativeLayout {
 
     public QrCodeFinderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
         mContext = context;
         mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+
+        mDistanceOne = dp2px(context, 5);
+
+        mLineWidth = dp2px(context, 1);
+        mLineWidthOne = dp2px(context, 2);
+        mTextWidth = 1;
+
+        mAngleOne = 0;
+        mAngleTwo = 180;
 
         Resources resources = getResources();
         mMaskColor = resources.getColor(R.color.qr_code_finder_mask);
+        mTransColor = resources.getColor(R.color.qr_code_finder_trans);
         mFrameColor = resources.getColor(R.color.qr_code_finder_frame);
         mLaserColor = resources.getColor(R.color.qr_code_finder_laser);
         mTextColor = resources.getColor(R.color.qr_code_white);
+        mArcColor = resources.getColor(R.color.qr_code_flash_light_text_color);
 
         mFocusThick = 1;
         mAngleThick = 8;
@@ -96,28 +126,97 @@ public final class QrCodeFinderView extends RelativeLayout {
         if (isInEditMode()) {
             return;
         }
-        Rect frame = mFrameRect;
-        if (frame == null) {
-            return;
-        }
+
         int width = canvas.getWidth();
         int height = canvas.getHeight();
+        Rect frame = mFrameRect;
 
-        // 绘制焦点框外边的暗色背景
-        mPaint.setColor(mMaskColor);
-        canvas.drawRect(0, 0, width, frame.top, mPaint);
-        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, mPaint);
-        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, mPaint);
-        canvas.drawRect(0, frame.bottom + 1, width, height, mPaint);
+        Bitmap BmpDST = makeBg(frame.width(), frame.height(),mTransColor);
+        Canvas c = new Canvas(BmpDST);
+        mPaint.setColor(mLaserColor);
+        c.drawCircle(frame.width()/2, frame.height()/2, frame.width()/2, mPaint);
 
-        drawFocusRect(canvas, frame);
-        drawAngle(canvas, frame);
-        drawText(canvas, frame);
-        drawLaser(canvas, frame);
+        //然后把目标图像画到画布上
+        canvas.drawBitmap(BmpDST, frame.left, frame.top,mPaint);
 
-        // Request another update at the animation interval, but only repaint the laser line,
-        // not the entire viewfinder mask.
-        postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
+        //计算源图像区域
+        Bitmap BmpSRC = makeBg(width, height, mMaskColor);
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        canvas.drawBitmap(BmpSRC,0,0,mPaint);
+
+        mPaint.setXfermode(null);
+        mPaint.setStrokeWidth(mTextWidth);
+        mPaint.setColor(mTextColor);
+        mPaint.setStyle(Paint.Style.FILL);//设置实心
+        drawText(canvas, frame);//绘制文字
+
+//        mPaint.setColor(mTextColor);
+//        mPaint.setStyle(Paint.Style.STROKE);//设置空心
+//        mPaint.setStrokeWidth(mLineWidth);
+//        RectF oval = new RectF(frame.left,frame.top,frame.right,frame.bottom);
+//        canvas.drawOval(oval, mPaint);
+//
+//        mPaint.setStrokeWidth(mLineWidthOne);
+//        mPaint.setColor(mArcColor);
+//        RectF oval1 = new RectF(frame.left - mDistanceOne,frame.top - mDistanceOne
+//                ,frame.right + mDistanceOne,frame.bottom + mDistanceOne);
+//        canvas.drawArc(oval1, mAngleOne, 180,false, mPaint);
+//
+//        mPaint.setStrokeWidth(mLineWidthOne);
+//        RectF oval2 = new RectF(frame.left + mDistanceOne,frame.top + mDistanceOne
+//                ,frame.right - mDistanceOne,frame.bottom - mDistanceOne);
+//        canvas.drawArc(oval2, mAngleTwo, 180,false, mPaint);
+//
+//        mAngleOne += 5;
+//        mAngleTwo -= 5;
+//        postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
+
+
+//        Rect frame = mFrameRect;
+//        if (frame == null) {
+//            return;
+//        }
+//        int width = canvas.getWidth();
+//        int height = canvas.getHeight();
+//
+//        // 绘制焦点框外边的暗色背景
+//        mPaint.setColor(mMaskColor);
+//        canvas.drawRect(0, 0, width, frame.top, mPaint);//上面区域
+//        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, mPaint);//左边区域
+//        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, mPaint);//右边区域
+//        canvas.drawRect(0, frame.bottom + 1, width, height, mPaint);//下边区域
+//
+//        drawFocusRect(canvas, frame);
+//        drawAngle(canvas, frame);
+//        drawText(canvas, frame);
+//        drawLaser(canvas, frame);
+//
+//        // Request another update at the animation interval, but only repaint the laser line,
+//        // not the entire viewfinder mask.
+//        postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
+    }
+
+    // create a bitmap with a circle, used for the "dst" image
+    private Bitmap makeOval(Rect frame) {
+        Bitmap bm = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        p.setColor(mLaserColor);
+//        c.drawCircle(frame.left, frame.top, frame.width()/2, p);
+        c.drawOval(new RectF(frame.left, frame.top, frame.right, frame.bottom), p);
+        return bm;
+    }
+
+        // create a bitmap with a rect, used for the "src" image
+    private Bitmap makeBg(int w, int h, int mColor) {
+        Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        p.setColor(mColor);
+        c.drawRect(0, 0, w, h, p);
+        return bm;
     }
 
     /**
@@ -179,7 +278,7 @@ public final class QrCodeFinderView extends RelativeLayout {
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
         float fontTotalHeight = fontMetrics.bottom - fontMetrics.top;
         float offY = fontTotalHeight / 2 - fontMetrics.bottom;
-        float newY = rect.bottom + margin + offY;
+        float newY = rect.bottom + margin + offY + mDistanceOne;
         float left = (ScreenUtils.getScreenWidth(mContext) - mPaint.getTextSize() * text.length()) / 2;
         canvas.drawText(text, left, newY, mPaint);
     }
@@ -192,5 +291,10 @@ public final class QrCodeFinderView extends RelativeLayout {
         int middle = rect.height() / 2 + rect.top;
         canvas.drawRect(rect.left + 2, middle - 1, rect.right - 1, middle + 2, mPaint);
 
+    }
+
+    public int dp2px(Context context, int dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }
