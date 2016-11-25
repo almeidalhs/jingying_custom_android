@@ -68,10 +68,10 @@ public final class QrCodeArcView extends RelativeLayout {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
 
-        mDistanceOne = dp2px(context, 5);
+        mDistanceOne = dp2px(context, 4);
 
         mLineWidth = dp2px(context, 1);
-        mLineWidthOne = dp2px(context, 2);
+        mLineWidthOne = dp2px(context, 3);
         mTextWidth = 1;
 
         mAngleOne = 0;
@@ -107,10 +107,6 @@ public final class QrCodeArcView extends RelativeLayout {
         }
         Rect frame = mFrameRect;
 
-        mPaint.setStrokeWidth(mTextWidth);
-        mPaint.setColor(mTextColor);
-        mPaint.setStyle(Paint.Style.FILL);//设置实心
-
         mPaint.setColor(mTextColor);
         mPaint.setStyle(Paint.Style.STROKE);//设置空心
         mPaint.setStrokeWidth(mLineWidth);
@@ -128,9 +124,9 @@ public final class QrCodeArcView extends RelativeLayout {
                 ,frame.right - mDistanceOne,frame.bottom - mDistanceOne);
         canvas.drawArc(oval2, mAngleTwo, 180,false, mPaint);
 
-        mAngleOne += 5;
-        mAngleTwo -= 5;
-        postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
+        mAngleOne += 10;
+        mAngleTwo -= 10;
+        postInvalidateDelayed(ANIMATION_DELAY);
     }
 
     public int dp2px(Context context, int dpValue) {
