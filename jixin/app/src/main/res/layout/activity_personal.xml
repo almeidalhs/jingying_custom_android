@@ -22,6 +22,7 @@
             android:id="@+id/personal_head_befor_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="#88000000" />
 
         <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"

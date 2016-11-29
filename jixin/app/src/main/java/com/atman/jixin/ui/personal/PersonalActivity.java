@@ -2,6 +2,8 @@ package com.atman.jixin.ui.personal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,10 +17,13 @@ import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.shop.ExchangeRecordActivity;
 import com.atman.jixin.utils.Common;
+import com.atman.jixin.widget.GroundGlassUtil;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
@@ -95,7 +100,7 @@ public class PersonalActivity extends MyBaseActivity {
             ImageLoader.getInstance().displayImage(Common.ImageUrl + headImge, personalHeadImgIv
                     , MyBaseApplication.getApplication().optionsHead);
             ImageLoader.getInstance().displayImage(Common.ImageUrl + headImge, personalHeadBg
-                    , MyBaseApplication.getApplication().optionsHead);
+                    , MyBaseApplication.getApplication().optionsNot, mListener);
             personalHeadNameTx.setText(MyBaseApplication.USERINFOR.getBody().getMemberName());
         }
 
@@ -105,6 +110,35 @@ public class PersonalActivity extends MyBaseActivity {
                 .tag(Common.NET_PERSONAL_ID).id(Common.NET_PERSONAL_ID).build()
                 .execute(new MyStringCallback(mContext, "", this, false));
     }
+
+    private ImageLoadingListener mListener = new ImageLoadingListener() {
+
+        @Override
+        public void onLoadingStarted(String s, View view) {
+
+        }
+
+        @Override
+        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+        }
+
+        @Override
+        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+//            bitmap = GroundGlassUtil.drawable2Bitmap(getResources().getDrawable(R.mipmap.ic_launcher));
+            ImageView im = (ImageView) view;
+//            if (Build.VERSION.SDK_INT > 16) {
+//                im.setImageBitmap(GroundGlassUtil.groundGlass17(mContext, bitmap, 25));
+//            } else {
+                im.setImageBitmap(GroundGlassUtil.groundGlass16(bitmap, 25));
+//            }
+        }
+
+        @Override
+        public void onLoadingCancelled(String s, View view) {
+
+        }
+    };
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
