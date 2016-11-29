@@ -849,7 +849,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
             return;
         }
 
-        super.onRestoreInstanceState(state);
+        //一些第三方清理工具,在清理之后,重启之后会读取之前进入后台的状态,清理之后super的时候就会报错,这样处理一下
+        try {
+            super.onRestoreInstanceState(state);
+        } catch (Exception e) {
+        }
+        state = null;
     }
 
     @Override

@@ -34,8 +34,7 @@
         <TextView
             android:id="@+id/company_video_close_iv"
             android:layout_gravity="right|top"
-            android:layout_marginTop="@dimen/dimen_dp_10"
-            android:layout_marginRight="@dimen/dimen_dp_15"
+            android:padding="@dimen/dimen_dp_15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/dimen_dp_15"

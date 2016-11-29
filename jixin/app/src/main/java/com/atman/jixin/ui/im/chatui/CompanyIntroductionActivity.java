@@ -119,6 +119,12 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
         videoView.setMediaController(mediaController);
         setVideoAreaSize(view, position);
         videoView.setVideoViewCallback(callback);
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     private UniversalVideoView.VideoViewCallback callback = new UniversalVideoView.VideoViewCallback() {

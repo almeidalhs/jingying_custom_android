@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_p2pchat_root_ll"
+    android:id="@+id/p2pchat_root_ll"
     android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +14,8 @@
         <com.handmark.pulltorefresh.library.PullToRefreshListView
             xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/p2pchat_lv"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
             android:divider="@color/color_line"
             android:dividerHeight="0px"

@@ -17,6 +17,8 @@ import com.atman.jixin.utils.MyTools;
 import com.base.baselibs.net.MyStringCallback;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.text.DecimalFormat;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,6 +50,7 @@ public class GetCouponActivity extends MyBaseActivity {
     private long CouponId;
     private CouponDetailModel mCouponDetailModel;
     private GetCouponModel mGetCouponModel;
+    private DecimalFormat df;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class GetCouponActivity extends MyBaseActivity {
         setBarTitleTx("优惠券");
 
         CouponId = getIntent().getLongExtra("CouponId", 0);
+        df = new DecimalFormat("###");
     }
 
     @Override
@@ -100,8 +104,8 @@ public class GetCouponActivity extends MyBaseActivity {
     }
 
     private void upDateUi() {
-        coupondetailPriceTx.setText(mCouponDetailModel.getBody().getCouponPrice() + "");
-        coupondetailLimitTx.setText("满" + mCouponDetailModel.getBody().getCouponLimit() + "可用");
+        coupondetailPriceTx.setText(df.format(mCouponDetailModel.getBody().getCouponPrice()) + "");
+        coupondetailLimitTx.setText("满" + df.format(mCouponDetailModel.getBody().getCouponLimit()) + "可用");
         coupondetailRemainingTx.setText("剩余" + (mCouponDetailModel.getBody().getCouponStorage()
                 - mCouponDetailModel.getBody().getCouponUsage()) +"张");
         coupondetailLimitnumTx.setText("限领" + mCouponDetailModel.getBody().getUserReceiveLimit()+"张");

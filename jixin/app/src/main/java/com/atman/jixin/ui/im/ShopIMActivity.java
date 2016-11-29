@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -264,6 +265,23 @@ public class ShopIMActivity extends MyBaseActivity
             @Override
             public void run() {
                 p2pchatLv.getRefreshableView().setSelection(mAdapter.getCount());
+            }
+        });
+        p2pchatLv.getRefreshableView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isIMOpen()) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+                }
+                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
+                p2pchatSendBt.setVisibility(View.GONE);
+                p2pchatServiceOrKeyboardIv.setVisibility(View.VISIBLE);
+                blogdetailAddcommentEt.setVisibility(View.VISIBLE);
+                llFacechoose.setVisibility(View.GONE);
+                p2pchatAddLl.setVisibility(View.GONE);
+                p2pchatServiceLl.setVisibility(View.GONE);
+                return false;
             }
         });
     }
@@ -547,21 +565,9 @@ public class ShopIMActivity extends MyBaseActivity
     }
 
     @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_service_or_keyboard_iv, R.id.p2pchat_send_bt
-            , R.id.p2pchat_add_picture_tv, R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv, R.id.item_p2pchat_root_ll})
+            , R.id.p2pchat_add_picture_tv, R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.item_p2pchat_root_ll://聊天记录item点击
-                if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
-                }
-                p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
-                blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
-                p2pchatServiceLl.setVisibility(View.GONE);
-                llFacechoose.setVisibility(View.GONE);
-                p2pchatAddLl.setVisibility(View.GONE);
-                handler.postDelayed(runnable, 200);
-                break;
             case R.id.p2pchat_add_iv://其他
                 if (p2pchatAddLl.getVisibility() == View.VISIBLE) {
                     p2pchatAddLl.setVisibility(View.GONE);
@@ -569,8 +575,7 @@ public class ShopIMActivity extends MyBaseActivity
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
                 } else {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     p2pchatAddLl.setVisibility(View.VISIBLE);
                 }
@@ -583,8 +588,7 @@ public class ShopIMActivity extends MyBaseActivity
             case R.id.blogdetail_addemol_iv://表情
                 if (llFacechoose.getVisibility() == View.GONE) {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     llFacechoose.setVisibility(View.VISIBLE);
                     blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_keyboard);
@@ -610,8 +614,7 @@ public class ShopIMActivity extends MyBaseActivity
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     p2pchatServiceLl.setVisibility(View.VISIBLE);
                     p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_keyboard);
@@ -851,7 +854,7 @@ public class ShopIMActivity extends MyBaseActivity
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            p2pchatLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
+//            p2pchatLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
         }
     };
 
@@ -877,8 +880,7 @@ public class ShopIMActivity extends MyBaseActivity
         switch (v.getId()) {
             case R.id.item_p2pchat_root_Rl:
                 if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+                    cancelIM(v);
                 }
                 p2pchatServiceOrKeyboardIv.setImageResource(R.mipmap.adchat_input_action_icon_struct);
                 p2pchatSendBt.setVisibility(View.GONE);
@@ -1029,8 +1031,7 @@ public class ShopIMActivity extends MyBaseActivity
     @Override
     public void onItemClick(View view, String str, int tagId) {
         if (isIMOpen() && view.getWindowToken()!=null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+            cancelIM(view);
         }
         switch (view.getId()) {
             case R.id.edittext_dialog_cancel_tx:

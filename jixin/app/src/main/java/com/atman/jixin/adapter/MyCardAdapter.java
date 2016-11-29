@@ -16,6 +16,7 @@ import com.atman.jixin.widget.XCFlowLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +36,13 @@ public class MyCardAdapter extends BaseAdapter {
     private Context mContext;
     private AdapterInterface onItemClick;
     private ViewGroup.MarginLayoutParams lp;
+    private DecimalFormat df;
 
     public MyCardAdapter(Context mContext, AdapterInterface onItemClick) {
         this.mContext = mContext;
         this.onItemClick = onItemClick;
         this.list = new ArrayList<>();
+        df = new DecimalFormat("###");
     }
 
     /**
@@ -75,8 +78,8 @@ public class MyCardAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.itemMycardPriceTx.setText(mData.getCouponPrice()+"");
-        viewHolder.itemMycardLimitTx.setText("满"+mData.getCouponLimit()+"可用");
+        viewHolder.itemMycardPriceTx.setText(df.format(mData.getCouponPrice())+"");
+        viewHolder.itemMycardLimitTx.setText("满"+df.format(mData.getCouponLimit())+"可用");
         viewHolder.itemMycardNameTx.setText("[商家]"+mData.getStoreName());
         viewHolder.itemMycardStarttimeTx.setText("开始:"+ MyTools.convertTime(mData.getCouponStartDate()*1000, "yyyy-MM-dd HH:mm"));
         viewHolder.itemMycardEndtimeTx.setText("结束:"+MyTools.convertTime(mData.getCouponEndDate()*1000, "yyyy-MM-dd HH:mm"));

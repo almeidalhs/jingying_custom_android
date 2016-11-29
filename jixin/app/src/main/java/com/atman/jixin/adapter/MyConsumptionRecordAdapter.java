@@ -20,6 +20,7 @@ import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
     private Context mContext;
     private AdapterInterface onItemClick;
     private ViewGroup.MarginLayoutParams lp;
+    private DecimalFormat df;
 
     public MyConsumptionRecordAdapter(Context mContext, AdapterInterface onItemClick) {
         this.mContext = mContext;
@@ -50,6 +52,7 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
         lp.rightMargin = DensityUtil.dp2px(mContext, 2);
         lp.topMargin = DensityUtil.dp2px(mContext, 0);
         lp.bottomMargin = DensityUtil.dp2px(mContext, 0);
+        df = new DecimalFormat("###");
     }
 
     /**
@@ -88,9 +91,9 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
         viewHolder.itemMyconsumesNumTx.setText(mData.getTitle());
         viewHolder.itemMyconsumesShopnameTx.setText(mData.getStoreName());
         viewHolder.itemMyconsumesTimeTv.setText(MyTools.convertTime(mData.getAddTime() * 1000, "yyyy-MM-dd HH:mm"));
-        viewHolder.itemMyconsumesTotalTv.setText("共" + mData.getGoodsBeanList().size() + "件商品,合计￥ " + mData.getTotal());
 
         viewHolder.itemMyconsumesGoodsLl.removeAllViews();
+        int num = 0;
         for (int i = 0; i < mData.getGoodsBeanList().size(); i++) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.item_part_myconsumes_view, null);
             viewHolder.itemMyconsumesGoodsLl.addView(v);
@@ -109,9 +112,11 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
             } else {
                 itemMyconsumesGoodsdescriptionTv.setText(mData.getGoodsBeanList().get(i).getGoodsInfo());
             }
+            num += mData.getGoodsBeanList().get(i).getGoodsCount();
             itemMyconsumesGoodsnumTv.setText("数量:" + mData.getGoodsBeanList().get(i).getGoodsCount());
             itemMyconsumesGoodspriceTv.setText("￥ " + mData.getGoodsBeanList().get(i).getGoodsPrice());
         }
+        viewHolder.itemMyconsumesTotalTv.setText("共" + num + "件商品,合计￥ " + mData.getReceived());
 
         viewHolder.itemMemberrecordFlowlayout.removeAllViews();
         if (mData.getMansongRuleList().size() > 0 || mData.getCouponList().size() > 0) {
@@ -121,8 +126,8 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
         }
         for (int i = 0; i < mData.getMansongRuleList().size(); i++) {
             TextView tv = new TextView(mContext);
-            tv.setText("全场满"+mData.getMansongRuleList().get(i).getPrice()
-                    +"减"+mData.getMansongRuleList().get(i).getDiscount());
+            tv.setText("全场满"+df.format(mData.getMansongRuleList().get(i).getPrice())
+                    +"减"+df.format(mData.getMansongRuleList().get(i).getDiscount()));
             tv.setTextColor(Color.WHITE);
             tv.setPadding(DensityUtil.dp2px(mContext, 5), DensityUtil.dp2px(mContext, 1),
                     DensityUtil.dp2px(mContext, 5), DensityUtil.dp2px(mContext, 1));
@@ -133,8 +138,8 @@ public class MyConsumptionRecordAdapter extends BaseAdapter {
 
         for (int i=0;i<mData.getCouponList().size();i++) {
             TextView tv = new TextView(mContext);
-            tv.setText("满"+mData.getCouponList().get(i).getCouponLimit()
-                    +"减"+mData.getCouponList().get(i).getCouponPrice()+"优惠券");
+            tv.setText("满"+df.format(mData.getCouponList().get(i).getCouponLimit())
+                    +"减"+df.format(mData.getCouponList().get(i).getCouponPrice())+"优惠券");
             tv.setTextColor(Color.WHITE);
             tv.setPadding(DensityUtil.dp2px(mContext, 5), DensityUtil.dp2px(mContext, 1),
                     DensityUtil.dp2px(mContext, 5), DensityUtil.dp2px(mContext, 1));

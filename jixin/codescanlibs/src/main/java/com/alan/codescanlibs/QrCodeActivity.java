@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -388,6 +389,10 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                     if (null != mQrCodeExecutor && !TextUtils.isEmpty(imgPath)) {
                         mQrCodeExecutor.execute(new DecodeImageThread(imgPath, mDecodeImageCallback));
                     }
+                } else {
+                    if (null != mQrCodeExecutor && !TextUtils.isEmpty(uri.getPath())) {
+                        mQrCodeExecutor.execute(new DecodeImageThread(uri.getPath(), mDecodeImageCallback));
+                    }
                 }
                 break;
         }
@@ -421,6 +426,7 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                 case MSG_DECODE_SUCCEED:
                     Result result = (Result) msg.obj;
                     if (null == result) {
+                        Log.e(">>>>",">>>>MSG_DECODE_SUCCEED and null");
                         mDecodeManager.showCouldNotReadQrCodeFromPicture(qrCodeActivity);
                     } else {
                         String resultString = result.getText();
@@ -428,6 +434,7 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                     }
                     break;
                 case MSG_DECODE_FAIL:
+                    Log.e(">>>>",">>>>MSG_DECODE_FAIL");
                     mDecodeManager.showCouldNotReadQrCodeFromPicture(qrCodeActivity);
                     break;
             }

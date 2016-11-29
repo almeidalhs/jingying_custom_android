@@ -199,6 +199,7 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
                 isGuests = true;
                 Map<String, String> p = new HashMap<>();
                 p.put("mobileSign", mUUID);
+                LogUtils.e("mGson.toJson(p)"+mGson.toJson(p));
                 OkHttpUtils.postString()
                         .url(Common.Url_Get_Visitors).tag(Common.NET_GET_VISITORS_ID).id(Common.NET_GET_VISITORS_ID)
                         .content(mGson.toJson(p)).addHeader("cookie",MyBaseApplication.getApplication().getCookie())

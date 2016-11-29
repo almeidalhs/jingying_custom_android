@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -103,8 +104,6 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     RelativeLayout llFacechoose;
     @Bind(R.id.FaceRelativeLayout)
     com.atman.jixin.utils.face.FaceRelativeLayout FaceRelativeLayout;
-    @Bind(R.id.item_p2pchat_root_ll)
-    LinearLayout itemP2pchatRootLl;
     private QRScanCodeModel mQRScanCodeModel = new QRScanCodeModel();
     private Context mContext = PersonalIMActivity.this;
     private int adChatTypeText;
@@ -202,6 +201,19 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                 p2pchatLv.getRefreshableView().setSelection(mAdapter.getCount());
             }
         });
+        p2pchatLv.getRefreshableView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isIMOpen()) {
+                    cancelIM(v);
+                }
+                p2pchatSendBt.setVisibility(View.VISIBLE);
+                blogdetailAddcommentEt.setVisibility(View.VISIBLE);
+                llFacechoose.setVisibility(View.GONE);
+                p2pchatAddLl.setVisibility(View.GONE);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -261,19 +273,9 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
     }
 
     @OnClick({R.id.p2pchat_add_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_send_bt, R.id.p2pchat_add_picture_tv
-            , R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv, R.id.item_p2pchat_root_ll})
+            , R.id.p2pchat_add_camera_tv, R.id.p2pchat_add_record_tv})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.item_p2pchat_root_ll:
-                if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
-                }
-                blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_face);
-                llFacechoose.setVisibility(View.GONE);
-                p2pchatAddLl.setVisibility(View.GONE);
-                handler.postDelayed(runnable, 200);
-                break;
             case R.id.p2pchat_add_iv:
                 if (p2pchatAddLl.getVisibility() == View.VISIBLE) {
                     p2pchatAddLl.setVisibility(View.GONE);
@@ -281,8 +283,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
                 } else {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     p2pchatAddLl.setVisibility(View.VISIBLE);
                 }
@@ -293,8 +294,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
             case R.id.blogdetail_addemol_iv:
                 if (llFacechoose.getVisibility() == View.GONE) {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     llFacechoose.setVisibility(View.VISIBLE);
                     blogdetailAddemolIv.setImageResource(R.mipmap.adchat_input_action_icon_keyboard);
@@ -539,8 +539,7 @@ public class PersonalIMActivity extends MyBaseActivity implements AdapterInterfa
         switch (v.getId()) {
             case R.id.item_p2pchat_root_Rl:
                 if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+                    cancelIM(v);
                 }
                 p2pchatSendBt.setVisibility(View.VISIBLE);
                 blogdetailAddcommentEt.setVisibility(View.VISIBLE);

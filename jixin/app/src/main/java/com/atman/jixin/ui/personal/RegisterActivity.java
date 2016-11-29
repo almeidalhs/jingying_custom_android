@@ -129,6 +129,8 @@ public class RegisterActivity extends MyBaseActivity {
         super.onError(call, e, code, id);
         timeCount.cancel();
         registerCodeTv.setText("获取短信验证码");
+        registerCodeTv.setClickable(true);
+        registerCodeTv.setEnabled(true);
     }
 
     @Override
@@ -150,12 +152,12 @@ public class RegisterActivity extends MyBaseActivity {
                     Map<String, Object> p = new HashMap<>();
                     p.put("userName", aount);
                     p.put("password", MD5Util.getMD5(password));
-                    OkHttpUtils.postString()
-                            .url(Common.Url_Bind_Phone).tag(Common.NET_BING_PHONE_ID).id(Common.NET_BING_PHONE_ID)
-                            .content(mGson.toJson(p)).addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                            .mediaType(Common.JSON).headers(MyBaseApplication.getApplication().getHeaderSeting())
-                            .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
-                            .execute(new MyStringCallback(mContext, "绑定中...", this, true, false));
+
+                    OkHttpUtils.postString().url(Common.Url_Bind_Phone).content(mGson.toJson(p)).mediaType(Common.JSON)
+                            .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                            .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_BING_PHONE_ID).id(Common.NET_BING_PHONE_ID).build()
+                            .execute(new MyStringCallback(mContext, "绑定中...", this, true));
                 } else {
                     Map<String, Object> p = new HashMap<>();
                     p.put("deviceToken", PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
@@ -167,8 +169,7 @@ public class RegisterActivity extends MyBaseActivity {
                     p.put("userName", aount);
                     p.put("password", MD5Util.getMD5(password));
                     p.put("login_terminal", 0);
-                    String str = mGson.toJson(p);
-                    OkHttpUtils.postString().url(Common.Url_Register).content(str).mediaType(Common.JSON)
+                    OkHttpUtils.postString().url(Common.Url_Register).content(mGson.toJson(p)).mediaType(Common.JSON)
                             .headers(MyBaseApplication.getApplication().getHeaderSeting())
                             .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                             .tag(Common.NET_REGISTER_ID).id(Common.NET_REGISTER_ID).build()

@@ -116,6 +116,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="处理中"
+                    android:textSize="@dimen/dimen_sp_13"
                     android:textColor="@color/color_62b3ee" />
 
             </LinearLayout>
