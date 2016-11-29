@@ -286,6 +286,8 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
             videoLayout.setVisibility(View.GONE);
             videoView.closePlayer();
         }
+        n = 0;
+        mAdapter.updataView(positionAudio, companyListView, 0, false, String.valueOf(displayTime*1000));
     }
 
     @Override
@@ -405,7 +407,9 @@ public class CompanyIntroductionActivity extends MyBaseActivity implements Adapt
                         mAnimationDrawable.start();
                         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             public void onCompletion(MediaPlayer mp) {
+                                LogUtils.e("111111");
                                 if (!mp.isPlaying()) {
+                                    LogUtils.e("2222222");
                                     mAnimationDrawable.stop();
                                     mAnimationDrawable.selectDrawable(0);
                                     n = 0;

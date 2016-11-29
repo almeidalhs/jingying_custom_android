@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -377,6 +378,8 @@ public class MyBaseActivity extends BaseAppCompatActivity {
                 && (this instanceof MainActivity || this instanceof LoginActivity)) {// 返回键
             exitBy2Click();
             return true;
+        } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+
         }
         return super.onKeyDown(keyCode, event);
     }

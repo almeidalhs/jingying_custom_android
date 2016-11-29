@@ -9,7 +9,7 @@ import okhttp3.internal.framed.PushObserver;
 
 public class Common {
     /**************************http通用设置*****************************/
-    public static int timeOut = 15000;
+    public static int timeOut = 60000;
     public static int timeOutTwo = 120000;
     public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static String ContentType = "application/json; charset=utf-8";

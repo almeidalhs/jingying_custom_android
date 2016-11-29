@@ -110,7 +110,7 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .mediaType(Common.JSON).id(Common.NET_UP_GETTUI_ID).tag(Common.NET_UP_GETTUI_ID)
                     .build().execute(new MyStringCallback(mContext, "链接中...", this, false, false));
-            EventBus.getDefault().register(this);
+            EventBus.getDefault().register(mContext);
         }
     }
 
