@@ -65,6 +65,7 @@ public final class CaptureActivityHandler extends Handler {
 
         } else if (message.what == R.id.auto_focus_and_pic) {
             Log.e(TAG, "auto_focus_and_pic");
+            mState = State.SUCCESS;
             CameraManager.get().requestTakenPic(this, R.id.takenpic);
         } else if (message.what == R.id.takenpic) {
             Log.e(TAG, "takenpic");

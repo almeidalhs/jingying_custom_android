@@ -49,7 +49,7 @@ final class CameraConfigurationManager {
             parameters.getSupportedPreviewSizes());
         Log.e(TAG, "Setting preview size: " + mCameraResolution.width + "-" + mCameraResolution.height);
         mPictureResolution = findCloselySize(ScreenUtils.getScreenWidth(mContext),
-            ScreenUtils.getScreenHeight(mContext), parameters.getSupportedPictureSizes());
+            ScreenUtils.getScreenHeight(mContext)-ScreenUtils.getStatusBarHeight(mContext)-ScreenUtils.dp2px(mContext, 128), parameters.getSupportedPictureSizes());
         Log.e(TAG, "Setting picture size: " + mPictureResolution.width + "-" + mPictureResolution.height);
     }
 
@@ -240,32 +240,36 @@ final class CameraConfigurationManager {
      */
     protected Camera.Size findCloselySize(int surfaceWidth, int surfaceHeight, List<Camera.Size> preSizeList) {
 
-        // // 当屏幕为垂直的时候需要把宽高值进行调换，保证宽大于高
-        // int ReqTmpWidth = surfaceHeight;
-        // int ReqTmpHeight = surfaceWidth;
-        //
-        // // 先查找preview中是否存在与SurfaceView相同宽高的尺寸
-        // for (Size size : preSizeList) {
-        // if ((size.width == ReqTmpWidth) && (size.height == ReqTmpHeight)) {
-        // return size;
-        // }
-        // }
-        //
-        // // 得到与传入的宽高比最接近的size
-        // float reqRatio = ((float) ReqTmpWidth) / ReqTmpHeight;
-        // float curRatio, deltaRatio;
-        // float deltaRatioMin = Float.MAX_VALUE;
-        // Size retSize = null;
-        // for (Size size : preSizeList) {
-        // curRatio = ((float) size.width) / size.height;
-        // deltaRatio = Math.abs(reqRatio - curRatio);
-        // if (deltaRatio < deltaRatioMin) {
-        // deltaRatioMin = deltaRatio;
-        // retSize = size;
-        // }
-        // }
-        Collections.sort(preSizeList, new SizeComparator(surfaceWidth, surfaceHeight));
-        return preSizeList.get(0);
+        // 当屏幕为垂直的时候需要把宽高值进行调换，保证宽大于高
+        int ReqTmpWidth = surfaceHeight;
+        int ReqTmpHeight = surfaceWidth;
+
+        // 先查找preview中是否存在与SurfaceView相同宽高的尺寸
+        for (Camera.Size size : preSizeList) {
+            if ((size.width == ReqTmpWidth) && (size.height == ReqTmpHeight)) {
+                return size;
+            }
+        }
+
+        // 得到与传入的宽高比最接近的size
+        float reqRatio = ((float) ReqTmpWidth) / ReqTmpHeight;
+        float curRatio, deltaRatio;
+        float deltaRatioMin = Float.MAX_VALUE;
+        Camera.Size retSize = null;
+        for (Camera.Size size : preSizeList) {
+            curRatio = ((float) size.width) / size.height;
+            deltaRatio = Math.abs(reqRatio - curRatio);
+            if (deltaRatio < deltaRatioMin && size.width<=surfaceWidth) {
+                deltaRatioMin = deltaRatio;
+                retSize = size;
+            }
+        }
+        return retSize;
+//        Collections.sort(preSizeList, new SizeComparator(surfaceWidth, surfaceHeight));
+//        for (int i=0;i<preSizeList.size();i++) {
+//            Log.e(TAG,"Size:"+preSizeList.get(i).width+"-"+preSizeList.get(i).height);
+//        }
+//        return preSizeList.get(0);
     }
 
     /**

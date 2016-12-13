@@ -39,6 +39,7 @@
         <activity android:name=".ui.personal.MyConsumptionRecordActivity" />
         <activity android:name=".ui.personal.MyCardActivity" />
         <activity android:name=".ui.scancode.QRScanCodeActivity" />
+        <activity android:name=".ui.scancode.TakenPictureScanActivity" />
         <activity android:name=".ui.im.ShopIMActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.im.PersonalIMActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.im.TAPersonalInformationActivity" />

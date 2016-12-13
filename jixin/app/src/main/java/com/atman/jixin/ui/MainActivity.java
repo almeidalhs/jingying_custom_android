@@ -36,6 +36,7 @@ import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
 import com.atman.jixin.ui.personal.PersonalSettingActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
+import com.atman.jixin.ui.scancode.TakenPictureScanActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
@@ -363,7 +364,7 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
             str = data.getStringExtra("ScanResult");
             if (str==null) {
                 str = data.getStringExtra("TakenPicResult");
-                showWraning("str:"+str);
+                startActivity(TakenPictureScanActivity.buildIntent(mContext, str));
             } else {
                 Map<String, String> p = new HashMap<>();
                 p.put("content", str);
