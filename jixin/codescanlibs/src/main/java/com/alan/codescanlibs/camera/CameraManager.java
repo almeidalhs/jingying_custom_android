@@ -39,6 +39,7 @@ public final class CameraManager {
      * it will only receive one message.
      */
     private final PreviewCallback mPreviewCallback;
+    private final TakenPictureCallback mTakenPictureCallback;
     /** Auto-focus callbacks arrive here, and are dispatched to the Handler which requested them. */
     private final AutoFocusCallback mAutoFocusCallback;
 
@@ -63,6 +64,7 @@ public final class CameraManager {
     private CameraManager(Context context) {
         this.mConfigManager = new CameraConfigurationManager(context);
         mPreviewCallback = new PreviewCallback(mConfigManager);
+        mTakenPictureCallback = new TakenPictureCallback(mConfigManager);
         mAutoFocusCallback = new AutoFocusCallback();
     }
 
@@ -164,6 +166,7 @@ public final class CameraManager {
         if (mCamera != null && mPreviewing) {
             mCamera.stopPreview();
             mPreviewCallback.setHandler(null, 0);
+            mTakenPictureCallback.setHandler(null, 0);
             mAutoFocusCallback.setHandler(null, 0);
             mPreviewing = false;
         }
@@ -194,6 +197,14 @@ public final class CameraManager {
             mAutoFocusCallback.setHandler(handler, message);
             // Log.d(TAG, "Requesting auto-focus callback");
             mCamera.autoFocus(mAutoFocusCallback);
+        }
+    }
+
+    public void requestTakenPic(Handler handler, int message) {
+        if (mCamera != null && mPreviewing) {
+            mTakenPictureCallback.setHandler(handler, message);
+            // Log.d(TAG, "Requesting auto-focus callback");
+            mCamera.takePicture(null, null, mTakenPictureCallback);
         }
     }
 }

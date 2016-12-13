@@ -2,7 +2,9 @@
 <resources>
     <!-- QR Code IDs -->
     <item type="id" name="auto_focus"/>
+    <item type="id" name="auto_focus_and_pic"/>
     <item type="id" name="decode"/>
+    <item type="id" name="takenpic"/>
     <item type="id" name="decode_failed"/>
     <item type="id" name="decode_succeeded"/>
     <item type="id" name="encode_failed"/>

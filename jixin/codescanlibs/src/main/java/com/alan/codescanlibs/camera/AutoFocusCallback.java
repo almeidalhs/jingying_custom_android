@@ -18,9 +18,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.alan.codescanlibs.R;
+
 final class AutoFocusCallback implements Camera.AutoFocusCallback {
     private static final String TAG = AutoFocusCallback.class.getName();
     private static final long AUTO_FOCUS_INTERVAL_MS = 1500L;
+    private static final long AUTO_FOCUS_INTERVAL_MS_NOW = 100L;
 
     private Handler mAutoFocusHandler;
     private int mAutoFocusMessage;
@@ -33,7 +36,11 @@ final class AutoFocusCallback implements Camera.AutoFocusCallback {
     public void onAutoFocus(boolean success, Camera camera) {
         if (mAutoFocusHandler != null) {
             Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
-            mAutoFocusHandler.sendMessageDelayed(message, AUTO_FOCUS_INTERVAL_MS);
+            if (mAutoFocusMessage == R.id.auto_focus_and_pic) {
+                mAutoFocusHandler.sendMessageDelayed(message, AUTO_FOCUS_INTERVAL_MS_NOW);
+            } else {
+                mAutoFocusHandler.sendMessageDelayed(message, AUTO_FOCUS_INTERVAL_MS);
+            }
             mAutoFocusHandler = null;
         } else {
             Log.v(TAG, "Got auto-focus callback, but no handler for it");

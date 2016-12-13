@@ -361,13 +361,18 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
         }
         if (requestCode == Common.TO_CODESCAN) {
             str = data.getStringExtra("ScanResult");
-            Map<String, String> p = new HashMap<>();
-            p.put("content", str);
-            OkHttpUtils.postString().url(Common.Url_QRCode).content(mGson.toJson(p))
-                    .headers(MyBaseApplication.getApplication().getHeaderSeting())
-                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                    .mediaType(Common.JSON).id(Common.NET_QR_CODE_ID).tag(Common.NET_QR_CODE_ID)
-                    .build().execute(new MyStringCallback(mContext, "", this, true));
+            if (str==null) {
+                str = data.getStringExtra("TakenPicResult");
+                showWraning("str:"+str);
+            } else {
+                Map<String, String> p = new HashMap<>();
+                p.put("content", str);
+                OkHttpUtils.postString().url(Common.Url_QRCode).content(mGson.toJson(p))
+                        .headers(MyBaseApplication.getApplication().getHeaderSeting())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .mediaType(Common.JSON).id(Common.NET_QR_CODE_ID).tag(Common.NET_QR_CODE_ID)
+                        .build().execute(new MyStringCallback(mContext, "", this, true));
+            }
         }
     }
 

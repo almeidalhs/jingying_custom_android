@@ -2,13 +2,11 @@ package com.alan.codescanlibs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,10 +47,13 @@ import java.util.concurrent.Executors;
  */
 public class QrCodeActivity extends Activity implements Callback, OnClickListener {
 
+    private Context mContext = QrCodeActivity.this;
+
     private static final int REQUEST_SYSTEM_PICTURE = 0;
     private static final int REQUEST_PICTURE = 1;
     public static final int MSG_DECODE_SUCCEED = 1;
     public static final int MSG_DECODE_FAIL = 2;
+    public static final int MSG_TAKENPIC_SUCCEED = 3;
     private CaptureActivityHandler mCaptureActivityHandler;
     private boolean mHasSurface;
     private boolean mPermissionOk;
@@ -124,6 +125,7 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
         mIvFlashLightLl.setOnClickListener(this);
         tvPic.setOnClickListener(this);
         back_tx.setOnClickListener(this);
+        mSurfaceView.setOnClickListener(this);
     }
 
     private void initData() {
@@ -201,6 +203,11 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
             String resultString = result.getText();
             handleResult(resultString);
         }
+    }
+
+    public void takenPicture(String result) {
+        Log.e("TAG", "Get pic:"+result);
+        mHandler.obtainMessage(MSG_TAKENPIC_SUCCEED, result).sendToTarget();
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -318,6 +325,10 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
 
         } else if (i == R.id.back_tx) {
             finish();
+        } else if (i == R.id.qr_code_preview_view) {
+            if (null != mCaptureActivityHandler) {
+                mCaptureActivityHandler.autoFocusAndTakePicture();
+            }
         }
     }
 
@@ -437,8 +448,19 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                     Log.e(">>>>",">>>>MSG_DECODE_FAIL");
                     mDecodeManager.showCouldNotReadQrCodeFromPicture(qrCodeActivity);
                     break;
+                case MSG_TAKENPIC_SUCCEED:
+                    handleTakenPicResult((String) msg.obj);
+                    break;
             }
             super.handleMessage(msg);
+        }
+
+        private void handleTakenPicResult(String resultString) {
+            QrCodeActivity imagePickerActivity = mWeakQrCodeActivity.get();
+            Intent mIntent = new Intent();
+            mIntent.putExtra("TakenPicResult", resultString);
+            imagePickerActivity.setResult(RESULT_OK,mIntent);
+            imagePickerActivity.finish();
         }
 
         private void handleResult(String resultString) {

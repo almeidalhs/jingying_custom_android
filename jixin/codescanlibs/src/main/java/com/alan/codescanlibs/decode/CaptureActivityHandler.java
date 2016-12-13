@@ -63,6 +63,12 @@ public final class CaptureActivityHandler extends Handler {
             mState = State.PREVIEW;
             CameraManager.get().requestPreviewFrame(mDecodeThread.getHandler(), R.id.decode);
 
+        } else if (message.what == R.id.auto_focus_and_pic) {
+            Log.e(TAG, "auto_focus_and_pic");
+            CameraManager.get().requestTakenPic(this, R.id.takenpic);
+        } else if (message.what == R.id.takenpic) {
+            Log.e(TAG, "takenpic");
+            mActivity.takenPicture((String)message.obj);
         }
     }
 
@@ -89,6 +95,10 @@ public final class CaptureActivityHandler extends Handler {
             CameraManager.get().requestPreviewFrame(mDecodeThread.getHandler(), R.id.decode);
             CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
         }
+    }
+
+    public void autoFocusAndTakePicture() {
+        CameraManager.get().requestAutoFocus(this, R.id.auto_focus_and_pic);
     }
 
 }

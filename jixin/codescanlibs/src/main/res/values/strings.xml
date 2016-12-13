@@ -6,7 +6,8 @@
     <string name="qr_code_select_picture">照片</string>
     <string name="qr_code_open_flash_light">打开闪光灯</string>
     <string name="qr_code_close_flash_light">关闭闪光灯</string>
-    <string name="qr_code_auto_scan_notification">将二维码放入扫描区域内，即可自动扫描</string>
+    <string name="qr_code_auto_scan_notification">将二维码放入扫描区内->扫描二维码</string>
+    <string name="qr_code_auto_scan_notification_two">点击屏幕任意区域->扫描图片</string>
     <string name="qr_code_notification">提示</string>
     <string name="qr_code_camera_not_open">您的相机功能好像没有打开哦~去\"设置>隐私>相机\"设置一下吧</string>
     <string name="qr_code_positive_button_know">知道了</string>

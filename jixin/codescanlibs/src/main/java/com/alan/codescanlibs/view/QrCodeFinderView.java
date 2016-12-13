@@ -149,6 +149,7 @@ public final class QrCodeFinderView extends RelativeLayout {
         mPaint.setColor(mTextColor);
         mPaint.setStyle(Paint.Style.FILL);//设置实心
         drawText(canvas, frame);//绘制文字
+        drawTextTwo(canvas, frame);//绘制文字
 
 //        mPaint.setColor(mTextColor);
 //        mPaint.setStyle(Paint.Style.STROKE);//设置空心
@@ -279,6 +280,19 @@ public final class QrCodeFinderView extends RelativeLayout {
         float fontTotalHeight = fontMetrics.bottom - fontMetrics.top;
         float offY = fontTotalHeight / 2 - fontMetrics.bottom;
         float newY = rect.bottom + margin + offY + mDistanceOne;
+        float left = (ScreenUtils.getScreenWidth(mContext) - mPaint.getTextSize() * text.length()) / 2;
+        canvas.drawText(text, left, newY, mPaint);
+    }
+
+    private void drawTextTwo(Canvas canvas, Rect rect) {
+        int margin = 40;
+        mPaint.setColor(mTextColor);
+        mPaint.setTextSize(getResources().getDimension(R.dimen.text_size_13sp));
+        String text = getResources().getString(R.string.qr_code_auto_scan_notification_two);
+        Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
+        float fontTotalHeight = fontMetrics.bottom - fontMetrics.top;
+        float offY = fontTotalHeight / 2 - fontMetrics.bottom;
+        float newY = rect.bottom + margin + offY + mDistanceOne + getResources().getDimension(R.dimen.text_size_15sp);
         float left = (ScreenUtils.getScreenWidth(mContext) - mPaint.getTextSize() * text.length()) / 2;
         canvas.drawText(text, left, newY, mPaint);
     }
