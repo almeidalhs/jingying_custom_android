@@ -1,7 +1,6 @@
 package com.atman.jixin.ui;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,13 +33,11 @@ import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
-import com.atman.jixin.ui.personal.PersonalSettingActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.scancode.TakenPictureScanActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
 import com.atman.jixin.utils.Common;
 import com.atman.jixin.utils.MyTools;
-import com.atman.jixin.utils.face.FaceConversionUtil;
 import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -61,8 +58,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -324,7 +319,8 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                 startActivity(new Intent(mContext, PersonalActivity.class));
                 break;
             case R.id.main_bottom_ll:
-                startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
+                startActivity(TakenPictureScanActivity.buildIntent(mContext, ""));
+//                startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
                 break;
         }
     }

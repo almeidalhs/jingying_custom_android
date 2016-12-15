@@ -8,4 +8,8 @@
     <color name="qr_code_finder_frame">#FFFFFFFF</color>
     <color name="qr_code_finder_laser">#ef8394</color>
     <color name="qr_code_null">#0000</color>
+    <color name="qr_code_45d1f1">#45d1f1</color>
+    <color name="qr_code_fec186">#fec186</color>
+    <color name="qr_code_399269">#52a980</color>
+    <color name="qr_code_d1dbcd">#d1dbcd</color>
 </resources>
