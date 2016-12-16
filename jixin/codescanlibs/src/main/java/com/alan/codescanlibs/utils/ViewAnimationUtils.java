@@ -2,11 +2,14 @@ package com.alan.codescanlibs.utils;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 
 import com.alan.codescanlibs.view.ScanEyesFindView;
+import com.alan.codescanlibs.view.ScanInformationView;
 import com.alan.codescanlibs.view.ScanPointView;
 
 import java.util.Random;
@@ -43,6 +46,10 @@ public class ViewAnimationUtils {
             ScanPointView view = (ScanPointView) temp;
             childH = view.getViewWidth()/2;
             childW = view.getViewWidth()/2;
+        } else if (temp instanceof ScanInformationView) {
+            ScanInformationView view = (ScanInformationView) temp;
+            childH = view.getViewHeight()/2;
+            childW = view.getViewWidth()/2;
         }
 
         Log.e("TAG","toX:"+(toX-temp.getLeft()-childW));
@@ -65,6 +72,18 @@ public class ViewAnimationUtils {
             public void onAnimationEnd(Animation animation) {
                 temp.clearAnimation();
                 temp.layout((int) (toX-childW), (int) (toY-childH), (int) (toX+childW), (int) (toY+childH));
+
+                if (temp instanceof ScanPointView) {
+                    FrameLayout.LayoutParams mlp =
+                            (FrameLayout.LayoutParams) temp.getLayoutParams();
+                    mlp.leftMargin = temp.getLeft();
+                    mlp.topMargin = temp.getTop();
+                    temp.setLayoutParams(mlp);
+                }
+
+//                temp.offsetLeftAndRight((int) (toX-temp.getLeft()-childW));
+//                temp.offsetTopAndBottom((int) (toY-temp.getTop()-childH));
+
                 TranslateAnimation anim = new TranslateAnimation(0,0,0,0);
                 temp.setAnimation(anim);
                 if (isRandomReStart && temp instanceof ScanEyesFindView) {
@@ -111,6 +130,15 @@ public class ViewAnimationUtils {
 
     public void stopMove(int x, int y, View child){
         moveView(x, y, child,0L, 0L);
+    }
+
+    public void addInformationView (int x, int y, View child) {
+        child.layout(x, y, x+child.getWidth(), y+child.getHeight());
+        FrameLayout.LayoutParams mlp =
+                (FrameLayout.LayoutParams) child.getLayoutParams();
+        mlp.leftMargin = x;
+        mlp.topMargin = y;
+        child.setLayoutParams(mlp);
     }
 
     public boolean isRandomReStart() {

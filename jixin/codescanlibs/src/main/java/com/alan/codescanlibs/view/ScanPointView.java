@@ -53,7 +53,7 @@ public class ScanPointView extends RelativeLayout {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
 
-        mWidth = dp2px(context, 25);
+        mWidth = dp2px(context, 18);
         mDistanceOne = dp2px(context, 1);
         mDistanceTwo = dp2px(context, 4);
         mLineWidth = dp2px(context, 1);
