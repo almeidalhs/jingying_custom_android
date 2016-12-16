@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/gv_img_sign_back"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="@dimen/dimen_dp_20"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:background="@color/color_sign_bg">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_dp_50"
+            android:src="@mipmap/gv_img_sign_title"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/annualmeeting_name_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_22"
+            android:text="尊敬的《---》领导\n您的座位号为"
+            android:textColor="@color/color_ffffff"/>
+
+        <TextView
+            android:id="@+id/annualmeeting_num_tx"
+            android:layout_marginBottom="@dimen/dimen_dp_70"
+            android:layout_marginTop="@dimen/dimen_dp_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_50"
+            android:text="--"
+            android:textStyle="bold"
+            android:textColor="@color/color_ffffff"
+            android:background="@mipmap/gv_img_sign_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

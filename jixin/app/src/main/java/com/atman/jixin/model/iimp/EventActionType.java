@@ -10,4 +10,5 @@ public interface EventActionType {
     int EventActionType_GoodList = 3;      //商品列表  (仅展示)
     int EventActionType_Good = 4;          //商品
     int EventActionType_Coupon = 5;        //优惠券
+    int EventActionType_AnnualMeeting = 6;        //年会
 }

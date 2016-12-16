@@ -49,6 +49,7 @@
         <activity android:name=".ui.im.chatui.StoreCommentActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.im.chatui.StoreDetailActivity" />
         <activity android:name=".ui.im.chatui.GetCouponActivity" />
+        <activity android:name=".ui.im.chatui.AnnualMeetingActivity" />
         <activity android:name=".ui.shop.MemberCenterActivity" />
         <activity android:name=".ui.shop.IntegralexchangeActivity" />
         <activity android:name=".ui.shop.GoodsDetailActivity" />

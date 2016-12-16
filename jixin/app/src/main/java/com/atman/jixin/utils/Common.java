@@ -18,13 +18,13 @@ public class Common {
 
 
     /**************************http基础访问路径*****************************/
-//    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
-//    public static String hostUrl_Up = "http://192.168.1.141:8089/";
-//    public static String ImageUrl = "http://192.168.1.141:8000/by/";
+    public static String hostUrl = "http://192.168.1.141:8089/baiye/";
+    public static String hostUrl_Up = "http://192.168.1.141:8089/";
+    public static String ImageUrl = "http://192.168.1.141:8000/by/";
 
-    public static String hostUrl = "http://www.jiplaza.net/";
-    public static String hostUrl_Up = "http://www.jiplaza.net/";
-    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
+//    public static String hostUrl = "http://www.jiplaza.net/";
+//    public static String hostUrl_Up = "http://www.jiplaza.net/";
+//    public static String ImageUrl = "http://www.jiplaza.net:8000/by/";
     /**************************http基础访问路径*****************************/
 
 
@@ -109,6 +109,8 @@ public class Common {
     public static String Url_Coupon_Detail = hostUrl + "rest/coupon/getCouponById/";
     //领取优惠券
     public static String Url_Coupon_Detail_Get = hostUrl + "rest/coupon/couponReceive/";
+    //获取签到信息
+    public static String Url_Get_SignInfor = hostUrl + "rest/greenvalleysign/getCurrentUserInfo";
     /**************************http访问路径*****************************/
 
 
@@ -194,6 +196,8 @@ public class Common {
     public static int NET_COUPON_DETAIL_ID = 39;
     //领取优惠券
     public static int NET_COUPON_DETAIL_GET_ID = 40;
+    //获取签到信息
+    public static int NET_GET_SIGNINFOR_ID = 41;
     /**************************http访问回应识别码*****************************/
 
 

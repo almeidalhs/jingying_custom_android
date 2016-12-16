@@ -319,8 +319,8 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                 startActivity(new Intent(mContext, PersonalActivity.class));
                 break;
             case R.id.main_bottom_ll:
-                startActivity(TakenPictureScanActivity.buildIntent(mContext, ""));
-//                startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
+//                startActivity(TakenPictureScanActivity.buildIntent(mContext, ""));
+                startActivityForResult(new Intent(mContext, QrCodeActivity.class), Common.TO_CODESCAN);
                 break;
         }
     }

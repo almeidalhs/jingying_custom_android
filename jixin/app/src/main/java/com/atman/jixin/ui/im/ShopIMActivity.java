@@ -44,6 +44,7 @@ import com.atman.jixin.service.SeedMessageService;
 import com.atman.jixin.ui.PictureBrowsingActivity;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
+import com.atman.jixin.ui.im.chatui.AnnualMeetingActivity;
 import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
 import com.atman.jixin.ui.im.chatui.GetCouponActivity;
 import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
@@ -381,7 +382,11 @@ public class ShopIMActivity extends MyBaseActivity
                     } else {
                         mChatListModel.setSendTime(mQRScanCodeModel.getBody().getMessageBean().getSendTime());
                         mChatListModel.setUnreadNum(0);
-                        mChatListModel.setContent(mQRScanCodeModel.getBody().getMessageBean().getContent());
+                        if (mQRScanCodeModel.getBody().getMessageBean().getContent()==null) {
+                            mChatListModel.setContent(mQRScanCodeModel.getBody().getStoreBean().getStoreName());
+                        } else {
+                            mChatListModel.setContent(mQRScanCodeModel.getBody().getMessageBean().getContent());
+                        }
                         mChatListModel.setType(mQRScanCodeModel.getBody().getMessageBean().getType());
                         mChatListModelDao.update(mChatListModel);
                     }
@@ -447,6 +452,9 @@ public class ShopIMActivity extends MyBaseActivity
                                 ==EventActionType.EventActionType_Coupon) {//优惠券
                             startActivity(GetCouponActivity.buildIntent(mContext
                                     , mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId()));
+                        } else  if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
+                                ==EventActionType.EventActionType_AnnualMeeting) {//年会
+                            startActivity(new Intent(mContext, AnnualMeetingActivity.class));
                         }
                     }
 
@@ -913,6 +921,9 @@ public class ShopIMActivity extends MyBaseActivity
                         ==EventActionType.EventActionType_Coupon) {//优惠券
                     startActivity(GetCouponActivity.buildIntent(mContext
                             , mAdapter.getItem(position).getCouponId()));
+                } else  if (mAdapter.getItem(position).getActionType()
+                        ==EventActionType.EventActionType_AnnualMeeting) {//年会
+                    startActivity(new Intent(mContext, AnnualMeetingActivity.class));
                 }
                 break;
             case R.id.item_p2pchat_text_headleft_iv:

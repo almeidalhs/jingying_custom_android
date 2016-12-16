@@ -218,7 +218,6 @@ public class MyBaseApplication extends BaseApplication {
         stringBuilder.append("USER_KEY=");
         stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
         stringBuilder.append(";USER_TOKEN=");
-        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));stringBuilder.append(";USER_TOKEN=");
         stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));
         return stringBuilder.toString();
     }
