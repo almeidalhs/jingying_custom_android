@@ -76,7 +76,7 @@ public class TakenPictureScanActivity extends MyBaseActivity implements ViewAnim
             e.printStackTrace();
         }
 
-        picUrl = "/storage/emulated/0/jiying/image/1481682222586.jpg";
+//        picUrl = "/storage/emulated/0/jiying/image/1481682222586.jpg";
         mViewAnimationUtils = new ViewAnimationUtils(this);
 
         ImageLoader.getInstance().displayImage("file://" + picUrl, takenpicBgIv, new ImageLoadingListener() {

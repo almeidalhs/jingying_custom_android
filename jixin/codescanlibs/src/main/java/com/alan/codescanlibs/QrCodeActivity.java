@@ -326,9 +326,9 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
         } else if (i == R.id.back_tx) {
             finish();
         } else if (i == R.id.qr_code_preview_view) {
-            if (null != mCaptureActivityHandler) {
-                mCaptureActivityHandler.autoFocusAndTakePicture();
-            }
+//            if (null != mCaptureActivityHandler) {
+//                mCaptureActivityHandler.autoFocusAndTakePicture();
+//            }
         }
     }
 

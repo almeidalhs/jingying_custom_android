@@ -152,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:text="2016-11-11"
                         android:textColor="#a2a2a2"
-                        android:textSize="@dimen/dimen_sp_13" />
+                        android:textSize="@dimen/dimen_sp_12" />
                 </LinearLayout>
 
                 <TextView

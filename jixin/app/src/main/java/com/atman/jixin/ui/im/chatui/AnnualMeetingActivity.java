@@ -25,8 +25,10 @@ public class AnnualMeetingActivity extends MyBaseActivity {
 
     @Bind(R.id.annualmeeting_name_tx)
     TextView annualmeetingNameTx;
-    @Bind(R.id.annualmeeting_num_tx)
-    TextView annualmeetingNumTx;
+    @Bind(R.id.annualmeeting_table_num_tx)
+    TextView annualmeetingTableNumTx;
+    @Bind(R.id.annualmeeting_seat_num_tx)
+    TextView annualmeetingSeatNumTx;
 
     private Context mContext = AnnualMeetingActivity.this;
     private GetSignInforModel mGetSignInforModel;
@@ -66,10 +68,11 @@ public class AnnualMeetingActivity extends MyBaseActivity {
         if (id == Common.NET_GET_SIGNINFOR_ID) {
             mGetSignInforModel = mGson.fromJson(data, GetSignInforModel.class);
 
-            if (mGetSignInforModel.getBody()!=null &&
-                    mGetSignInforModel.getBody().getRespectCall()!=null) {
+            if (mGetSignInforModel.getBody() != null &&
+                    mGetSignInforModel.getBody().getRespectCall() != null) {
                 annualmeetingNameTx.setText(mGetSignInforModel.getBody().getRespectCall());
-                annualmeetingNumTx.setText(""+mGetSignInforModel.getBody().getTableNum());
+                annualmeetingTableNumTx.setText("" + mGetSignInforModel.getBody().getTableNum());
+                annualmeetingSeatNumTx.setText("" + mGetSignInforModel.getBody().getSeatNum());
             } else {
                 showWraning("数据获取失败!");
             }

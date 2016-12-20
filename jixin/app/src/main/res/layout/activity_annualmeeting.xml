@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_margin="@dimen/dimen_dp_20"
+        android:layout_margin="@dimen/dimen_dp_15"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -20,7 +20,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_dp_50"
+            android:layout_marginTop="@dimen/dimen_dp_35"
             android:src="@mipmap/gv_img_sign_title"/>
 
         <View
@@ -38,9 +38,30 @@
             android:textColor="@color/color_ffffff"/>
 
         <TextView
-            android:id="@+id/annualmeeting_num_tx"
-            android:layout_marginBottom="@dimen/dimen_dp_70"
-            android:layout_marginTop="@dimen/dimen_dp_50"
+            android:id="@+id/annualmeeting_table_num_tx"
+            android:layout_marginBottom="@dimen/dimen_dp_20"
+            android:layout_marginTop="@dimen/dimen_dp_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_50"
+            android:text="--"
+            android:textStyle="bold"
+            android:textColor="@color/color_ffffff"
+            android:background="@mipmap/gv_img_sign_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_sp_22"
+            android:text="晚宴坐席"
+            android:textColor="@color/color_ffffff"/>
+
+        <TextView
+            android:id="@+id/annualmeeting_seat_num_tx"
+            android:layout_marginBottom="@dimen/dimen_dp_20"
+            android:layout_marginTop="@dimen/dimen_dp_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
