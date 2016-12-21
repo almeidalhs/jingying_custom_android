@@ -60,8 +60,8 @@ public class GetSignInforModel {
         private long atmanUserId;
         private int signType;
         private int getOver;
-        private int seatNum;
-        private int tableNum;
+        private String seatNum;
+        private String tableNum;
         private int machineType;
         private int winningType;
 
@@ -153,19 +153,19 @@ public class GetSignInforModel {
             this.getOver = getOver;
         }
 
-        public int getSeatNum() {
+        public String getSeatNum() {
             return seatNum;
         }
 
-        public void setSeatNum(int seatNum) {
+        public void setSeatNum(String seatNum) {
             this.seatNum = seatNum;
         }
 
-        public int getTableNum() {
+        public String getTableNum() {
             return tableNum;
         }
 
-        public void setTableNum(int tableNum) {
+        public void setTableNum(String tableNum) {
             this.tableNum = tableNum;
         }
 

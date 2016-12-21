@@ -142,6 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:singleLine="true"
                         android:text="nick"
                         android:textColor="#484848"
                         android:textSize="@dimen/dimen_sp_15" />

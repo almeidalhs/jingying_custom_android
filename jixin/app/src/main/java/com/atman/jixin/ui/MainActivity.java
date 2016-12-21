@@ -26,13 +26,16 @@ import com.atman.jixin.model.iimp.ADChatTargetType;
 import com.atman.jixin.model.iimp.ToAppType;
 import com.atman.jixin.model.response.CheckVersionModel;
 import com.atman.jixin.model.response.QRScanCodeModel;
+import com.atman.jixin.model.response.QRTouristModel;
 import com.atman.jixin.service.SeedMessageService;
 import com.atman.jixin.service.SeedPersonalMessageService;
 import com.atman.jixin.ui.base.MyBaseActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
 import com.atman.jixin.ui.im.PersonalIMActivity;
 import com.atman.jixin.ui.im.ShopIMActivity;
+import com.atman.jixin.ui.im.chatui.AnnualMeetingActivity;
 import com.atman.jixin.ui.personal.PersonalActivity;
+import com.atman.jixin.ui.personal.RegisterActivity;
 import com.atman.jixin.ui.scancode.QRScanCodeActivity;
 import com.atman.jixin.ui.scancode.TakenPictureScanActivity;
 import com.atman.jixin.ui.shop.MemberCenterActivity;
@@ -215,9 +218,39 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_QR_CODE_ID) {
-            QRScanCodeModel mQRScanCodeModel = mGson.fromJson(data, QRScanCodeModel.class);
-            if (mQRScanCodeModel.getResult().equals("1")) {
-                startActivity(ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false));
+            QRTouristModel mQRTouristModel = mGson.fromJson(data, QRTouristModel.class);
+            if (mQRTouristModel.getBody()!=null && mQRTouristModel.getBody().getType()>=200) {
+                if (mQRTouristModel.getBody().getType()==201) {
+                    //游客身份扫描二维码
+                    PromptDialog.Builder builder = new PromptDialog.Builder(this);
+                    builder.setMessage("您当前为游客账户,请先绑定手机号后再试!");
+                    builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("去绑定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(new Intent(mContext, RegisterActivity.class));
+                        }
+                    });
+                    builder.show();
+                }
+            } else {
+                QRScanCodeModel mQRScanCodeModel = mGson.fromJson(data, QRScanCodeModel.class);
+                if (mQRScanCodeModel.getResult().equals("1")) {
+                    if (mQRScanCodeModel.getBody().getStoreBean().getStoreName().contains("绿谷集团")) {
+                        Intent[] intents = new Intent[2];
+                        intents[0] = ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false);
+                        intents[1] = new Intent(mContext, AnnualMeetingActivity.class);
+                        startActivities(intents);
+                    } else {
+                        startActivity(ShopIMActivity.buildIntent(mContext, mQRScanCodeModel, false));
+                    }
+                }
             }
         } else if (id == Common.NET_UP_GETTUI_ID) {
         } else if (id == Common.NET_GET_VERSION_ID) {
@@ -367,8 +400,9 @@ public class MainActivity extends MyBaseActivity implements ChatSessionListAdapt
                 OkHttpUtils.postString().url(Common.Url_QRCode).content(mGson.toJson(p))
                         .headers(MyBaseApplication.getApplication().getHeaderSeting())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .mediaType(Common.JSON).id(Common.NET_QR_CODE_ID).tag(Common.NET_QR_CODE_ID)
-                        .build().execute(new MyStringCallback(mContext, "", this, true));
+                        .mediaType(Common.JSON).id(Common.NET_QR_CODE_ID).tag(Common.NET_QR_CODE_ID).build()
+                        .connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                        .execute(new MyStringCallback(mContext, "", this, true));
             }
         }
     }

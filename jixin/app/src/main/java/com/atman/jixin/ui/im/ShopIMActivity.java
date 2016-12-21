@@ -454,7 +454,7 @@ public class ShopIMActivity extends MyBaseActivity
                                     , mQRScanCodeModel.getBody().getMessageBean().getEventAction().getCouponId()));
                         } else  if (mQRScanCodeModel.getBody().getMessageBean().getEventAction().getActionType()
                                 ==EventActionType.EventActionType_AnnualMeeting) {//年会
-                            startActivity(new Intent(mContext, AnnualMeetingActivity.class));
+//                            startActivity(new Intent(mContext, AnnualMeetingActivity.class));
                         }
                     }
 
