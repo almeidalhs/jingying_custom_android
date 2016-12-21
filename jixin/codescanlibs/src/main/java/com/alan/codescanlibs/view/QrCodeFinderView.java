@@ -149,7 +149,7 @@ public final class QrCodeFinderView extends RelativeLayout {
         mPaint.setColor(mTextColor);
         mPaint.setStyle(Paint.Style.FILL);//设置实心
         drawText(canvas, frame);//绘制文字
-        drawTextTwo(canvas, frame);//绘制文字
+//        drawTextTwo(canvas, frame);//绘制文字
 
 //        mPaint.setColor(mTextColor);
 //        mPaint.setStyle(Paint.Style.STROKE);//设置空心

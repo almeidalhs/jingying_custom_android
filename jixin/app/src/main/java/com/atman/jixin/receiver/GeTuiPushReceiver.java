@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 
-import com.atman.jixin.R;
 import com.atman.jixin.model.MessageEvent;
 import com.atman.jixin.model.bean.ChatListModel;
 import com.atman.jixin.model.bean.ChatMessageModel;
@@ -18,10 +17,7 @@ import com.atman.jixin.model.greendao.gen.ChatMessageModelDao;
 import com.atman.jixin.model.iimp.ADChatType;
 import com.atman.jixin.model.iimp.EventActionType;
 import com.atman.jixin.model.response.GetMessageModel;
-import com.atman.jixin.ui.MainActivity;
 import com.atman.jixin.ui.base.MyBaseApplication;
-import com.atman.jixin.ui.im.chatui.CompanyIntroductionActivity;
-import com.atman.jixin.ui.im.chatui.MenuPreviewActivity;
 import com.atman.jixin.widget.ResidentNotificationHelper;
 import com.base.baselibs.util.LogUtils;
 import com.google.gson.Gson;
